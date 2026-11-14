@@ -1,64 +1,95 @@
-# Electron + React + TypeScript App
+# Welcome to React Router!
 
-Plantilla base moderna y optimizada para crear aplicaciones de escritorio con **Electron**, **React 18** y **TypeScript**, impulsada por **electron-vite**.
+A modern, production-ready template for building full-stack React applications using React Router.
 
-## 🚀 Características
+## Inicio de sesión
 
-- ⚡ **electron-vite**: Compilación ultra rápida basada en Vite y recarga en caliente (HMR) tanto para el proceso renderer como para el main y preload.
-- ⚛️ **React 18**: UI reactiva y moderna.
-- 🎨 **Tailwind CSS + DaisyUI**: Clases utilitarias y componentes para la interfaz del renderer.
-- 🛡️ **TypeScript Estricto**: Configuración de TS separada para Node (proceso principal y preload) y Web (proceso renderer).
-- 🔒 **Seguridad por defecto**: `contextIsolation` activado, `nodeIntegration` desactivado y paso seguro de APIs mediante `contextBridge`.
-- 📡 **IPC tipado**: Ejemplo funcional de comunicación bidireccional entre Renderer y Main.
+El cliente consume la API de autenticación NestJS configurada con
+`VITE_API_URL` (por defecto `http://localhost:3000`). El refresh token se
+mantiene en una cookie `HttpOnly`; el access token permanece solo en memoria y
+se renueva automáticamente. Configura `CLIENT_ORIGIN` en el backend para
+permitir el origen del frontend con credenciales.
 
-## 📂 Estructura del Proyecto
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
 
-```
-electron-react-ts/
-├── electron.vite.config.ts    # Configuración de compilación Vite para Electron
-├── postcss.config.cjs         # Procesamiento de Tailwind CSS y Autoprefixer
-├── tailwind.config.cjs        # Rutas del renderer y plugin de DaisyUI
-├── tsconfig.json              # Referencias maestras de TypeScript
-├── tsconfig.node.json         # Tipado y reglas para Node/Electron (main & preload)
-├── tsconfig.web.json          # Tipado y reglas para React / Browser (renderer)
-├── package.json
-└── src/
-    ├── main/                  # Proceso principal de Electron
-    │   └── index.ts           # Creación de ventana y manejadores IPC
-    ├── preload/               # Script Preload (puente seguro)
-    │   ├── index.ts           # Exposición de APIs mediante contextBridge
-    │   └── index.d.ts         # Declaraciones de tipos para window.api
-    └── renderer/              # Proceso Renderer (UI de React)
-        ├── index.html         # Archivo HTML de entrada
-        └── src/
-            ├── App.tsx        # Componente principal con estado e IPC
-            ├── main.tsx       # Punto de entrada de React
-            └── assets/
-                └── index.css  # Tailwind CSS y estilos globales
-```
+## Features
 
-Tailwind y DaisyUI se compilan dentro del renderer junto con la aplicación. Puedes usar sus clases en los componentes React, por ejemplo `className="btn btn-primary"`. DaisyUI incluye los temas `light` y `dark`; cambia el tema con `data-theme="dark"` en un elemento de la interfaz.
+- 🚀 Server-side rendering
+- ⚡️ Hot Module Replacement (HMR)
+- 📦 Asset bundling and optimization
+- 🔄 Data loading and mutations
+- 🔒 TypeScript by default
+- 🎉 TailwindCSS for styling
+- 📖 [React Router docs](https://reactrouter.com/)
 
-## 🛠️ Comandos Disponibles
+## Getting Started
 
-### 1. Instalar dependencias
+### Installation
+
+Install the dependencies:
+
 ```bash
 npm install
 ```
 
-### 2. Iniciar en modo desarrollo
-Inicia el entorno de desarrollo con recarga en caliente (HMR):
+### Development
+
+Start the development server with HMR:
+
 ```bash
 npm run dev
 ```
 
-### 3. Verificar tipos TypeScript
-```bash
-npm run typecheck
-```
+Your application will be available at `http://localhost:5173`.
 
-### 4. Compilar para producción
-Genera los paquetes optimizados en el directorio `out/`:
+## Building for Production
+
+Create a production build:
+
 ```bash
 npm run build
 ```
+
+## Deployment
+
+### Docker Deployment
+
+To build and run using Docker:
+
+```bash
+docker build -t my-app .
+
+# Run the container
+docker run -p 3000:3000 my-app
+```
+
+The containerized application can be deployed to any platform that supports Docker, including:
+
+- AWS ECS
+- Google Cloud Run
+- Azure Container Apps
+- Digital Ocean App Platform
+- Fly.io
+- Railway
+
+### DIY Deployment
+
+If you're familiar with deploying Node applications, the built-in app server is production-ready.
+
+Make sure to deploy the output of `npm run build`
+
+```
+├── package.json
+├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
+├── build/
+│   ├── client/    # Static assets
+│   └── server/    # Server-side code
+```
+
+## Styling
+
+This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+
+---
+
+Built with ❤️ using React Router.

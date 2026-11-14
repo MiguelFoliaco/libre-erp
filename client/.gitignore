@@ -1,9 +1,7 @@
-node_modules
 .DS_Store
-dist
-dist-electron
-out
-*.local
-.vscode/*
-!.vscode/extensions.json
-package-lock.json
+.env
+/node_modules/
+
+# React Router
+/.react-router/
+/build/

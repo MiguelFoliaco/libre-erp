@@ -1,10 +1,31 @@
-import { pgTable, unique, bigint, varchar, timestamp, index, check, uuid, char, text, jsonb, boolean, foreignKey, uniqueIndex, numeric, date, integer, inet, pgEnum } from "drizzle-orm/pg-core"
+import { pgTable, index, foreignKey, unique, uuid, text, timestamp, boolean, bigint, varchar, check, char, jsonb, uniqueIndex, numeric, date, integer, inet, pgEnum } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 export const environmentType = pgEnum("environment_type", ['development', 'production', 'test'])
 export const movementType = pgEnum("movement_type", ['entry', 'exit', 'adjustment_in', 'adjustment_out', 'transfer_in', 'transfer_out', 'reversal'])
 export const productType = pgEnum("product_type", ['physical', 'virtual', 'service'])
 
+
+export const session = pgTable("session", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	userId: uuid("user_id").notNull(),
+	token: text().notNull(),
+	refreshToken: text("refresh_token").notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	expiresAt: timestamp("expires_at", { withTimezone: true, mode: 'string' }).notNull(),
+	active: boolean().default(true).notNull(),
+	isRefresh: boolean("is_refresh").default(false).notNull(),
+}, (table) => [
+	index("idx_session_expires_at").using("btree", table.expiresAt.asc().nullsLast().op("timestamptz_ops")).where(sql`(active = true)`),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [users.id],
+			name: "session_user_id_fkey"
+		}),
+	unique("session_user_id_token_key").on(table.token, table.userId),
+	unique("session_user_id_refresh_token_key").on(table.refreshToken, table.userId),
+]);
 
 export const schemaMigrations = pgTable("schema_migrations", {
 	// You can use { mode: "bigint" } if numbers are exceeding js number limitations

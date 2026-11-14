@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { documentItems } from './database/migrations/schema.js';
+import { documentItems } from './database/migrations/schema';
 
 export type DocumentItem = typeof documentItems.$inferSelect;
 

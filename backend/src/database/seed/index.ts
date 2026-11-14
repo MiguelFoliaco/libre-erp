@@ -1,0 +1,1 @@
+export { createSeed } from './create-init-company';

@@ -15,7 +15,7 @@ services:
       - postgres
       - -c
       - shared_preload_libraries=pg_cron
-      - c
+      - -c
       - cron.database_name=libreerp
     ports:
       - "5432:5432"

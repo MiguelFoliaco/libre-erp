@@ -1,5 +1,31 @@
 import { relations } from "drizzle-orm/relations";
-import { companies, environments, brands, categories, departments, products, branches, warehouses, inventory, inventoryMovements, transfers, transferItems, people, documentTypesPeople, customers, customerTypes, users, roles, userRoles, documentTypes, documentTypeFields, documentTypeHeaders, documentTypeFooters, documents, documentItems, taxes, productTaxes, auditLogs, accounts, fiscalPeriods, journalEntries, journalEntryLines, documentTaxes, cashRegisters, cashSessions, paymentMethods, sales, saleItems, saleItemTaxes, salePayments, cashMovements, saleReturns, saleReturnItems } from "./schema";
+import { users, session, companies, environments, brands, categories, departments, products, branches, warehouses, inventory, inventoryMovements, transfers, transferItems, people, documentTypesPeople, customers, customerTypes, roles, userRoles, documentTypes, documentTypeFields, documentTypeHeaders, documentTypeFooters, documents, documentItems, taxes, productTaxes, auditLogs, accounts, fiscalPeriods, journalEntries, journalEntryLines, documentTaxes, cashRegisters, cashSessions, paymentMethods, sales, saleItems, saleItemTaxes, salePayments, cashMovements, saleReturns, saleReturnItems } from "./schema";
+
+export const sessionRelations = relations(session, ({one}) => ({
+	user: one(users, {
+		fields: [session.userId],
+		references: [users.id]
+	}),
+}));
+
+export const usersRelations = relations(users, ({one, many}) => ({
+	sessions: many(session),
+	person: one(people, {
+		fields: [users.companyId],
+		references: [people.id]
+	}),
+	userRoles: many(userRoles),
+	auditLogs: many(auditLogs),
+	cashSessions_companyId: many(cashSessions, {
+		relationName: "cashSessions_companyId_users_id"
+	}),
+	sales: many(sales),
+	salePayments: many(salePayments),
+	cashMovements: many(cashMovements),
+	saleReturns_companyId: many(saleReturns, {
+		relationName: "saleReturns_companyId_users_id"
+	}),
+}));
 
 export const environmentsRelations = relations(environments, ({one, many}) => ({
 	company: one(companies, {
@@ -112,9 +138,6 @@ export const warehousesRelations = relations(warehouses, ({one, many}) => ({
 	transfers_companyId: many(transfers, {
 		relationName: "transfers_companyId_warehouses_id"
 	}),
-	transfers_companyId: many(transfers, {
-		relationName: "transfers_companyId_warehouses_id"
-	}),
 	cashRegisters: many(cashRegisters),
 	sales: many(sales),
 }));
@@ -164,11 +187,6 @@ export const transfersRelations = relations(transfers, ({one, many}) => ({
 		fields: [transfers.companyId],
 		references: [environments.id]
 	}),
-	warehouse_companyId: one(warehouses, {
-		fields: [transfers.companyId],
-		references: [warehouses.id],
-		relationName: "transfers_companyId_warehouses_id"
-	}),
 	transferItems: many(transferItems),
 }));
 
@@ -217,30 +235,6 @@ export const customersRelations = relations(customers, ({one, many}) => ({
 
 export const customerTypesRelations = relations(customerTypes, ({many}) => ({
 	customers: many(customers),
-}));
-
-export const usersRelations = relations(users, ({one, many}) => ({
-	person: one(people, {
-		fields: [users.companyId],
-		references: [people.id]
-	}),
-	userRoles: many(userRoles),
-	auditLogs: many(auditLogs),
-	cashSessions_companyId: many(cashSessions, {
-		relationName: "cashSessions_companyId_users_id"
-	}),
-	cashSessions_companyId: many(cashSessions, {
-		relationName: "cashSessions_companyId_users_id"
-	}),
-	sales: many(sales),
-	salePayments: many(salePayments),
-	cashMovements: many(cashMovements),
-	saleReturns_companyId: many(saleReturns, {
-		relationName: "saleReturns_companyId_users_id"
-	}),
-	saleReturns_companyId: many(saleReturns, {
-		relationName: "saleReturns_companyId_users_id"
-	}),
 }));
 
 export const rolesRelations = relations(roles, ({one, many}) => ({
@@ -454,11 +448,6 @@ export const cashSessionsRelations = relations(cashSessions, ({one, many}) => ({
 		references: [users.id],
 		relationName: "cashSessions_companyId_users_id"
 	}),
-	user_companyId: one(users, {
-		fields: [cashSessions.companyId],
-		references: [users.id],
-		relationName: "cashSessions_companyId_users_id"
-	}),
 	sales: many(sales),
 	cashMovements: many(cashMovements),
 }));
@@ -556,11 +545,6 @@ export const cashMovementsRelations = relations(cashMovements, ({one}) => ({
 }));
 
 export const saleReturnsRelations = relations(saleReturns, ({one, many}) => ({
-	user_companyId: one(users, {
-		fields: [saleReturns.companyId],
-		references: [users.id],
-		relationName: "saleReturns_companyId_users_id"
-	}),
 	user_companyId: one(users, {
 		fields: [saleReturns.companyId],
 		references: [users.id],

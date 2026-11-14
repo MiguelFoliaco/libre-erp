@@ -25,6 +25,59 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Autenticación
+
+La API implementa access tokens JWT de 15 minutos y refresh tokens aleatorios
+rotativos de 30 días. El access token se devuelve en JSON y el refresh token se
+guarda como hash SHA-256 en `session` y se envía al cliente en una cookie
+`HttpOnly`. Los endpoints son:
+
+El backend compila a CommonJS, por lo que los imports relativos internos se
+escriben sin extensión y Node los resuelve al ejecutar `dist`.
+
+- `POST /auth/login`: acepta `identifier` (usuario o correo), `password` y,
+  opcionalmente, `companyId` junto con `environmentId` si la cuenta existe en
+  más de una empresa.
+- `POST /auth/refresh`: rota la sesión y devuelve un access token nuevo.
+- `POST /auth/logout`: revoca la sesión y borra la cookie.
+- `GET /auth/me`: devuelve el usuario autenticado; requiere `Authorization:
+  Bearer <accessToken>`.
+
+Configura `DATABASE_URL`, `ACCESS_TOKEN_SECRET` (mínimo 32 bytes) y
+`CLIENT_ORIGIN` en el entorno del servidor. Ejecuta las migraciones existentes
+con `pnpm db:migrate`.
+
+### Primer inicio de sesión
+
+1. Desde `backend`, configura `SEED_ADMIN_PASSWORD` con una contraseña fuerte
+   de al menos 12 caracteres. En PowerShell, usa el prompt seguro:
+
+   ```powershell
+   $secret = Read-Host "Contraseña inicial (12+ caracteres)" -AsSecureString
+   $env:SEED_ADMIN_PASSWORD = [System.Net.NetworkCredential]::new("", $secret).Password
+   ```
+
+2. Ejecuta `pnpm db:seed`. El seed crea la empresa, el entorno `main`, la
+   persona, el usuario inicial, el rol `Super Admin` y su asignación, todo en
+   una sola transacción. Si una operación falla, Drizzle revierte la
+   transacción completa.
+3. En el cliente inicia sesión con usuario `superadmin` y la contraseña que
+   configuraste. Si hay varias empresas, completa también los IDs de empresa y
+   entorno que el seed imprime al finalizar.
+4. Borra la variable de la sesión de PowerShell cuando termines:
+
+   ```powershell
+   Remove-Item Env:SEED_ADMIN_PASSWORD
+   ```
+
+No se ofrece registro público porque crear una cuenta requiere asignarle
+empresa, entorno y persona. El hash de contraseña usa scrypt; se puede generar
+por separado, sin mostrar la contraseña, con `pnpm auth:hash-password`.
+
+En producción la cookie requiere HTTPS (`NODE_ENV=production`). El frontend y
+el backend deben compartir el mismo sitio para que funcione la política de
+cookie `SameSite=Lax`.
+
 ## Project setup
 
 ```bash
