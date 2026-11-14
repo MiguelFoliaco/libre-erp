@@ -57,6 +57,9 @@ export interface AuthenticatedUser {
   firstName: string | null;
   lastName: string | null;
   secondLastName: string | null;
+  rol_name: string;
+  rol_actions: string;
+  rol_id: string;
 }
 
 export interface AuthSession {
@@ -180,8 +183,8 @@ export class ApiClient {
   constructor(options: ApiClientOptions = {}) {
     this.baseUrl = normalizeBaseUrl(
       options.baseUrl ??
-        import.meta.env.VITE_API_URL ??
-        "http://localhost:3000",
+      import.meta.env.VITE_API_URL ??
+      "http://localhost:3000",
     );
     this.fetcher = options.fetcher ?? globalThis.fetch.bind(globalThis);
   }

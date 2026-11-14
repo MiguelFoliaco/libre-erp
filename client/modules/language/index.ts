@@ -1,33 +1,38 @@
-import type { TranslationSchema } from "./type";
+import { english } from "./english";
+import { spanish } from "./spanish";
+import { useLanguage } from "./hook";
+import type { Language, PathText } from "./type";
 
-export const spanish = {
-    firstScreen: {
-        'title': "Bienvenido a ",
-        'subtitle': "Sistema implementado por ",
-        'label-select-environment': "Selecciona ambiente",
-        'btn-continue': "Continuar",
-        'text-change-language-1': "Cambiar idioma ",
-        "text-change-language-2": "aquí",
-        "text-version": "Versión "
-    },
-    login: {
-        title: "Inicia sesión en",
-        username: "Usuario",
-        password: "Contraseña",
-        "sign-in": "Ingresar",
-        "forgot-password": "¿Olvidaste tu contraseña?",
-        "recover-password": "Recuperar contraseña"
-    },
-    common: {
-        "yes": "Si",
-        "no": "No",
-        "ok": "Ok",
-        "cancel": "Cancelar",
-        "loading": "Cargando",
-        'back': 'Atrás',
-        "error": "Error",
-        "success": "Exito",
-        'confirm': 'Confirmar',
-        'next': 'Siguiente'
+const translations = {
+    english,
+    spanish
+};
+
+type TextParams = Record<string, string | number>;
+
+export const text = (path: PathText, params?: TextParams): string => {
+    const language = useLanguage.getState().language;
+
+    const translation = path.split('.').reduce<unknown>(
+        (obj, key) => {
+            if (typeof obj !== 'object' || obj === null) {
+                return undefined;
+            }
+
+            return (obj as Record<string, unknown>)[key];
+        },
+        translations[language]
+    );
+
+    if (typeof translation !== 'string') {
+        return path;
     }
-} satisfies TranslationSchema;
+
+    return translation.replace(
+        /\{(\w+)\}/g,
+        (match, key: string) => String(params?.[key] ?? match)
+    );
+};
+
+export { english, spanish };
+export type { Language, PathText };

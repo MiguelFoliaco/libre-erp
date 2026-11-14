@@ -30,6 +30,9 @@ interface UserRow {
   first_name: string | null;
   last_name: string | null;
   second_last_name: string | null;
+  rol_name: string;
+  rol_actions: string;
+  rol_id: string;
 }
 
 export interface AuthenticatedUser {
@@ -41,6 +44,10 @@ export interface AuthenticatedUser {
   firstName: string | null;
   lastName: string | null;
   secondLastName: string | null;
+  rol_name: string;
+  rol_actions: string;
+  rol_id: string;
+
 }
 
 export interface AuthResult {
@@ -63,6 +70,9 @@ function toAuthenticatedUser(row: UserRow): AuthenticatedUser {
     firstName: row.first_name,
     lastName: row.last_name,
     secondLastName: row.second_last_name,
+    rol_name: row.rol_name,
+    rol_actions: row.rol_actions,
+    rol_id: row.rol_id,
   };
 }
 
@@ -75,7 +85,7 @@ export class AuthService {
 
   constructor(@Inject(PG_POOL) private readonly pool: Pool) {
     const secret = process.env.ACCESS_TOKEN_SECRET;
-    
+
     if (!secret || Buffer.byteLength(secret) < 32) {
       throw new Error('ACCESS_TOKEN_SECRET must be at least 32 bytes long');
     }
@@ -115,7 +125,10 @@ export class AuthService {
          u.is_active,
          p.first_name,
          p.last_name,
-         p.second_last_name
+         p.second_last_name,
+         r."name" AS rol_name,
+         r.actions AS rol_actions,
+         r.id AS rol_id
        FROM users u
        JOIN companies c ON c.id = u.company_id AND c.is_active = TRUE
        JOIN environments e
@@ -126,6 +139,10 @@ export class AuthService {
          ON p.id = u.person_id
         AND p.company_id = u.company_id
         AND p.environment_id = u.environment_id
+       		inner JOIN user_roles ur
+ 		    ON ur.user_id = u.id
+ 		    inner JOIN roles r
+ 		    ON r.id = ur.role_id 
        WHERE (LOWER(u.email) = LOWER($1) OR LOWER(u.username) = LOWER($1))
          AND ($2::uuid IS NULL OR u.company_id = $2::uuid)
          AND ($3::uuid IS NULL OR u.environment_id = $3::uuid)
@@ -194,7 +211,10 @@ export class AuthService {
            u.is_active,
            p.first_name,
            p.last_name,
-           p.second_last_name
+           p.second_last_name,
+           r."name" AS rol_name,
+            r.actions AS rol_actions,
+            r.id AS rol_id
          FROM session s
          JOIN users u ON u.id = s.user_id
          JOIN companies c ON c.id = u.company_id AND c.is_active = TRUE
@@ -206,6 +226,10 @@ export class AuthService {
            ON p.id = u.person_id
           AND p.company_id = u.company_id
           AND p.environment_id = u.environment_id
+                 		inner JOIN user_roles ur
+ 		    ON ur.user_id = u.id
+ 		    inner JOIN roles r
+ 		    ON r.id = ur.role_id 
          WHERE s.refresh_token = $1
            AND s.active = TRUE
            AND s.expires_at > NOW()
@@ -315,18 +339,25 @@ export class AuthService {
          u.is_active,
          p.first_name,
          p.last_name,
-         p.second_last_name
+         p.second_last_name,
+         r."name" AS rol_name,
+         r.actions AS rol_actions,
+         r.id AS rol_id
        FROM users u
        JOIN companies c ON c.id = u.company_id AND c.is_active = TRUE
-       JOIN environments e
+      JOIN environments e
          ON e.id = u.environment_id
         AND e.company_id = u.company_id
         AND e.is_active = TRUE
-       LEFT JOIN people p
+      LEFT JOIN people p
          ON p.id = u.person_id
         AND p.company_id = u.company_id
         AND p.environment_id = u.environment_id
-       WHERE u.id = $1
+ 		inner JOIN user_roles ur
+ 		ON ur.user_id = u.id
+ 		inner JOIN roles r
+ 		ON r.id = ur.role_id
+       WHERE u.id = 'd52539af-fabc-414a-b4ff-6527d819e53f'
          AND u.is_active = TRUE`,
       [userId],
     );
