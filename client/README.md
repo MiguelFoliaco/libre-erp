@@ -10,6 +10,23 @@ mantiene en una cookie `HttpOnly`; el access token permanece solo en memoria y
 se renueva automáticamente. Configura `CLIENT_ORIGIN` en el backend para
 permitir el origen del frontend con credenciales.
 
+## SDK de API
+
+El cliente compartido está en `lib/sdk.ts`. Usa `apiClient.login`,
+`restoreSession` y `logout` para autenticación, y `list`, `get`, `create`,
+`update` y `remove` para los recursos CRUD. Las solicitudes incluyen la cookie
+de refresh, adjuntan el access token y, ante un `401`, intentan renovar la
+sesión una sola vez antes de repetir la petición.
+
+```ts
+import { apiClient } from "../../lib/sdk";
+
+const products = await apiClient.list<{ id: string; name: string }>(
+  "products",
+  { limit: 50 },
+);
+```
+
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
 
 ## Features

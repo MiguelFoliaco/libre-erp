@@ -1,97 +1,12 @@
 import { useEffect, useState, type FormEvent } from "react";
 import type { Route } from "./+types/home";
+import {
+  apiClient,
+  type AuthenticatedUser,
+  type AuthSession,
+} from "../../lib/sdk";
 
-const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(
-  /\/+$/,
-  "",
-);
-
-interface AuthenticatedUser {
-  id: string;
-  companyId: string;
-  environmentId: string;
-  username: string;
-  email: string;
-  firstName: string | null;
-  lastName: string | null;
-  secondLastName: string | null;
-}
-
-interface AuthResponse {
-  accessToken: string;
-  expiresIn: number;
-  user: AuthenticatedUser;
-}
-
-let refreshInFlight: Promise<AuthResponse | null> | null = null;
-
-function isAuthenticatedUser(value: unknown): value is AuthenticatedUser {
-  if (!value || typeof value !== "object") return false;
-  const user = value as Record<string, unknown>;
-  return (
-    typeof user.id === "string" &&
-    typeof user.companyId === "string" &&
-    typeof user.environmentId === "string" &&
-    typeof user.username === "string" &&
-    typeof user.email === "string" &&
-    (typeof user.firstName === "string" || user.firstName === null) &&
-    (typeof user.lastName === "string" || user.lastName === null) &&
-    (typeof user.secondLastName === "string" || user.secondLastName === null)
-  );
-}
-
-function isAuthResponse(value: unknown): value is AuthResponse {
-  if (!value || typeof value !== "object") return false;
-  const response = value as Record<string, unknown>;
-  return (
-    typeof response.accessToken === "string" &&
-    typeof response.expiresIn === "number" &&
-    response.expiresIn > 0 &&
-    isAuthenticatedUser(response.user)
-  );
-}
-
-async function responseError(response: Response): Promise<string> {
-  let body: unknown;
-  try {
-    body = await response.json();
-  } catch {
-    return `Error del servidor (${response.status})`;
-  }
-  if (body && typeof body === "object" && "message" in body) {
-    const message = (body as { message?: unknown }).message;
-    if (typeof message === "string") return message;
-    if (Array.isArray(message) && message.every((item) => typeof item === "string")) {
-      return message.join(", ");
-    }
-  }
-  return `Error del servidor (${response.status})`;
-}
-
-function requestRefresh(): Promise<AuthResponse | null> {
-  if (!refreshInFlight) {
-    refreshInFlight = (async () => {
-      const response = await fetch(`${API_URL}/auth/refresh`, {
-        method: "POST",
-        credentials: "include",
-      });
-      if (response.status === 401) return null;
-      if (!response.ok) {
-        throw new Error(await responseError(response));
-      }
-      const payload: unknown = await response.json();
-      if (!isAuthResponse(payload)) {
-        throw new Error("Respuesta de autenticación inválida");
-      }
-      return payload;
-    })().finally(() => {
-      refreshInFlight = null;
-    });
-  }
-  return refreshInFlight;
-}
-
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
     { title: "Iniciar sesión | LibreERP" },
     { name: "description", content: "Accede a tu espacio de LibreERP." },
@@ -106,7 +21,7 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  function applySession(session: AuthResponse) {
+  function applySession(session: AuthSession) {
     setUser(session.user);
     setAccessToken(session.accessToken);
     setExpiresAt(Date.now() + session.expiresIn * 1000);
@@ -115,7 +30,8 @@ export default function Home() {
 
   useEffect(() => {
     let active = true;
-    requestRefresh()
+    apiClient
+      .restoreSession()
       .then((session) => {
         if (active && session) applySession(session);
       })
@@ -137,7 +53,8 @@ export default function Home() {
     if (!accessToken || expiresAt === null) return;
     const delay = Math.max(1000, expiresAt - Date.now() - 60_000);
     const timer = window.setTimeout(() => {
-      requestRefresh()
+      apiClient
+        .refresh()
         .then((session) => {
           if (!session) {
             throw new Error("Refresh token inválido");
@@ -170,30 +87,20 @@ export default function Home() {
     const environmentId = String(formData.get("environmentId") ?? "").trim();
 
     if (Boolean(companyId) !== Boolean(environmentId)) {
-      setError("Ingresa ambos identificadores de empresa y entorno, o deja ambos vacíos.");
+      setError(
+        "Ingresa ambos identificadores de empresa y entorno, o deja ambos vacíos.",
+      );
       setIsSubmitting(false);
       return;
     }
 
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          identifier,
-          password,
-          ...(companyId ? { companyId, environmentId } : {}),
-        }),
+      const session = await apiClient.login({
+        identifier,
+        password,
+        ...(companyId ? { companyId, environmentId } : {}),
       });
-      if (!response.ok) {
-        throw new Error(await responseError(response));
-      }
-      const payload: unknown = await response.json();
-      if (!isAuthResponse(payload)) {
-        throw new Error("Respuesta de autenticación inválida");
-      }
-      applySession(payload);
+      applySession(session);
     } catch (cause: unknown) {
       setError(
         cause instanceof Error
@@ -208,16 +115,7 @@ export default function Home() {
   async function handleLogout() {
     setIsSubmitting(true);
     try {
-      const response = await fetch(`${API_URL}/auth/logout`, {
-        method: "POST",
-        credentials: "include",
-        headers: accessToken
-          ? { Authorization: `Bearer ${accessToken}` }
-          : undefined,
-      });
-      if (!response.ok) {
-        throw new Error(await responseError(response));
-      }
+      await apiClient.logout();
       setUser(null);
       setAccessToken(null);
       setExpiresAt(null);
@@ -233,10 +131,15 @@ export default function Home() {
     }
   }
 
+  async function loadCompanies() {
+    const data = await apiClient.list('companies');
+    console.log(data);
+  }
+
   const fullName = user
     ? [user.firstName, user.lastName, user.secondLastName]
-        .filter((name): name is string => Boolean(name))
-        .join(" ")
+      .filter((name): name is string => Boolean(name))
+      .join(" ")
     : "";
 
   return (
@@ -355,6 +258,8 @@ export default function Home() {
           </p>
         )}
       </section>
+
+      <button className="btn mt-2 btn-primary" onClick={loadCompanies}>Load</button>
 
       <footer className="auth-footer">
         Acceso seguro a tu espacio de trabajo
