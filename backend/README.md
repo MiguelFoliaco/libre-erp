@@ -41,7 +41,7 @@ escriben sin extensión y Node los resuelve al ejecutar `dist`.
 - `POST /auth/refresh`: rota la sesión y devuelve un access token nuevo.
 - `POST /auth/logout`: revoca la sesión y borra la cookie.
 - `GET /auth/me`: devuelve el usuario autenticado; requiere `Authorization:
-  Bearer <accessToken>`.
+Bearer <accessToken>`.
 
 Configura `DATABASE_URL`, `ACCESS_TOKEN_SECRET` (mínimo 32 bytes) y
 `CLIENT_ORIGIN` en el entorno del servidor. Ejecuta las migraciones existentes
@@ -77,6 +77,69 @@ por separado, sin mostrar la contraseña, con `pnpm auth:hash-password`.
 En producción la cookie requiere HTTPS (`NODE_ENV=production`). El frontend y
 el backend deben compartir el mismo sitio para que funcione la política de
 cookie `SameSite=Lax`.
+
+## API de datos y permisos
+
+Las rutas de datos requieren `Authorization: Bearer <accessToken>`. El usuario
+debe tener un rol activo asignado en su empresa y entorno; los permisos se leen
+de `roles.actions` en cada solicitud:
+
+- `*`: todas las acciones.
+- `Product[*]`: todas las acciones del módulo Product.
+- `Product[READ|INSERT|UPDATE|DELETE]`: acciones explícitas del módulo.
+
+Los nombres de módulo no distinguen mayúsculas y aceptan alias en español
+documentados en `src/common/authorization/permissions.ts`. Un permiso no
+concedido responde 403. El acceso a cada fila se limita a la empresa y al entorno del usuario;
+los IDs de ámbito enviados por el cliente se ignoran. Los listados aceptan
+`limit` (máximo 200) y `offset`.
+
+Las rutas CRUD siguen `GET /api/:resource`, `GET /api/:resource/:id`,
+`POST /api/:resource`, `PATCH /api/:resource/:id` y
+`DELETE /api/:resource/:id`. Recursos disponibles:
+
+`companies`, `environments`, `brands`, `categories`, `departments`, `products`,
+`branches`, `warehouses`, `inventory`, `inventory-movements`, `transfers`,
+`transfer-items`, `document-types-people`, `people`, `customer-types`,
+`customers`, `users`, `roles`, `user-roles`, `document-types`,
+`document-type-fields`, `document-type-headers`, `document-type-footers`,
+`documents`, `document-items`, `taxes`, `product-taxes`, `audit-logs`,
+`accounts`, `fiscal-periods`, `journal-entries`, `journal-entry-lines`,
+`document-taxes`, `cash-registers`, `cash-sessions`, `payment-methods`, `sales`,
+`sale-items`, `sale-item-taxes`, `sale-payments`, `cash-movements`,
+`sale-returns` y `sale-return-items`.
+
+`/api/sellers` usa la tabla `users` y requiere permisos del módulo `Seller`;
+`/api/users` usa la misma tabla con permisos del módulo `User`. No existe una
+tabla de proveedores en el esquema actual.
+
+El cuerpo de los CRUD usa nombres de columnas en `snake_case` o propiedades en
+`camelCase`; no se aceptan IDs, contraseñas hash, campos de ámbito ni marcas de
+tiempo controladas por el servidor. Al crear usuarios se envía `password` (12+
+caracteres), que se guarda como scrypt; el hash nunca se devuelve. Para cambiar
+la contraseña propia: `PATCH /api/users/:id/password` con
+`{ "currentPassword": "...", "newPassword": "..." }`. Al crear un cliente se
+puede enviar `{ "person": { ... }, ...camposDelCliente }`; persona y cliente
+se insertan en una única transacción.
+
+Los cambios de roles y asignaciones requieren el permiso correspondiente y no
+pueden conceder acciones que quien los realiza no tenga. El permiso raíz `*`
+solo puede asignarlo un superadministrador. La modificación de empresas y las
+escrituras en catálogos globales también requieren `*`. Auditoría es de solo
+lectura. Las tablas `session` y `schema_migrations` no se exponen.
+Reportes iniciales: `GET /api/reports/inventory` y
+`GET /api/reports/sales?from=YYYY-MM-DD&to=YYYY-MM-DD`, ambos requieren
+`Report[READ]`.
+
+### Estructura del backend
+
+- `src/common/authorization`: validación de permisos y contexto del usuario.
+- `src/common/crud`: operaciones CRUD compartidas y registro de recursos.
+- `src/modules`: módulos por dominio, con controladores y recursos del dominio.
+- `src/modules/api`: módulo agregador importado por la aplicación.
+
+Esta organización mantiene las rutas públicas existentes y permite desarrollar
+cada dominio en su propio módulo sin duplicar la lógica CRUD común.
 
 ## Project setup
 

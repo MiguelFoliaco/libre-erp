@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { createObserveModule } from '@nestjs/observe';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ApiModule } from './modules/api/api.module';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 
@@ -11,6 +12,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
   imports: [
     DatabaseModule,
     AuthModule,
+    ApiModule,
     // // Distributed tracing, auto-correlated logs, request/job metrics, error
     // // telemetry, alarms, and more — out of the box. Sign up at https://observe.nestjs.com
     // ObserveModule.forRoot({

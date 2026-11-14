@@ -23,6 +23,8 @@ interface AuthResponse {
   user: AuthenticatedUser;
 }
 
+let refreshInFlight: Promise<AuthResponse | null> | null = null;
+
 function isAuthenticatedUser(value: unknown): value is AuthenticatedUser {
   if (!value || typeof value !== "object") return false;
   const user = value as Record<string, unknown>;
@@ -66,20 +68,27 @@ async function responseError(response: Response): Promise<string> {
   return `Error del servidor (${response.status})`;
 }
 
-async function requestRefresh(): Promise<AuthResponse | null> {
-  const response = await fetch(`${API_URL}/auth/refresh`, {
-    method: "POST",
-    credentials: "include",
-  });
-  if (response.status === 401) return null;
-  if (!response.ok) {
-    throw new Error(await responseError(response));
+function requestRefresh(): Promise<AuthResponse | null> {
+  if (!refreshInFlight) {
+    refreshInFlight = (async () => {
+      const response = await fetch(`${API_URL}/auth/refresh`, {
+        method: "POST",
+        credentials: "include",
+      });
+      if (response.status === 401) return null;
+      if (!response.ok) {
+        throw new Error(await responseError(response));
+      }
+      const payload: unknown = await response.json();
+      if (!isAuthResponse(payload)) {
+        throw new Error("Respuesta de autenticación inválida");
+      }
+      return payload;
+    })().finally(() => {
+      refreshInFlight = null;
+    });
   }
-  const payload: unknown = await response.json();
-  if (!isAuthResponse(payload)) {
-    throw new Error("Respuesta de autenticación inválida");
-  }
-  return payload;
+  return refreshInFlight;
 }
 
 export function meta({}: Route.MetaArgs) {
