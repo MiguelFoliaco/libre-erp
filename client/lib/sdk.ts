@@ -1,3 +1,5 @@
+import type { PersonSearchResult } from './user-and-roles';
+
 export const API_RESOURCES = [
   "companies",
   "environments",
@@ -283,6 +285,11 @@ export class ApiClient {
     }
     const suffix = query.size > 0 ? `?${query.toString()}` : "";
     return this.request(`api/${resource}${suffix}`);
+  }
+
+  searchPeople(query: string, signal?: AbortSignal): Promise<PersonSearchResult[]> {
+    const params = new URLSearchParams({ query });
+    return this.request(`api/people/search?${params.toString()}`, { signal });
   }
 
   get<T>(resource: ApiResource, id: string): Promise<T> {

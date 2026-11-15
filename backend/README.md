@@ -113,6 +113,11 @@ Las rutas CRUD siguen `GET /api/:resource`, `GET /api/:resource/:id`,
 `/api/users` usa la misma tabla con permisos del módulo `User`. No existe una
 tabla de proveedores en el esquema actual.
 
+El autocomplete de personas puede buscar por nombre o número de documento con
+`GET /api/people/search?query=...`. Requiere `Client[READ]`, mínimo dos
+caracteres, y devuelve como máximo 20 personas activas del ámbito de empresa y
+entorno de la sesión.
+
 El cuerpo de los CRUD usa nombres de columnas en `snake_case` o propiedades en
 `camelCase`; no se aceptan IDs, contraseñas hash, campos de ámbito ni marcas de
 tiempo controladas por el servidor. Al crear usuarios se envía `password` (12+

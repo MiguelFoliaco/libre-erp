@@ -1,24 +1,41 @@
-import { LayoutDashboard, MoreHorizontal, Settings, UserRoundShield, UsersRound } from 'lucide-react';
-import React from 'react'
-import { text } from '../../language';
+import { LayoutDashboard, LogOut, SkipBack, UsersRound } from 'lucide-react';
+// import React from 'react'
+import { text } from '../language';
 import { clsx } from 'clsx';
 import { useNavigate, useParams } from 'react-router';
+import { useSession } from '../auth/hook/store';
 
 
-const primaryColor = 'bg-linear-to-tr from-red-500 to-120% to-orange-600'
-const primaryColor20 = 'bg-linear-to-tr from-red-500/10 to-120% to-orange-600/10'
-const textColor =
-    "bg-linear-to-r from-red-500 to-orange-600 bg-clip-text text-transparent";
+// const primaryColor20 = 'bg-linear-to-tr from-red-500/10 to-120% to-orange-600/10'
+// const textColor =
+//     "bg-linear-to-r from-red-500 to-orange-600 bg-clip-text text-transparent";
+
+export type LeftNavigation = {
+    label: string
+    key: string
+    path: string
+    icon: typeof UsersRound
+}
 
 
-const navigation = [
-    { label: "Inicio", key: '', path: '/start/users-and-roles', icon: LayoutDashboard },
-    { label: "Usuarios y roles", key: 'manager', path: '/start/users-and-roles/manager', icon: UsersRound, },
-    { label: "Configuración", key: 'settings', path: '/start/users-and-roles/settings', icon: Settings },
-];
 
-export const LeftPanel = () => {
+type LeftPanelProps = {
+    navigation: LeftNavigation[]
+    primaryColor: string
+    nameModule: string;
+    IconModule: typeof LayoutDashboard
+}
 
+export const LeftPanel = (
+    {
+        navigation,
+        primaryColor,
+        nameModule,
+        IconModule
+    }: LeftPanelProps
+) => {
+
+    const { logout, user } = useSession()
     const { section } = useParams()
     const navigate = useNavigate()
 
@@ -26,12 +43,12 @@ export const LeftPanel = () => {
         <aside className="h-screen sticky top-0 w-60 shrink-0 border-r border-base-300 bg-base-100 flex flex-col">
             <div className="flex h-16 items-center gap-3 border-b border-base-300 px-5">
                 <div className={"grid size-9 place-items-center text-white rounded-md " + primaryColor}>
-                    <UserRoundShield size={19} />
+                    <IconModule size={19} />
                 </div>
                 <div className="min-w-0">
                     <p className="font-bold tracking-tight">LibreERP</p>
                     <p className="text-xs text-base-content/50">
-                        {text('startModule.listAppliaction.userAndRoles')}
+                        {nameModule}
                     </p>
                 </div>
             </div>
@@ -41,7 +58,7 @@ export const LeftPanel = () => {
                     Espacio de trabajo
                 </p>
 
-                <ul className="w-full gap-1 p-0">
+                <ul className="w-full flex flex-col gap-1 p-0">
                     {navigation.map(({ label, icon: Icon, path, key }) => (
                         <li
                             onClick={() => navigate(path)}
@@ -61,6 +78,21 @@ export const LeftPanel = () => {
                             </a>
                         </li>
                     ))}
+                    <li
+                        onClick={() => navigate('/start')}
+                        className={
+                            clsx(
+                                "w-full mt-auto flex cursor-pointer p-1 items-center gap-2 pl-2 hover:pl-3 transition-all rounded-sm hover:bg-base-200/50",
+                            )
+
+                        }>
+                        <SkipBack size={17} />
+                        <a
+                            aria-current={"page"}
+                        >
+                            Volver al inicio
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -68,16 +100,19 @@ export const LeftPanel = () => {
                 <button className="flex w-full items-center gap-3 rounded-lg p-2 text-left hover:bg-base-200">
                     <div className="avatar avatar-placeholder">
                         <div className={" text-neutral-content w-10 rounded-full " + primaryColor}>
-                            <span className="text-sm">D</span>
+                            <span className="text-sm">{user?.firstName?.charAt(0)}</span>
                         </div>
                     </div>
                     <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-semibold">Alex Flores</p>
+                        <p className="truncate text-sm font-semibold">{(user?.firstName + ' ' + user?.lastName).substring(0, 15)}</p>
                         <p className="truncate text-xs text-base-content/50">
-                            Administrador
+                            {user?.rol_name}
                         </p>
                     </div>
-                    <MoreHorizontal size={18} className="text-base-content/50" />
+
+                    <div className="tooltip cursor-pointer" data-tip="Cerrar sesión">
+                        <LogOut onClick={logout} size={18} className="text-error" />
+                    </div>
                 </button>
             </div>
         </aside >
