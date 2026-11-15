@@ -7,5 +7,9 @@ export default [
         index("routes/user-and-roles-home.tsx"),
         route(":section", "routes/user-and-roles-section.tsx"),
     ]),
-    route("/start/settings", "routes/settings.tsx")
+    route("/start/settings", "routes/settings.tsx", [
+        index("routes/settings-home.tsx"),
+        route("company", "routes/settings-company.tsx"),
+        route("branches", "routes/settings-branches.tsx"),
+    ])
 ] satisfies RouteConfig;

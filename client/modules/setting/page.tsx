@@ -7,9 +7,9 @@ import { Outlet } from 'react-router';
 const primaryColor = 'bg-linear-to-tr to-gray-500 to-120% from-black'
 
 const navigation: LeftNavigation[] = [
-    { label: text('startModule.userAndRoles.navigation.settings'), key: '', path: '/start/settings', icon: Settings },
-    { label: 'Compañia', key: 'company', path: '/start/settings/company', icon: Building },
-    { label: 'Ambiente', key: 'enviroments', path: '/start/settings/enviroments', icon: Store },
+    { label: text('startModule.settings.navigation.home'), key: '', path: '/start/settings', icon: Settings },
+    { label: text('startModule.settings.navigation.company'), key: 'company', path: '/start/settings/company', icon: Building },
+    { label: text('startModule.settings.navigation.branches'), key: 'branches', path: '/start/settings/branches', icon: Store },
 ];
 
 

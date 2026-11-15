@@ -1,4 +1,60 @@
 export const startModule = {
+    settings: {
+        navigation: {
+            home: "Settings",
+            company: "Company",
+            branches: "Branches"
+        },
+        home: {
+            title: "Company settings",
+            description: "Manage the details of your single company and the branches in the current workspace.",
+            companyTitle: "Company details",
+            companyDescription: "Update the company's legal and contact information.",
+            branchesTitle: "Branches",
+            branchesDescription: "Create and manage branches available in this workspace."
+        },
+        company: {
+            title: "Company",
+            description: "Edit the company information associated with your workspace.",
+            oneCompanyNotice: "Only one company can be managed from these settings; you can update its details here.",
+            legalName: "Legal name",
+            tradeName: "Trade name",
+            registrationType: "Registration type",
+            registrationNumber: "Registration number",
+            countryCode: "Country code (ISO)",
+            email: "Email address",
+            phone: "Phone",
+            website: "Website",
+            address: "Address",
+            save: "Save changes",
+            saved: "Company details were updated."
+        },
+        branches: {
+            title: "Branches",
+            description: "Manage the branches associated with the current workspace.",
+            environmentNotice: "Branches belong to the selected workspace. Sign in to another workspace to manage its branches.",
+            createTitle: "New branch",
+            editTitle: "Edit branch",
+            name: "Branch name",
+            code: "Code",
+            active: "Active branch",
+            create: "Create branch",
+            save: "Save changes",
+            cancel: "Cancel",
+            edit: "Edit",
+            activeStatus: "Active",
+            inactiveStatus: "Inactive",
+            noRecords: "There are no branches in this workspace yet.",
+            created: "Branch created.",
+            updated: "Branch updated."
+        },
+        common: {
+            loading: "Loading...",
+            retry: "Retry",
+            required: "This field is required.",
+            operationFailed: "The operation could not be completed. Try again."
+        }
+    },
     listAppliaction: {
         userAndRoles: "User and roles",
         settings: "Settings",

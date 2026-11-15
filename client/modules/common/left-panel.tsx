@@ -2,7 +2,7 @@ import { LayoutDashboard, LogOut, SkipBack, UsersRound } from 'lucide-react';
 // import React from 'react'
 import { text } from '../language';
 import { clsx } from 'clsx';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import { useSession } from '../auth/hook/store';
 
 
@@ -38,6 +38,7 @@ export const LeftPanel = (
     const { logout, user } = useSession()
     const { section } = useParams()
     const navigate = useNavigate()
+    const location = useLocation()
 
     return (
         <aside className="h-screen sticky top-0 w-60 shrink-0 border-r border-base-300 bg-base-100 flex flex-col">
@@ -63,16 +64,20 @@ export const LeftPanel = (
                         <li
                             onClick={() => navigate(path)}
                             key={label}
-                            className={
-                                clsx(
-                                    "w-full flex cursor-pointer p-1 items-center gap-2 pl-2 hover:pl-3 transition-all rounded-sm hover:bg-base-200/50",
-                                    (section ?? '') === key && "active font-semibold text-white " + primaryColor
-                                )
-
-                            }>
+                            className={clsx(
+                                "w-full flex cursor-pointer p-1 items-center gap-2 pl-2 hover:pl-3 transition-all rounded-sm hover:bg-base-200/50",
+                                (location.pathname === path ||
+                                    (section !== undefined && section === key)) &&
+                                    "active font-semibold text-white " + primaryColor
+                            )}>
                             <Icon size={17} />
                             <a
-                                aria-current={(section ?? '') === key ? "page" : undefined}
+                                aria-current={
+                                    location.pathname === path ||
+                                    (section !== undefined && section === key)
+                                        ? "page"
+                                        : undefined
+                                }
                             >
                                 {label}
                             </a>

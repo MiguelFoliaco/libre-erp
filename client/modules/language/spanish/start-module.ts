@@ -1,4 +1,60 @@
 export const startModule = {
+    settings: {
+        navigation: {
+            home: "Configuración",
+            company: "Compañía",
+            branches: "Sucursales"
+        },
+        home: {
+            title: "Configuración de la empresa",
+            description: "Administra los datos de tu única compañía y las sucursales del ambiente de trabajo actual.",
+            companyTitle: "Datos de la compañía",
+            companyDescription: "Actualiza la información legal y de contacto de la compañía.",
+            branchesTitle: "Sucursales",
+            branchesDescription: "Crea y administra las sucursales disponibles en este ambiente."
+        },
+        company: {
+            title: "Compañía",
+            description: "Edita la información de la compañía asociada a tu espacio de trabajo.",
+            oneCompanyNotice: "Solo se permite una compañía desde esta configuración; aquí puedes actualizar sus datos.",
+            legalName: "Razón social",
+            tradeName: "Nombre comercial",
+            registrationType: "Tipo de identificación",
+            registrationNumber: "Número de identificación",
+            countryCode: "Código de país (ISO)",
+            email: "Correo electrónico",
+            phone: "Teléfono",
+            website: "Sitio web",
+            address: "Dirección",
+            save: "Guardar cambios",
+            saved: "Los datos de la compañía se actualizaron."
+        },
+        branches: {
+            title: "Sucursales",
+            description: "Gestiona las sucursales asociadas al ambiente actual.",
+            environmentNotice: "Las sucursales pertenecen al ambiente de trabajo seleccionado. Para administrar otro ambiente, inicia sesión en ese espacio.",
+            createTitle: "Nueva sucursal",
+            editTitle: "Editar sucursal",
+            name: "Nombre de la sucursal",
+            code: "Código",
+            active: "Sucursal activa",
+            create: "Crear sucursal",
+            save: "Guardar cambios",
+            cancel: "Cancelar",
+            edit: "Editar",
+            activeStatus: "Activa",
+            inactiveStatus: "Inactiva",
+            noRecords: "Todavía no hay sucursales en este ambiente.",
+            created: "Sucursal creada.",
+            updated: "Sucursal actualizada."
+        },
+        common: {
+            loading: "Cargando...",
+            retry: "Reintentar",
+            required: "Este campo es obligatorio.",
+            operationFailed: "No se pudo completar la operación. Inténtalo nuevamente."
+        }
+    },
     listAppliaction: {
         userAndRoles: "Roles y usuarios",
         settings: "Configuraciones",
