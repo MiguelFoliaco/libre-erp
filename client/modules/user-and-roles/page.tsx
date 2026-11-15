@@ -6,13 +6,12 @@ import { text } from "../language";
 const primaryColor = 'bg-linear-to-tr from-red-500 to-120% to-orange-600'
 
 
-const navigation: LeftNavigation[] = [
-  { label: "Inicio", key: '', path: '/start/users-and-roles', icon: LayoutDashboard },
-  { label: "Usuarios y roles", key: 'manager', path: '/start/users-and-roles/manager', icon: UsersRound, },
-  { label: "Configuración", key: 'settings', path: '/start/users-and-roles/settings', icon: Settings },
-];
-
 export function UserAndRolesPage() {
+  const navigation: LeftNavigation[] = [
+    { label: text('startModule.userAndRoles.navigation.home'), key: '', path: '/start/users-and-roles', icon: LayoutDashboard },
+    { label: text('startModule.userAndRoles.navigation.manager'), key: 'manager', path: '/start/users-and-roles/manager', icon: UsersRound },
+    { label: text('startModule.userAndRoles.navigation.settings'), key: 'settings', path: '/start/users-and-roles/settings', icon: Settings },
+  ];
 
   return (
     <div className="h-screen overflow-y-auto bg-base-200 text-base-content p-0 lg:flex">

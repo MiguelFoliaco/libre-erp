@@ -7,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import { text } from '../language';
 
 export type ToastKind = 'success' | 'error' | 'warning' | 'info';
 
@@ -61,10 +62,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             <button
               type="button"
               className="btn btn-ghost btn-xs"
-              aria-label="Cerrar notificación"
+              aria-label={text('common.toast.closeNotification')}
               onClick={dismiss}
             >
-              Cerrar
+              {text('common.toast.close')}
             </button>
           </div>
         </div>

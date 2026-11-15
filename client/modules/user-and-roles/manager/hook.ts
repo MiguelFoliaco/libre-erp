@@ -8,6 +8,7 @@ import type {
 } from '../../../lib/user-and-roles';
 import { describeUserAndRolesError } from '../../../lib/user-and-roles-errors';
 import { useToast } from '../../common/toast';
+import { text } from '../../language';
 
 type ManagerTab = 'users' | 'roles';
 type RoleModal = { role: RoleRecord | null } | null;
@@ -128,7 +129,7 @@ export const useManager = () => {
                     assignment.role_id === assignmentRoleId,
             )
         ) {
-            notify('info', 'Ese rol ya está asignado al usuario.');
+            notify('info', text('startModule.userAndRoles.notifications.alreadyAssigned'));
             return;
         }
 
@@ -138,7 +139,7 @@ export const useManager = () => {
                 roleId: assignmentRoleId,
             };
             await apiClient.create<UserRoleRecord>('user-roles', input);
-            notify('success', 'Rol asignado al usuario.');
+            notify('success', text('startModule.userAndRoles.notifications.roleAssigned'));
             setAssignmentRoleId('');
             await loadRecords();
         } catch (cause: unknown) {
@@ -150,7 +151,7 @@ export const useManager = () => {
     async function removeRole(assignment: UserRoleRecord) {
         try {
             await apiClient.remove('user-roles', assignment.id);
-            notify('success', 'Rol retirado del usuario.');
+            notify('success', text('startModule.userAndRoles.notifications.roleRemoved'));
             await loadRecords();
         } catch (cause: unknown) {
             const error = describeUserAndRolesError(cause);

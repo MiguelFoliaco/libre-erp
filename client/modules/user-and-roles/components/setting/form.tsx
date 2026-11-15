@@ -7,10 +7,11 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { ToastProvider } from '../../../common/toast';
+import { text } from '../../../language';
 import { useSettingsForm, type AuthProvider } from './hook';
 
 const authProviders: { value: AuthProvider; label: string }[] = [
-  { value: 'local', label: 'Usuario y contraseña' },
+  { value: 'local', label: text('startModule.userAndRoles.settings.localProvider') },
   { value: 'google', label: 'Google' },
   { value: 'github', label: 'GitHub' },
   { value: 'gitlab', label: 'GitLab' },
@@ -29,17 +30,16 @@ function SettingsFormContent() {
       <header className="flex h-16 items-center gap-3 border-b border-base-300 bg-base-100 px-6">
         <ShieldCheck size={20} className="text-error" />
         <div>
-          <h1 className="font-bold">Configuración de acceso</h1>
+          <h1 className="font-bold">{text('startModule.userAndRoles.settings.title')}</h1>
           <p className="text-xs text-base-content/55">
-            Autenticación, correo y passkeys
+            {text('startModule.userAndRoles.settings.subtitle')}
           </p>
         </div>
       </header>
 
       <main className="mx-auto max-w-4xl space-y-5 p-4 sm:p-6">
         <div className="alert alert-info text-sm" role="status">
-          Este formulario es visual por ahora. Los cambios permanecen en esta
-          pantalla y no se aplican al backend ni se guardan al recargar.
+          {text('startModule.userAndRoles.settings.previewNotice')}
         </div>
 
         <form className="space-y-5" onSubmit={form.handleSubmit}>
@@ -48,15 +48,15 @@ function SettingsFormContent() {
               <div className="flex items-center gap-2">
                 <KeyRound size={18} className="text-error" />
                 <div>
-                  <h2 className="font-bold">Proveedor de autenticación</h2>
+                  <h2 className="font-bold">{text('startModule.userAndRoles.settings.authProvider')}</h2>
                   <p className="text-xs text-base-content/55">
-                    Elige el proveedor que se configuraría para iniciar sesión.
+                    {text('startModule.userAndRoles.settings.authProviderDescription')}
                   </p>
                 </div>
               </div>
 
               <label className="form-control max-w-md">
-                <span className="label-text mb-1 mr-2">authProvider</span>
+                <span className="label-text mb-1 mr-2">{text('startModule.userAndRoles.settings.authProvider')}</span>
                 <select
                   className="select select-sm"
                   value={form.authProvider}
@@ -81,16 +81,16 @@ function SettingsFormContent() {
               <div className="flex items-center gap-2">
                 <Mail size={18} className="text-error" />
                 <div>
-                  <h2 className="font-bold">Configuración de correo SMTP</h2>
+                  <h2 className="font-bold">{text('startModule.userAndRoles.settings.emailTitle')}</h2>
                   <p className="text-xs text-base-content/55">
-                    Datos del servidor y del remitente.
+                    {text('startModule.userAndRoles.settings.emailDescription')}
                   </p>
                 </div>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="form-control flex flex-col">
-                  <span className="label-text mb-1">Servidor (host)</span>
+                  <span className="label-text mb-1">{text('startModule.userAndRoles.settings.host')}</span>
                   <span className="input input-sm flex items-center gap-2">
                     <Server size={15} className="text-base-content/45" />
                     <input
@@ -106,7 +106,7 @@ function SettingsFormContent() {
                 </div>
 
                 <div className="form-control flex flex-col">
-                  <span className="label-text mb-1">Puerto</span>
+                  <span className="label-text mb-1">{text('startModule.userAndRoles.settings.port')}</span>
                   <input
                     className="input input-sm"
                     type="number"
@@ -120,7 +120,7 @@ function SettingsFormContent() {
                 </div>
 
                 <label className="form-control flex flex-col">
-                  <span className="label-text mb-1">Usuario SMTP</span>
+                  <span className="label-text mb-1">{text('startModule.userAndRoles.settings.smtpUsername')}</span>
                   <input
                     className="input input-sm"
                     autoComplete="username"
@@ -132,7 +132,7 @@ function SettingsFormContent() {
                 </label>
 
                 <label className="form-control flex flex-col">
-                  <span className="label-text mb-1 ">Contraseña SMTP</span>
+                  <span className="label-text mb-1 ">{text('startModule.userAndRoles.settings.smtpPassword')}</span>
                   <input
                     className="input input-sm"
                     type="password"
@@ -145,7 +145,7 @@ function SettingsFormContent() {
                 </label>
 
                 <label className="form-control flex flex-col">
-                  <span className="label-text mb-1 ">Correo del remitente</span>
+                  <span className="label-text mb-1 ">{text('startModule.userAndRoles.settings.senderEmail')}</span>
                   <span className="input input-sm flex items-center gap-2">
                     <AtSign size={15} className="text-base-content/45" />
                     <input
@@ -162,7 +162,7 @@ function SettingsFormContent() {
                 </label>
 
                 <label className="form-control flex flex-col">
-                  <span className="label-text mb-1">Nombre del remitente</span>
+                  <span className="label-text mb-1">{text('startModule.userAndRoles.settings.senderName')}</span>
                   <input
                     className="input input-sm"
                     autoComplete="organization"
@@ -185,9 +185,9 @@ function SettingsFormContent() {
                   }
                 />
                 <span>
-                  <span className="block text-sm font-medium">Usar TLS/SSL</span>
+                  <span className="block text-sm font-medium">{text('startModule.userAndRoles.settings.useTls')}</span>
                   <span className="block text-xs text-base-content/55">
-                    Conexión segura con el servidor SMTP
+                    {text('startModule.userAndRoles.settings.secureSmtpConnection')}
                   </span>
                 </span>
               </label>
@@ -200,17 +200,16 @@ function SettingsFormContent() {
                 <div className="flex items-start gap-3">
                   <KeyRound size={18} className="mt-1 text-error" />
                   <div>
-                    <h2 className="font-bold">Inicio de sesión con passkey</h2>
+                    <h2 className="font-bold">{text('startModule.userAndRoles.settings.passkeyTitle')}</h2>
                     <p className="mt-1 max-w-2xl text-sm text-base-content/60">
-                      Permitir el acceso con una passkey, por ejemplo Windows
-                      Hello. El uso de passkeys/WebAuthn todavía no está conectado.
+                      {text('startModule.userAndRoles.settings.passkeyDescription')}
                     </p>
                   </div>
                 </div>
                 <input
                   className="toggle toggle-error"
                   type="checkbox"
-                  aria-label="Habilitar inicio de sesión con passkey"
+                  aria-label={text('startModule.userAndRoles.settings.enablePasskey')}
                   checked={form.enablePasskeyLogin}
                   onChange={(event) =>
                     form.setEnablePasskeyLogin(event.target.checked)
@@ -223,7 +222,7 @@ function SettingsFormContent() {
           <div className="flex justify-end">
             <button className="btn btn-error text-white" type="submit">
               <Save size={16} />
-              Guardar configuración
+              {text('startModule.userAndRoles.settings.save')}
             </button>
           </div>
         </form>

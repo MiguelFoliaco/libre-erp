@@ -52,7 +52,34 @@ export const spanish = {
         "error": "Error",
         "success": "Exito",
         'confirm': 'Confirmar',
-        'next': 'Siguiente'
+        'next': 'Siguiente',
+        toast: {
+            close: "Cerrar",
+            closeNotification: "Cerrar notificación"
+        },
+        leftPanel: {
+            workspace: "Espacio de trabajo",
+            returnHome: "Volver al inicio",
+            logout: "Cerrar sesión"
+        },
+        welcome: {
+            gettingStarted: "Guía de inicio",
+            welcomeAboard: "Te damos la bienvenida",
+            welcomeTo: "Te damos la bienvenida a",
+            exploreDocumentation: "Explorar documentación",
+            tryThingsOut: "Prueba las opciones",
+            exploreWhatYouCanDo: "Descubre lo que puedes hacer con {name}.",
+            stepsCount: "{count} pasos",
+            oneStep: "1 paso",
+            followSteps: "Sigue estos pasos para completar esta operación.",
+            gettingStartedLabel: "Primeros pasos",
+            stepsToFollow: "Pasos a seguir",
+            stepByStepGuide: "Guía paso a paso",
+            getStarted: "Comenzar",
+            needMoreInformation: "¿Necesitas más información?",
+            learnMore: "Conoce más sobre las funciones y capacidades de este módulo.",
+            documentation: "Documentación"
+        }
     },
     startModule
 } satisfies TranslationSchema;

@@ -3,6 +3,7 @@ import { apiClient } from '../../../../lib/sdk';
 import type { UpdateUserInput, UserRecord } from '../../../../lib/user-and-roles';
 import { describeUserAndRolesError } from '../../../../lib/user-and-roles-errors';
 import { useToast } from '../../../common/toast';
+import { text } from '../../../language';
 
 export function useEditUserForm(
   user: UserRecord,
@@ -34,7 +35,7 @@ export function useEditUserForm(
         user.id,
         input,
       );
-      notify('success', 'Los datos del usuario se actualizaron.');
+      notify('success', text('startModule.userAndRoles.notifications.userUpdated'));
       onSaved(updatedUser);
     } catch (cause: unknown) {
       const error = describeUserAndRolesError(cause);

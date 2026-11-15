@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useToast } from '../../../common/toast';
+import { text } from '../../../language';
 
 export type AuthProvider = 'local' | 'google' | 'github' | 'gitlab' | 'microsoft';
 
@@ -38,7 +39,7 @@ export function useSettingsForm() {
     event.preventDefault();
     notify(
       'info',
-      'Vista previa actualizada en esta sesión. La configuración aún no se guarda en el servidor.',
+      text('startModule.userAndRoles.notifications.settingsPreviewSaved'),
     );
   }
 

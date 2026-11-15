@@ -4,6 +4,7 @@ import {
   ROLE_PERMISSION_MODULES,
   type RoleRecord,
 } from '../../../../lib/user-and-roles';
+import { text } from '../../../language';
 import { useRoleForm } from './hook';
 
 interface RoleFormProps {
@@ -22,7 +23,7 @@ export function RoleForm({ role, onSaved, onCancel }: RoleFormProps) {
   return (
     <form className="space-y-4" onSubmit={form.handleSubmit}>
       <label className="mt-2 form-control w-full">
-        <span className="label-text text-sm mb-1">Nombre del rol</span>
+        <span className="label-text text-sm mb-1">{text('startModule.userAndRoles.forms.roleName')}</span>
         <input
           className="input input-sm outline-none w-full"
           value={form.name}
@@ -33,7 +34,7 @@ export function RoleForm({ role, onSaved, onCancel }: RoleFormProps) {
       </label>
 
       <div className="mt-2 form-control w-full">
-        <span className="label-text text-sm mb-1">Descripción</span>
+        <span className="label-text text-sm mb-1">{text('startModule.userAndRoles.forms.description')}</span>
         <textarea
           className="textarea textarea-sm outline-none resize-none w-full"
           value={form.description}
@@ -44,14 +45,14 @@ export function RoleForm({ role, onSaved, onCancel }: RoleFormProps) {
 
       {form.rootRole && (
         <p className="alert alert-warning text-sm" role="status">
-          Este rol tiene el permiso raíz `*`. La matriz no puede modificar ese permiso.
+          {text('startModule.userAndRoles.forms.rootRoleWarning')}
         </p>
       )}
 
       <fieldset className="space-y-2" disabled={form.rootRole}>
-        <legend className="mb-2 font-semibold">Acciones permitidas</legend>
+        <legend className="mb-2 font-semibold">{text('startModule.userAndRoles.forms.allowedActions')}</legend>
         <p className="mb-3 text-xs text-base-content/60">
-          El servidor solo acepta permisos que quien administra tenga autorizados.
+          {text('startModule.userAndRoles.forms.allowedActionsHelp')}
         </p>
         {ROLE_PERMISSION_MODULES.map((moduleName) => (
           <details
@@ -88,14 +89,16 @@ export function RoleForm({ role, onSaved, onCancel }: RoleFormProps) {
 
       <div className="flex justify-end gap-2">
         <button className="btn btn-ghost" type="button" onClick={onCancel}>
-          Cancelar
+          {text('startModule.userAndRoles.forms.cancel')}
         </button>
         <button className={clsx(
           "btn text-white",
           primaryColor
         )} type="submit" disabled={form.submitting}>
           {form.submitting && <span className="loading loading-spinner loading-xs" />}
-          {role ? 'Guardar rol' : 'Crear rol'}
+          {role
+            ? text('startModule.userAndRoles.forms.saveRole')
+            : text('startModule.userAndRoles.forms.createRole')}
         </button>
       </div>
     </form>

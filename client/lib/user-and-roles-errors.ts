@@ -1,4 +1,5 @@
 import { ApiError } from './sdk';
+import { text } from '../modules/language';
 
 export type UserAndRolesErrorKind =
   | 'permission'
@@ -19,7 +20,7 @@ export function describeUserAndRolesError(cause: unknown): UserAndRolesError {
     if (cause.status === 401) {
       return {
         kind: 'session',
-        message: 'Tu sesión venció. Inicia sesión nuevamente.',
+        message: text('startModule.userAndRoles.errors.sessionExpired'),
       };
     }
     if (cause.status === 403) {
@@ -27,42 +28,44 @@ export function describeUserAndRolesError(cause: unknown): UserAndRolesError {
       if (missingPermission) {
         return {
           kind: 'permission',
-          message: `Te falta el permiso ${missingPermission[1]} para realizar esta acción.`,
+          message: text('startModule.userAndRoles.errors.missingPermission', {
+            permission: missingPermission[1],
+          }),
         };
       }
       if (cause.message.toLowerCase().includes('super administrator')) {
         return {
           kind: 'permission',
-          message: 'Solo un superadministrador puede conceder todos los permisos.',
+          message: text('startModule.userAndRoles.errors.superAdminRequired'),
         };
       }
       return {
         kind: 'permission',
-        message: 'No tienes permisos para realizar esta acción.',
+        message: text('startModule.userAndRoles.errors.permissionDenied'),
       };
     }
     if (cause.status === 400) {
       return {
         kind: 'validation',
-        message: cause.message || 'Revisa los datos ingresados.',
+        message: cause.message || text('startModule.userAndRoles.errors.checkInput'),
       };
     }
     if (cause.status === 404) {
       return {
         kind: 'not-found',
-        message: 'El registro solicitado ya no está disponible.',
+        message: text('startModule.userAndRoles.errors.recordUnavailable'),
       };
     }
     if (cause.status === 409) {
       return {
         kind: 'conflict',
-        message: 'Ya existe un registro con esos datos.',
+        message: text('startModule.userAndRoles.errors.duplicateRecord'),
       };
     }
     if (cause.status >= 500) {
       return {
         kind: 'server',
-        message: 'El servidor no pudo completar la operación.',
+        message: text('startModule.userAndRoles.errors.server'),
       };
     }
     return { kind: 'network', message: cause.message };
@@ -73,6 +76,6 @@ export function describeUserAndRolesError(cause: unknown): UserAndRolesError {
   }
   return {
     kind: 'network',
-    message: 'No se pudo completar la operación. Inténtalo nuevamente.',
+    message: text('startModule.userAndRoles.errors.operationFailed'),
   };
 }

@@ -5,6 +5,8 @@ import { HeaderStart } from './components/header';
 import { ArrowRight, ChartColumn, FileText, Groceries, LayoutGrid, PackageSearch, Settings, ShoppingCartPlus, StoreIcon, Summary, User2, UserRoundShield } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useNavigate } from 'react-router';
+import { useLanguage } from '../language/hook';
+
 
 
 const MODULES: {
@@ -79,8 +81,8 @@ const MODULES: {
         }
     ]
 
-
 export const StartPage = () => {
+    const _ = useLanguage(state => state.language)
     const { user } = useSession()
     const navigate = useNavigate()
 

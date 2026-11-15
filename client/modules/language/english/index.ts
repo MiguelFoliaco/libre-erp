@@ -51,7 +51,34 @@ export const english = {
         "error": "Error",
         "success": "Success",
         'confirm': 'Confirm',
-        'next': 'Next'
+        'next': 'Next',
+        toast: {
+            close: "Close",
+            closeNotification: "Close notification"
+        },
+        leftPanel: {
+            workspace: "Workspace",
+            returnHome: "Back to home",
+            logout: "Sign out"
+        },
+        welcome: {
+            gettingStarted: "Getting started",
+            welcomeAboard: "Welcome aboard",
+            welcomeTo: "Welcome to",
+            exploreDocumentation: "Explore documentation",
+            tryThingsOut: "Try things out",
+            exploreWhatYouCanDo: "Explore what you can do with {name}.",
+            stepsCount: "{count} steps",
+            oneStep: "1 step",
+            followSteps: "Follow these steps to complete this operation.",
+            gettingStartedLabel: "Getting started",
+            stepsToFollow: "Steps to follow",
+            stepByStepGuide: "Step-by-step guide",
+            getStarted: "Get started",
+            needMoreInformation: "Need more information?",
+            learnMore: "Learn more about the features and capabilities of this module.",
+            documentation: "Documentation"
+        }
     },
     startModule
 } as const

@@ -10,6 +10,7 @@ import {
     Layers3
 } from 'lucide-react'
 import { clsx } from 'clsx';
+import { text } from '../language';
 
 type Props = {
     name: string
@@ -50,7 +51,7 @@ export const WelcomeBase = ({
                 <FileText size={21} className="text-base-content/60" />
 
                 <span className="text-sm font-medium text-base-content/70">
-                    Getting Started
+                    {text('common.welcome.gettingStarted')}
                 </span>
             </header>
 
@@ -65,11 +66,11 @@ export const WelcomeBase = ({
                         )
                     }>
                         <Sparkles size={16} className={theme.colorIcon} />
-                        Welcome aboard
+                        {text('common.welcome.welcomeAboard')}
                     </div>
 
                     <h1 className="text-3xl font-semibold tracking-tight text-base-content sm:text-4xl">
-                        Welcome to{' '}
+                        {text('common.welcome.welcomeTo')}{' '}
                         <span className={theme.textColor}>
                             {name}!
                         </span>
@@ -92,7 +93,7 @@ export const WelcomeBase = ({
                             }
                         >
                             <BookOpen size={16} className={theme.colorIcon} />
-                            Explore documentation
+                            {text('common.welcome.exploreDocumentation')}
                             <ExternalLink size={13} className={theme.colorIcon} />
                         </a>
                     )}
@@ -104,11 +105,11 @@ export const WelcomeBase = ({
 
                         <div>
                             <h2 className="text-xl font-semibold tracking-tight">
-                                Try things out
+                                {text('common.welcome.tryThingsOut')}
                             </h2>
 
                             <p className="mt-1 text-sm text-base-content/60">
-                                Explore what you can do with {name}.
+                                {text('common.welcome.exploreWhatYouCanDo', { name })}
                             </p>
                         </div>
 
@@ -170,11 +171,13 @@ export const WelcomeBase = ({
                                             <div className="flex items-center justify-between gap-2">
                                                 <span className="badge badge-ghost gap-1.5">
                                                     <Sparkles size={12} />
-                                                    {item.steps.length} steps
+                                                    {item.steps.length === 1
+                                                        ? text('common.welcome.oneStep')
+                                                        : text('common.welcome.stepsCount', { count: item.steps.length })}
                                                 </span>
 
                                                 <span className="text-xs text-base-content/40">
-                                                    Getting started
+                                                    {text('common.welcome.gettingStartedLabel')}
                                                 </span>
                                             </div>
 
@@ -185,7 +188,7 @@ export const WelcomeBase = ({
                                                 </h3>
 
                                                 <p className="mt-2 min-h-10 text-sm leading-relaxed text-base-content/60">
-                                                    {item.description || 'Follow these steps to complete this operation.'}
+                                                    {item.description || text('common.welcome.followSteps')}
                                                 </p>
                                             </div>
 
@@ -193,7 +196,7 @@ export const WelcomeBase = ({
                                             <div className="space-y-4 border-t border-base-300 pt-5">
 
                                                 <p className="text-xs font-semibold uppercase tracking-wider text-base-content/50">
-                                                    Steps to follow
+                                                    {text('common.welcome.stepsToFollow')}
                                                 </p>
 
                                                 <ol className="space-y-4">
@@ -236,7 +239,7 @@ export const WelcomeBase = ({
                                             {/* Footer */}
                                             <div className="mt-auto flex items-center justify-between gap-3 border-t border-base-300 pt-5">
                                                 <span className="text-xs text-base-content/50">
-                                                    Step-by-step guide
+                                                    {text('common.welcome.stepByStepGuide')}
                                                 </span>
 
                                                 {firstStep && (
@@ -244,7 +247,7 @@ export const WelcomeBase = ({
                                                         to={firstStep.path}
                                                         className={`btn btn-sm ${theme.colorPrimary}`}
                                                     >
-                                                        Get started
+                                                        {text('common.welcome.getStarted')}
                                                         <ArrowRight size={15} />
                                                     </Link>
                                                 )}
@@ -269,11 +272,11 @@ export const WelcomeBase = ({
 
                         <div>
                             <h3 className="text-sm font-semibold">
-                                Need more information?
+                                {text('common.welcome.needMoreInformation')}
                             </h3>
 
                             <p className="mt-1 text-xs text-base-content/60">
-                                Learn more about the features and capabilities of this module.
+                                {text('common.welcome.learnMore')}
                             </p>
                         </div>
                     </div>
@@ -285,7 +288,7 @@ export const WelcomeBase = ({
                             rel="noreferrer"
                             className="btn btn-outline btn-sm"
                         >
-                            Documentation
+                            {text('common.welcome.documentation')}
                             <ExternalLink size={14} />
                         </a>
                     )}

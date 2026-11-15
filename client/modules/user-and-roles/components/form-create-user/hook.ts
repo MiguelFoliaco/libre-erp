@@ -7,6 +7,7 @@ import type {
 } from '../../../../lib/user-and-roles';
 import { describeUserAndRolesError } from '../../../../lib/user-and-roles-errors';
 import { useToast } from '../../../common/toast';
+import { text } from '../../../language';
 
 function personLabel(person: PersonSearchResult): string {
   const name = [
@@ -83,7 +84,7 @@ export function useCreateUserForm(onCreated: (user: UserRecord) => void) {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!selectedPerson) {
-      setPeopleError('Selecciona una persona existente para continuar.');
+      setPeopleError(text('startModule.userAndRoles.notifications.personRequired'));
       return;
     }
 
@@ -96,7 +97,7 @@ export function useCreateUserForm(onCreated: (user: UserRecord) => void) {
         password: generatePassword(),
       };
       const user = await apiClient.create<UserRecord>('users', input);
-      notify('success', 'Usuario creado. La contraseña se generó y guardó de forma segura.');
+      notify('success', text('startModule.userAndRoles.notifications.userCreated'));
       onCreated(user);
     } catch (cause: unknown) {
       const error = describeUserAndRolesError(cause);

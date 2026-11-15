@@ -14,6 +14,7 @@ import {
 } from '../../../../lib/user-and-roles';
 import { describeUserAndRolesError } from '../../../../lib/user-and-roles-errors';
 import { useToast } from '../../../common/toast';
+import { text } from '../../../language';
 
 export function useRoleForm(
   role: RoleRecord | null,
@@ -67,7 +68,14 @@ export function useRoleForm(
       const savedRole = role
         ? await apiClient.update<RoleRecord>('roles', role.id, input)
         : await apiClient.create<RoleRecord>('roles', input);
-      notify('success', role ? 'Rol actualizado.' : 'Rol creado.');
+      notify(
+        'success',
+        text(
+          role
+            ? 'startModule.userAndRoles.notifications.roleUpdated'
+            : 'startModule.userAndRoles.notifications.roleCreated',
+        ),
+      );
       onSaved(savedRole);
     } catch (cause: unknown) {
       const error = describeUserAndRolesError(cause);

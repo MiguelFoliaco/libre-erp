@@ -55,7 +55,7 @@ export const LeftPanel = (
 
             <div className="px-3 py-6 bfg">
                 <p className="px-3 pb-3 text-xs font-semibold uppercase tracking-wider text-base-content/40">
-                    Espacio de trabajo
+                    {text('common.leftPanel.workspace')}
                 </p>
 
                 <ul className="w-full flex flex-col gap-1 p-0">
@@ -90,7 +90,7 @@ export const LeftPanel = (
                         <a
                             aria-current={"page"}
                         >
-                            Volver al inicio
+                            {text('common.leftPanel.returnHome')}
                         </a>
                     </li>
                 </ul>
@@ -110,8 +110,16 @@ export const LeftPanel = (
                         </p>
                     </div>
 
-                    <div className="tooltip cursor-pointer" data-tip="Cerrar sesión">
-                        <LogOut onClick={logout} size={18} className="text-error" />
+                    <div
+                        className="tooltip cursor-pointer"
+                        data-tip={text('common.leftPanel.logout')}
+                    >
+                        <LogOut
+                            onClick={logout}
+                            size={18}
+                            className="text-error"
+                            aria-label={text('common.leftPanel.logout')}
+                        />
                     </div>
                 </button>
             </div>
