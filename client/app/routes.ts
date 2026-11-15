@@ -7,4 +7,5 @@ export default [
         index("routes/user-and-roles-home.tsx"),
         route(":section", "routes/user-and-roles-section.tsx"),
     ]),
+    route("/start/settings", "routes/settings.tsx")
 ] satisfies RouteConfig;

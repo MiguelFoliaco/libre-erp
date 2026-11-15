@@ -59,18 +59,18 @@ const MODULES: {
             path: '/documents'
         },
         {
-            icon: Settings,
-            titleKeyPath: 'startModule.listAppliaction.settings',
-            request: ['*', 'Reports'],
-            className: 'to-gray-500 to-120% from-black',
-            path: '/settings'
-        },
-        {
             icon: StoreIcon,
             titleKeyPath: 'startModule.listAppliaction.marketplace',
             request: ['*', 'Reports'],
             className: 'to-blue-500 via-pink-500 to-120% from-red-500',
             path: '/marketplace'
+        },
+        {
+            icon: Settings,
+            titleKeyPath: 'startModule.listAppliaction.settings',
+            request: ['*', 'Reports'],
+            className: 'to-gray-500 to-120% from-black',
+            path: '/settings'
         },
         {
             icon: UserRoundShield,
