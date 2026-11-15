@@ -33,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="bg-base-200 w-screen h-screen">
+      <body className="bg-base-200 w-full  h-screen">
         <AuthProvider>
           {children}
         </AuthProvider>
