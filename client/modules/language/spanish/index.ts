@@ -1,5 +1,5 @@
 import type { TranslationSchema } from "../type";
-import { startModule } from "./start-module";
+import { modules } from "./module";
 
 export const spanish = {
     firstScreen: {
@@ -82,5 +82,5 @@ export const spanish = {
             documentation: "Documentación"
         }
     },
-    startModule
+    modules
 } satisfies TranslationSchema;

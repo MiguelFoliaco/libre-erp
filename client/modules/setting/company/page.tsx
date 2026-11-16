@@ -56,7 +56,7 @@ const primaryColor = 'bg-linear-to-tr to-gray-500 to-120% from-black'
 function errorMessage(cause: unknown): string {
     return cause instanceof ApiError || cause instanceof Error
         ? cause.message
-        : text("startModule.settings.common.operationFailed");
+        : text("modules.settings.common.operationFailed");
 }
 
 function CompanySettingsContent() {
@@ -134,7 +134,7 @@ function CompanySettingsContent() {
                 },
             );
             setCompany(updated);
-            notify("success", text("startModule.settings.company.saved"));
+            notify("success", text("modules.settings.company.saved"));
         } catch (cause: unknown) {
             const message = errorMessage(cause);
             setError(message);
@@ -149,25 +149,25 @@ function CompanySettingsContent() {
             <header className="flex h-16 items-center gap-3 border-b border-base-300 bg-base-100 px-6 py-4">
                 <Building size={20} className="text-neutral" />
                 <div>
-                    <h1 className="font-bold">{text("startModule.settings.company.title")}</h1>
-                    <p className="text-xs text-base-content/60">{text("startModule.settings.company.description")}</p>
+                    <h1 className="font-bold">{text("modules.settings.company.title")}</h1>
+                    <p className="text-xs text-base-content/60">{text("modules.settings.company.description")}</p>
                 </div>
             </header>
             <main className="mx-auto max-w-5xl space-y-5 p-4 sm:p-6">
                 <div className="alert alert-info text-sm">
-                    {text("startModule.settings.company.oneCompanyNotice")}
+                    {text("modules.settings.company.oneCompanyNotice")}
                 </div>
                 {loading ? (
                     <div className="flex min-h-40 items-center justify-center">
                         <span className="loading loading-spinner loading-lg text-primary" />
-                        <span className="sr-only">{text("startModule.settings.common.loading")}</span>
+                        <span className="sr-only">{text("modules.settings.common.loading")}</span>
                     </div>
                 ) : error && !company ? (
                     <section className="card border border-base-300 bg-base-100">
                         <div className="card-body items-start">
                             <p role="alert">{error}</p>
                             <button className="btn btn-primary btn-sm" type="button" onClick={() => void loadCompany()}>
-                                {text("startModule.settings.common.retry")}
+                                {text("modules.settings.common.retry")}
                             </button>
                         </div>
                     </section>
@@ -176,35 +176,35 @@ function CompanySettingsContent() {
                         <div className="card-body gap-4">
                             <div className="grid gap-4 sm:grid-cols-3">
                                 <label className="flex flex-col gap-1">
-                                    <span className="label-text mb-1">{text("startModule.settings.company.legalName")}</span>
+                                    <span className="label-text mb-1">{text("modules.settings.company.legalName")}</span>
                                     <input disabled className="input input-sm" maxLength={255} required value={values.legal_name} onChange={(event) => updateValue("legal_name", event.target.value)} />
                                 </label>
                                 <label className="flex flex-col gap-1">
-                                    <span className="label-text mb-1">{text("startModule.settings.company.tradeName")}</span>
+                                    <span className="label-text mb-1">{text("modules.settings.company.tradeName")}</span>
                                     <input disabled className="input input-sm" maxLength={255} value={values.trade_name} onChange={(event) => updateValue("trade_name", event.target.value)} />
                                 </label>
                                 <label className="flex flex-col gap-1">
-                                    <span className="label-text mb-1">{text("startModule.settings.company.registrationType")}</span>
+                                    <span className="label-text mb-1">{text("modules.settings.company.registrationType")}</span>
                                     <input disabled className="input input-sm" maxLength={100} value={values.registration_type} onChange={(event) => updateValue("registration_type", event.target.value)} />
                                 </label>
                                 <label className="flex flex-col gap-1">
-                                    <span className="label-text mb-1">{text("startModule.settings.company.registrationNumber")}</span>
+                                    <span className="label-text mb-1">{text("modules.settings.company.registrationNumber")}</span>
                                     <input disabled className="input input-sm" maxLength={100} value={values.registration_number} onChange={(event) => updateValue("registration_number", event.target.value)} />
                                 </label>
                                 <label className="flex flex-col gap-1">
-                                    <span className="label-text mb-1">{text("startModule.settings.company.countryCode")}</span>
+                                    <span className="label-text mb-1">{text("modules.settings.company.countryCode")}</span>
                                     <input disabled className="input input-sm" maxLength={2} pattern="[A-Za-z]{2}" value={values.country_code} onChange={(event) => updateValue("country_code", event.target.value)} />
                                 </label>
                                 <label className="flex flex-col gap-1">
-                                    <span className="label-text mb-1">{text("startModule.settings.company.email")}</span>
+                                    <span className="label-text mb-1">{text("modules.settings.company.email")}</span>
                                     <input disabled className="input input-sm" type="email" maxLength={255} value={values.email} onChange={(event) => updateValue("email", event.target.value)} />
                                 </label>
                                 <label className="flex flex-col gap-1">
-                                    <span className="label-text mb-1">{text("startModule.settings.company.phone")}</span>
+                                    <span className="label-text mb-1">{text("modules.settings.company.phone")}</span>
                                     <input disabled className="input input-sm" type="tel" maxLength={50} value={values.phone} onChange={(event) => updateValue("phone", event.target.value)} />
                                 </label>
                                 <label className="flex flex-col gap-1">
-                                    <span className="label-text mb-1">{text("startModule.settings.company.website")}</span>
+                                    <span className="label-text mb-1">{text("modules.settings.company.website")}</span>
                                     <input disabled className="input input-sm" type="url" maxLength={500} value={values.website} onChange={(event) => updateValue("website", event.target.value)} />
                                 </label>
                             </div>
@@ -224,7 +224,7 @@ function CompanySettingsContent() {
                                     )
                                 } type="submit" disabled={saving}>
                                     {saving ? <span className="loading loading-spinner loading-xs" /> : <Save size={16} />}
-                                    {text("startModule.settings.company.save")}
+                                    {text("modules.settings.company.save")}
                                 </button>
                             </div>
                         </div>

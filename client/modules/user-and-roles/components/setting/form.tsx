@@ -11,7 +11,7 @@ import { text } from '../../../language';
 import { useSettingsForm, type AuthProvider } from './hook';
 
 const authProviders: { value: AuthProvider; label: string }[] = [
-  { value: 'local', label: text('startModule.userAndRoles.settings.localProvider') },
+  { value: 'local', label: text('modules.userAndRoles.settings.localProvider') },
   { value: 'google', label: 'Google' },
   { value: 'github', label: 'GitHub' },
   { value: 'gitlab', label: 'GitLab' },
@@ -30,16 +30,16 @@ function SettingsFormContent() {
       <header className="flex h-16 items-center gap-3 border-b border-base-300 bg-base-100 px-6">
         <ShieldCheck size={20} className="text-error" />
         <div>
-          <h1 className="font-bold">{text('startModule.userAndRoles.settings.title')}</h1>
+          <h1 className="font-bold">{text('modules.userAndRoles.settings.title')}</h1>
           <p className="text-xs text-base-content/55">
-            {text('startModule.userAndRoles.settings.subtitle')}
+            {text('modules.userAndRoles.settings.subtitle')}
           </p>
         </div>
       </header>
 
       <main className="mx-auto max-w-4xl space-y-5 p-4 sm:p-6">
         <div className="alert alert-info text-sm" role="status">
-          {text('startModule.userAndRoles.settings.previewNotice')}
+          {text('modules.userAndRoles.settings.previewNotice')}
         </div>
 
         <form className="space-y-5" onSubmit={form.handleSubmit}>
@@ -48,15 +48,15 @@ function SettingsFormContent() {
               <div className="flex items-center gap-2">
                 <KeyRound size={18} className="text-error" />
                 <div>
-                  <h2 className="font-bold">{text('startModule.userAndRoles.settings.authProvider')}</h2>
+                  <h2 className="font-bold">{text('modules.userAndRoles.settings.authProvider')}</h2>
                   <p className="text-xs text-base-content/55">
-                    {text('startModule.userAndRoles.settings.authProviderDescription')}
+                    {text('modules.userAndRoles.settings.authProviderDescription')}
                   </p>
                 </div>
               </div>
 
               <label className="form-control max-w-md">
-                <span className="label-text mb-1 mr-2">{text('startModule.userAndRoles.settings.authProvider')}</span>
+                <span className="label-text mb-1 mr-2">{text('modules.userAndRoles.settings.authProvider')}</span>
                 <select
                   className="select select-sm"
                   value={form.authProvider}
@@ -81,16 +81,16 @@ function SettingsFormContent() {
               <div className="flex items-center gap-2">
                 <Mail size={18} className="text-error" />
                 <div>
-                  <h2 className="font-bold">{text('startModule.userAndRoles.settings.emailTitle')}</h2>
+                  <h2 className="font-bold">{text('modules.userAndRoles.settings.emailTitle')}</h2>
                   <p className="text-xs text-base-content/55">
-                    {text('startModule.userAndRoles.settings.emailDescription')}
+                    {text('modules.userAndRoles.settings.emailDescription')}
                   </p>
                 </div>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="form-control flex flex-col">
-                  <span className="label-text mb-1">{text('startModule.userAndRoles.settings.host')}</span>
+                  <span className="label-text mb-1">{text('modules.userAndRoles.settings.host')}</span>
                   <span className="input input-sm flex items-center gap-2">
                     <Server size={15} className="text-base-content/45" />
                     <input
@@ -106,7 +106,7 @@ function SettingsFormContent() {
                 </div>
 
                 <div className="form-control flex flex-col">
-                  <span className="label-text mb-1">{text('startModule.userAndRoles.settings.port')}</span>
+                  <span className="label-text mb-1">{text('modules.userAndRoles.settings.port')}</span>
                   <input
                     className="input input-sm"
                     type="number"
@@ -120,7 +120,7 @@ function SettingsFormContent() {
                 </div>
 
                 <label className="form-control flex flex-col">
-                  <span className="label-text mb-1">{text('startModule.userAndRoles.settings.smtpUsername')}</span>
+                  <span className="label-text mb-1">{text('modules.userAndRoles.settings.smtpUsername')}</span>
                   <input
                     className="input input-sm"
                     autoComplete="username"
@@ -132,7 +132,7 @@ function SettingsFormContent() {
                 </label>
 
                 <label className="form-control flex flex-col">
-                  <span className="label-text mb-1 ">{text('startModule.userAndRoles.settings.smtpPassword')}</span>
+                  <span className="label-text mb-1 ">{text('modules.userAndRoles.settings.smtpPassword')}</span>
                   <input
                     className="input input-sm"
                     type="password"
@@ -145,7 +145,7 @@ function SettingsFormContent() {
                 </label>
 
                 <label className="form-control flex flex-col">
-                  <span className="label-text mb-1 ">{text('startModule.userAndRoles.settings.senderEmail')}</span>
+                  <span className="label-text mb-1 ">{text('modules.userAndRoles.settings.senderEmail')}</span>
                   <span className="input input-sm flex items-center gap-2">
                     <AtSign size={15} className="text-base-content/45" />
                     <input
@@ -162,7 +162,7 @@ function SettingsFormContent() {
                 </label>
 
                 <label className="form-control flex flex-col">
-                  <span className="label-text mb-1">{text('startModule.userAndRoles.settings.senderName')}</span>
+                  <span className="label-text mb-1">{text('modules.userAndRoles.settings.senderName')}</span>
                   <input
                     className="input input-sm"
                     autoComplete="organization"
@@ -185,9 +185,9 @@ function SettingsFormContent() {
                   }
                 />
                 <span>
-                  <span className="block text-sm font-medium">{text('startModule.userAndRoles.settings.useTls')}</span>
+                  <span className="block text-sm font-medium">{text('modules.userAndRoles.settings.useTls')}</span>
                   <span className="block text-xs text-base-content/55">
-                    {text('startModule.userAndRoles.settings.secureSmtpConnection')}
+                    {text('modules.userAndRoles.settings.secureSmtpConnection')}
                   </span>
                 </span>
               </label>
@@ -200,16 +200,16 @@ function SettingsFormContent() {
                 <div className="flex items-start gap-3">
                   <KeyRound size={18} className="mt-1 text-error" />
                   <div>
-                    <h2 className="font-bold">{text('startModule.userAndRoles.settings.passkeyTitle')}</h2>
+                    <h2 className="font-bold">{text('modules.userAndRoles.settings.passkeyTitle')}</h2>
                     <p className="mt-1 max-w-2xl text-sm text-base-content/60">
-                      {text('startModule.userAndRoles.settings.passkeyDescription')}
+                      {text('modules.userAndRoles.settings.passkeyDescription')}
                     </p>
                   </div>
                 </div>
                 <input
                   className="toggle toggle-error"
                   type="checkbox"
-                  aria-label={text('startModule.userAndRoles.settings.enablePasskey')}
+                  aria-label={text('modules.userAndRoles.settings.enablePasskey')}
                   checked={form.enablePasskeyLogin}
                   onChange={(event) =>
                     form.setEnablePasskeyLogin(event.target.checked)
@@ -222,7 +222,7 @@ function SettingsFormContent() {
           <div className="flex justify-end">
             <button className="btn btn-error text-white" type="submit">
               <Save size={16} />
-              {text('startModule.userAndRoles.settings.save')}
+              {text('modules.userAndRoles.settings.save')}
             </button>
           </div>
         </form>

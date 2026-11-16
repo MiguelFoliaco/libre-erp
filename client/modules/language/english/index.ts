@@ -1,4 +1,4 @@
-import { startModule } from "./start-module";
+import { modules } from "./module";
 
 export const english = {
     firstScreen: {
@@ -81,5 +81,5 @@ export const english = {
             documentation: "Documentation"
         }
     },
-    modules: startModule
+    modules
 } as const

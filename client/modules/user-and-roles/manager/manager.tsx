@@ -66,7 +66,7 @@ function ManagerContent() {
         <UsersRound size={21} className="text-base-content/60" />
 
         <span className="text-sm font-medium text-base-content/70">
-          {text('startModule.listAppliaction.userAndRoles')}
+          {text('modules.listAppliaction.userAndRoles')}
         </span>
         <div className="ml-auto flex items-center gap-2">
           <button
@@ -74,10 +74,10 @@ function ManagerContent() {
             type="button"
             onClick={() => void loadRecords()}
             disabled={loading}
-            aria-label={text('startModule.userAndRoles.manager.refreshAriaLabel')}
+            aria-label={text('modules.userAndRoles.manager.refreshAriaLabel')}
           >
             <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
-            {text('startModule.userAndRoles.manager.refresh')}
+            {text('modules.userAndRoles.manager.refresh')}
           </button>
         </div>
       </header>
@@ -86,7 +86,7 @@ function ManagerContent() {
       <main className="mx-auto max-w-7xl space-y-5 p-4 sm:p-6">
         <nav
           className="tabs tabs-boxed w-fit bg-base-100"
-          aria-label={text('startModule.userAndRoles.manager.administrationAriaLabel')}
+          aria-label={text('modules.userAndRoles.manager.administrationAriaLabel')}
         >
           <button
             className={`tab gap-2 ${tab === 'users' ? 'tab-active' : ''}`}
@@ -94,7 +94,7 @@ function ManagerContent() {
             onClick={() => setTab('users')}
           >
             <UsersRound size={16} />
-            {text('startModule.userAndRoles.manager.tabs.users')}
+            {text('modules.userAndRoles.manager.tabs.users')}
           </button>
           <button
             className={`tab gap-2 ${tab === 'roles' ? 'tab-active' : ''}`}
@@ -102,7 +102,7 @@ function ManagerContent() {
             onClick={() => setTab('roles')}
           >
             <ShieldCheck size={16} />
-            {text('startModule.userAndRoles.manager.tabs.roles')}
+            {text('modules.userAndRoles.manager.tabs.roles')}
           </button>
         </nav>
 
@@ -116,9 +116,9 @@ function ManagerContent() {
           <section className="space-y-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h2 className="text-xl font-bold">{text('startModule.userAndRoles.manager.tabs.users')}</h2>
+                <h2 className="text-xl font-bold">{text('modules.userAndRoles.manager.tabs.users')}</h2>
                 <p className="text-sm text-base-content/60">
-                  {text('startModule.userAndRoles.manager.usersDescription')}
+                  {text('modules.userAndRoles.manager.usersDescription')}
                 </p>
               </div>
               <button
@@ -127,7 +127,7 @@ function ManagerContent() {
                 onClick={() => setCreateUserOpen(true)}
               >
                 <Plus size={16} />
-                {text('startModule.userAndRoles.manager.createUser')}
+                {text('modules.userAndRoles.manager.createUser')}
               </button>
             </div>
 
@@ -145,7 +145,7 @@ function ManagerContent() {
                         className="grow"
                         value={userSearch}
                         onChange={(event) => setUserSearch(event.target.value)}
-                        placeholder={text('startModule.userAndRoles.manager.searchUsersPlaceholder')}
+                        placeholder={text('modules.userAndRoles.manager.searchUsersPlaceholder')}
                       />
                     </label>
 
@@ -176,8 +176,8 @@ function ManagerContent() {
                                   }`}
                               >
                                 {user.is_active
-                                  ? text('startModule.userAndRoles.manager.active')
-                                  : text('startModule.userAndRoles.manager.inactive')}
+                                  ? text('modules.userAndRoles.manager.active')
+                                  : text('modules.userAndRoles.manager.inactive')}
                               </span>
                             </span>
                             <span className="block truncate text-xs text-base-content/60">
@@ -192,7 +192,7 @@ function ManagerContent() {
                                 ))
                               ) : (
                                 <span className="text-xs text-warning">
-                                  {text('startModule.userAndRoles.manager.noRoles')}
+                                  {text('modules.userAndRoles.manager.noRoles')}
                                 </span>
                               )}
                             </span>
@@ -202,8 +202,8 @@ function ManagerContent() {
                       {filteredUsers.length === 0 && (
                         <p className="py-6 text-center text-sm text-base-content/60">
                           {users.length === 0
-                            ? text('startModule.userAndRoles.manager.noUsers')
-                            : text('startModule.userAndRoles.manager.noUsersFound')}
+                            ? text('modules.userAndRoles.manager.noUsers')
+                            : text('modules.userAndRoles.manager.noUsersFound')}
                         </p>
                       )}
                     </div>
@@ -227,7 +227,7 @@ function ManagerContent() {
                             onClick={() => setEditUserOpen(true)}
                           >
                             <Pencil size={15} />
-                            {text('startModule.userAndRoles.manager.editUser')}
+                            {text('modules.userAndRoles.manager.editUser')}
                           </button>
                         </div>
 
@@ -235,7 +235,7 @@ function ManagerContent() {
 
                         <section className="space-y-3">
                           <div className="flex flex-wrap items-center justify-between gap-2">
-                            <h3 className="font-semibold">{text('startModule.userAndRoles.manager.assignedRoles')}</h3>
+                            <h3 className="font-semibold">{text('modules.userAndRoles.manager.assignedRoles')}</h3>
                             {assignmentsError && (
                               <span className="text-xs text-error" role="alert">
                                 {assignmentsError}
@@ -253,12 +253,12 @@ function ManagerContent() {
                                   type="button"
                                   className="btn btn-circle btn-ghost btn-xs"
                                   aria-label={text(
-                                    'startModule.userAndRoles.manager.removeRoleAriaLabel',
+                                    'modules.userAndRoles.manager.removeRoleAriaLabel',
                                     { role: role.name },
                                   )}
                                   onClick={() => {
                                     const check = confirm(
-                                      text('startModule.userAndRoles.manager.confirmRemoveRole'),
+                                      text('modules.userAndRoles.manager.confirmRemoveRole'),
                                     );
                                     if (!check) {
                                       return;
@@ -272,7 +272,7 @@ function ManagerContent() {
                             ))}
                             {selectedRoles.length === 0 && (
                               <p className="text-sm text-base-content/60">
-                                {text('startModule.userAndRoles.manager.noUserRoles')}
+                                {text('modules.userAndRoles.manager.noUserRoles')}
                               </p>
                             )}
                           </div>
@@ -282,9 +282,9 @@ function ManagerContent() {
                               value={assignmentRoleId}
                               onChange={(event) => setAssignmentRoleId(event.target.value)}
                               disabled={Boolean(rolesError)}
-                              aria-label={text('startModule.userAndRoles.manager.selectRole')}
+                              aria-label={text('modules.userAndRoles.manager.selectRole')}
                             >
-                              <option value="">{text('startModule.userAndRoles.manager.selectRole')}</option>
+                              <option value="">{text('modules.userAndRoles.manager.selectRole')}</option>
                               {activeRoles
                                 .filter(
                                   (role) =>
@@ -309,7 +309,7 @@ function ManagerContent() {
                               }
                             >
                               <Plus size={14} />
-                              {text('startModule.userAndRoles.manager.assignRole')}
+                              {text('modules.userAndRoles.manager.assignRole')}
                             </button>
                           </div>
                           {rolesError && (
@@ -324,7 +324,7 @@ function ManagerContent() {
                         <section className="space-y-2">
                           <div className="flex items-center gap-2 font-semibold">
                             <ShieldCheck size={16} />
-                            {text('startModule.userAndRoles.manager.inheritedPermissions')}
+                            {text('modules.userAndRoles.manager.inheritedPermissions')}
                           </div>
                           {selectedRoles.length > 0 ? (
                             <div className="flex flex-wrap gap-1.5">
@@ -342,7 +342,7 @@ function ManagerContent() {
                             </div>
                           ) : (
                             <p className="text-sm text-base-content/60">
-                              {text('startModule.userAndRoles.manager.noEffectivePermissions')}
+                              {text('modules.userAndRoles.manager.noEffectivePermissions')}
                             </p>
                           )}
                         </section>
@@ -352,7 +352,7 @@ function ManagerContent() {
                     !loading && (
                       <div className="card border border-base-300 bg-base-100">
                         <div className="card-body text-center text-base-content/60">
-                          {text('startModule.userAndRoles.manager.selectUserPrompt')}
+                          {text('modules.userAndRoles.manager.selectUserPrompt')}
                         </div>
                       </div>
                     )
@@ -361,14 +361,14 @@ function ManagerContent() {
                   <section className="card border border-base-300 bg-base-100 shadow-sm">
                     <div className="card-body gap-3 p-4">
                       <div>
-                        <h3 className="font-semibold">{text('startModule.userAndRoles.manager.teamsByRole')}</h3>
+                        <h3 className="font-semibold">{text('modules.userAndRoles.manager.teamsByRole')}</h3>
                         <p className="text-xs text-base-content/60">
-                          {text('startModule.userAndRoles.manager.teamsDescription')}
+                          {text('modules.userAndRoles.manager.teamsDescription')}
                         </p>
                       </div>
                       {roleGroups.length === 0 ? (
                         <p className="text-sm text-base-content/60">
-                          {text('startModule.userAndRoles.manager.noActiveRolesForTeams')}
+                          {text('modules.userAndRoles.manager.noActiveRolesForTeams')}
                         </p>
                       ) : (
                         <div className="grid gap-3 md:grid-cols-2">
@@ -386,7 +386,7 @@ function ManagerContent() {
                               <p className="mt-2 text-xs text-base-content/60">
                                 {members.length > 0
                                   ? members.map((user) => user.username).join(', ')
-                                  : text('startModule.userAndRoles.manager.noAssignedUsers')}
+                                  : text('modules.userAndRoles.manager.noAssignedUsers')}
                               </p>
                             </div>
                           ))}
@@ -402,9 +402,9 @@ function ManagerContent() {
           <section className="space-y-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h2 className="text-xl font-bold">{text('startModule.userAndRoles.manager.tabs.roles')}</h2>
+                <h2 className="text-xl font-bold">{text('modules.userAndRoles.manager.tabs.roles')}</h2>
                 <p className="text-sm text-base-content/60">
-                  {text('startModule.userAndRoles.manager.rolesDescription')}
+                  {text('modules.userAndRoles.manager.rolesDescription')}
                 </p>
               </div>
               <button
@@ -416,7 +416,7 @@ function ManagerContent() {
                 onClick={() => setRoleModal({ role: null })}
               >
                 <Plus size={16} />
-                {text('startModule.userAndRoles.manager.createRole')}
+                {text('modules.userAndRoles.manager.createRole')}
               </button>
             </div>
 
@@ -447,7 +447,7 @@ function ManagerContent() {
                           onClick={() => setRoleModal({ role })}
                         >
                           <Pencil size={14} />
-                          {text('startModule.userAndRoles.manager.edit')}
+                          {text('modules.userAndRoles.manager.edit')}
                         </button>
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -459,13 +459,13 @@ function ManagerContent() {
                           ))
                         ) : (
                           <span className="text-xs text-base-content/50">
-                            {text('startModule.userAndRoles.manager.noActionsAssigned')}
+                            {text('modules.userAndRoles.manager.noActionsAssigned')}
                           </span>
                         )}
                       </div>
                       {role.is_system && (
                         <span className="badge badge-outline badge-sm w-fit">
-                          {text('startModule.userAndRoles.manager.systemRole')}
+                          {text('modules.userAndRoles.manager.systemRole')}
                         </span>
                       )}
                     </div>
@@ -474,7 +474,7 @@ function ManagerContent() {
                 {activeRoles.length === 0 && (
                   <div className="card border border-base-300 bg-base-100">
                     <div className="card-body text-base-content/60">
-                      {text('startModule.userAndRoles.manager.noActiveRoles')}
+                      {text('modules.userAndRoles.manager.noActiveRoles')}
                     </div>
                   </div>
                 )}
@@ -488,11 +488,11 @@ function ManagerContent() {
         <div className="modal modal-open" role="dialog" aria-modal="true">
           <div className="modal-box max-w-xl">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-bold">{text('startModule.userAndRoles.manager.createUser')}</h2>
+              <h2 className="text-lg font-bold">{text('modules.userAndRoles.manager.createUser')}</h2>
               <button
                 className="btn btn-ghost btn-sm btn-square"
                 type="button"
-                aria-label={text('startModule.userAndRoles.manager.close')}
+                aria-label={text('modules.userAndRoles.manager.close')}
                 onClick={() => setCreateUserOpen(false)}
               >
                 <X size={16} />
@@ -506,7 +506,7 @@ function ManagerContent() {
           <button
             className="modal-backdrop"
             type="button"
-            aria-label={text('startModule.userAndRoles.manager.closeDialog')}
+            aria-label={text('modules.userAndRoles.manager.closeDialog')}
             onClick={() => setCreateUserOpen(false)}
           />
         </div>
@@ -516,11 +516,11 @@ function ManagerContent() {
         <div className="modal modal-open" role="dialog" aria-modal="true">
           <div className="modal-box max-w-xl">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-bold">{text('startModule.userAndRoles.manager.editUserTitle')}</h2>
+              <h2 className="text-lg font-bold">{text('modules.userAndRoles.manager.editUserTitle')}</h2>
               <button
                 className="btn btn-ghost btn-sm btn-square"
                 type="button"
-                aria-label={text('startModule.userAndRoles.manager.close')}
+                aria-label={text('modules.userAndRoles.manager.close')}
                 onClick={() => setEditUserOpen(false)}
               >
                 <X size={16} />
@@ -536,7 +536,7 @@ function ManagerContent() {
           <button
             className="modal-backdrop"
             type="button"
-            aria-label={text('startModule.userAndRoles.manager.closeDialog')}
+            aria-label={text('modules.userAndRoles.manager.closeDialog')}
             onClick={() => setEditUserOpen(false)}
           />
         </div>
@@ -548,13 +548,13 @@ function ManagerContent() {
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-bold">
                 {roleModal.role
-                  ? text('startModule.userAndRoles.manager.editRoleTitle')
-                  : text('startModule.userAndRoles.manager.createRole')}
+                  ? text('modules.userAndRoles.manager.editRoleTitle')
+                  : text('modules.userAndRoles.manager.createRole')}
               </h2>
               <button
                 className="btn btn-ghost btn-sm btn-square"
                 type="button"
-                aria-label={text('startModule.userAndRoles.manager.close')}
+                aria-label={text('modules.userAndRoles.manager.close')}
                 onClick={() => setRoleModal(null)}
               >
                 <X size={16} />
@@ -570,7 +570,7 @@ function ManagerContent() {
           <button
             className="modal-backdrop"
             type="button"
-            aria-label={text('startModule.userAndRoles.manager.closeDialog')}
+            aria-label={text('modules.userAndRoles.manager.closeDialog')}
             onClick={() => setRoleModal(null)}
           />
         </div>

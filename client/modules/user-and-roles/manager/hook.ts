@@ -129,7 +129,7 @@ export const useManager = () => {
                     assignment.role_id === assignmentRoleId,
             )
         ) {
-            notify('info', text('startModule.userAndRoles.notifications.alreadyAssigned'));
+            notify('info', text('modules.userAndRoles.notifications.alreadyAssigned'));
             return;
         }
 
@@ -139,7 +139,7 @@ export const useManager = () => {
                 roleId: assignmentRoleId,
             };
             await apiClient.create<UserRoleRecord>('user-roles', input);
-            notify('success', text('startModule.userAndRoles.notifications.roleAssigned'));
+            notify('success', text('modules.userAndRoles.notifications.roleAssigned'));
             setAssignmentRoleId('');
             await loadRecords();
         } catch (cause: unknown) {
@@ -151,7 +151,7 @@ export const useManager = () => {
     async function removeRole(assignment: UserRoleRecord) {
         try {
             await apiClient.remove('user-roles', assignment.id);
-            notify('success', text('startModule.userAndRoles.notifications.roleRemoved'));
+            notify('success', text('modules.userAndRoles.notifications.roleRemoved'));
             await loadRecords();
         } catch (cause: unknown) {
             const error = describeUserAndRolesError(cause);

@@ -1,11 +1,11 @@
-export const startModule = {
+export const modules = {
     settings: {
         navigation: {
             home: "Configuración",
             company: "Compañía",
             branches: "Sucursales"
         },
-        home: {
+        welcome: {
             title: "Configuración de la empresa",
             description: "Administra los datos de tu única compañía y las sucursales del ambiente de trabajo actual.",
             companyTitle: "Datos de la compañía",
@@ -69,6 +69,7 @@ export const startModule = {
     listAppliaction: {
         userAndRoles: "Roles y usuarios",
         settings: "Configuraciones",
+        crm: "CRM",
         selling: "Vender",
         pos: "POS",
         inventory: "Inventario",
@@ -221,6 +222,14 @@ export const startModule = {
             duplicateRecord: "Ya existe un registro con esos datos.",
             server: "El servidor no pudo completar la operación.",
             operationFailed: "No se pudo completar la operación. Inténtalo nuevamente."
+        }
+    },
+    crm: {
+        navigation: {
+            people: "Personas",
+            clients: 'Clientes',
+            contacts: 'Contactos',
+            processes: 'Procesos',
         }
     }
 }

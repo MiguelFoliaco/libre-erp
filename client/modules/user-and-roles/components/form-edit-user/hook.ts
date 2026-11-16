@@ -35,7 +35,7 @@ export function useEditUserForm(
         user.id,
         input,
       );
-      notify('success', text('startModule.userAndRoles.notifications.userUpdated'));
+      notify('success', text('modules.userAndRoles.notifications.userUpdated'));
       onSaved(updatedUser);
     } catch (cause: unknown) {
       const error = describeUserAndRolesError(cause);

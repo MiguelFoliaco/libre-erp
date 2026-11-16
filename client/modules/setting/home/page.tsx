@@ -18,8 +18,8 @@ export default function SettingsHome() {
                     primaryColor20: 'bg-linear-to-tr from-black/10 to-120% to-gray-500/10',
                     textColorBase: 'text-white'
                 }}
-                name={text('startModule.listAppliaction.settings')}
-                description={text('startModule.settings.welcome.description')}
+                name={text('modules.listAppliaction.settings')}
+                description={text('modules.settings.welcome.description')}
             />
         </div>
     );

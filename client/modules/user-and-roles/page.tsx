@@ -8,9 +8,9 @@ const primaryColor = 'bg-linear-to-tr from-red-500 to-120% to-orange-600'
 
 export function UserAndRolesPage() {
   const navigation: LeftNavigation[] = [
-    { label: text('startModule.userAndRoles.navigation.home'), key: '', path: '/start/users-and-roles', icon: LayoutDashboard },
-    { label: text('startModule.userAndRoles.navigation.manager'), key: 'manager', path: '/start/users-and-roles/manager', icon: UsersRound },
-    { label: text('startModule.userAndRoles.navigation.settings'), key: 'settings', path: '/start/users-and-roles/settings', icon: Settings },
+    { label: text('modules.userAndRoles.navigation.home'), key: '', path: '/start/users-and-roles', icon: LayoutDashboard },
+    { label: text('modules.userAndRoles.navigation.manager'), key: 'manager', path: '/start/users-and-roles/manager', icon: UsersRound },
+    { label: text('modules.userAndRoles.navigation.settings'), key: 'settings', path: '/start/users-and-roles/settings', icon: Settings },
   ];
 
   return (
@@ -20,7 +20,7 @@ export function UserAndRolesPage() {
       <LeftPanel
         navigation={navigation}
         primaryColor={primaryColor}
-        nameModule={text('startModule.listAppliaction.userAndRoles')}
+        nameModule={text('modules.listAppliaction.userAndRoles')}
         IconModule={UserRoundShield}
       />
 

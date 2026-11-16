@@ -84,7 +84,7 @@ export function useCreateUserForm(onCreated: (user: UserRecord) => void) {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!selectedPerson) {
-      setPeopleError(text('startModule.userAndRoles.notifications.personRequired'));
+      setPeopleError(text('modules.userAndRoles.notifications.personRequired'));
       return;
     }
 
@@ -97,7 +97,7 @@ export function useCreateUserForm(onCreated: (user: UserRecord) => void) {
         password: generatePassword(),
       };
       const user = await apiClient.create<UserRecord>('users', input);
-      notify('success', text('startModule.userAndRoles.notifications.userCreated'));
+      notify('success', text('modules.userAndRoles.notifications.userCreated'));
       onCreated(user);
     } catch (cause: unknown) {
       const error = describeUserAndRolesError(cause);

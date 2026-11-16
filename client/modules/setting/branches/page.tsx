@@ -32,7 +32,7 @@ const emptyValues: BranchFormValues = { name: "", code: "", address: emptyAddres
 function errorMessage(cause: unknown): string {
     return cause instanceof ApiError || cause instanceof Error
         ? cause.message
-        : text("startModule.settings.common.operationFailed");
+        : text("modules.settings.common.operationFailed");
 }
 
 function BranchSettingsContent() {
@@ -93,10 +93,10 @@ function BranchSettingsContent() {
             };
             if (editing) {
                 await apiClient.update<BranchRecord>("branches", editing.id, payload);
-                notify("success", text("startModule.settings.branches.updated"));
+                notify("success", text("modules.settings.branches.updated"));
             } else {
                 await apiClient.create<BranchRecord>("branches", payload);
-                notify("success", text("startModule.settings.branches.created"));
+                notify("success", text("modules.settings.branches.created"));
             }
             cancelEditing();
             await loadBranches();
@@ -116,8 +116,8 @@ function BranchSettingsContent() {
                 <div>
                     <h1 className={
                         "font-bold " + textPrimaryColorGradient
-                    }>{text("startModule.settings.branches.title")}</h1>
-                    <p className="text-xs text-base-content/60">{text("startModule.settings.branches.description")}</p>
+                    }>{text("modules.settings.branches.title")}</h1>
+                    <p className="text-xs text-base-content/60">{text("modules.settings.branches.description")}</p>
                 </div>
 
                 <button className="btn btn-sm ml-auto" onClick={() => void toggleLanguage()}>
@@ -127,18 +127,18 @@ function BranchSettingsContent() {
             </header>
             <main className="mx-auto max-w-5xl space-y-5 p-4 sm:p-6">
                 <div className="alert alert-info text-sm">
-                    {text("startModule.settings.branches.environmentNotice")}
+                    {text("modules.settings.branches.environmentNotice")}
                 </div>
                 <form className="card border border-base-300 bg-base-100 shadow-sm" onSubmit={handleSubmit}>
                     <div className="card-body gap-4">
                         <h2 className="card-title text-base">
                             {editing
-                                ? text("startModule.settings.branches.editTitle")
-                                : text("startModule.settings.branches.createTitle")}
+                                ? text("modules.settings.branches.editTitle")
+                                : text("modules.settings.branches.createTitle")}
                         </h2>
                         <div className="grid gap-4 sm:grid-cols-2">
                             <div className="flex flex-col">
-                                <span className="label-text mb-1">{text("startModule.settings.branches.name")}</span>
+                                <span className="label-text mb-1">{text("modules.settings.branches.name")}</span>
                                 <input
                                     className="input input-sm"
                                     maxLength={150}
@@ -148,7 +148,7 @@ function BranchSettingsContent() {
                                 />
                             </div>
                             <label className="flex flex-col">
-                                <span className="label-text mb-1">{text("startModule.settings.branches.code")}</span>
+                                <span className="label-text mb-1">{text("modules.settings.branches.code")}</span>
                                 <input
                                     className="input input-sm"
                                     maxLength={50}
@@ -172,14 +172,14 @@ function BranchSettingsContent() {
                                     checked={values.isActive}
                                     onChange={(event) => setValues((current) => ({ ...current, isActive: event.target.checked }))}
                                 />
-                                <span>{text("startModule.settings.branches.active")}</span>
+                                <span>{text("modules.settings.branches.active")}</span>
                             </label>
                         )}
                         {error && <p className="text-sm text-error" role="alert">{error}</p>}
                         <div className="flex justify-end gap-2">
                             {editing && (
                                 <button className="btn btn-ghost" type="button" onClick={cancelEditing}>
-                                    {text("startModule.settings.branches.cancel")}
+                                    {text("modules.settings.branches.cancel")}
                                 </button>
                             )}
                             <button className={
@@ -190,8 +190,8 @@ function BranchSettingsContent() {
                             } type="submit" disabled={saving}>
                                 {saving ? <span className="loading loading-spinner loading-xs" /> : editing ? <Pencil size={16} /> : <Plus size={16} />}
                                 {editing
-                                    ? text("startModule.settings.branches.save")
-                                    : text("startModule.settings.branches.create")}
+                                    ? text("modules.settings.branches.save")
+                                    : text("modules.settings.branches.create")}
                             </button>
                         </div>
                     </div>
@@ -211,11 +211,11 @@ function BranchSettingsContent() {
                                         primaryColor
                                     )
                                 } type="button" onClick={() => void loadBranches()}>
-                                    {text("startModule.settings.common.retry")}
+                                    {text("modules.settings.common.retry")}
                                 </button>
                             </div>
                         ) : branches.length === 0 ? (
-                            <p className="p-6 text-sm text-base-content/60">{text("startModule.settings.branches.noRecords")}</p>
+                            <p className="p-6 text-sm text-base-content/60">{text("modules.settings.branches.noRecords")}</p>
                         ) : (
                             <ul className="divide-y divide-base-300">
                                 {branches.map((branch) => (
@@ -224,8 +224,8 @@ function BranchSettingsContent() {
                                             <p className="font-semibold">{branch.name}</p>
                                             <p className="text-sm text-base-content/60">
                                                 {branch.code || "—"} · {branch.is_active
-                                                    ? text("startModule.settings.branches.activeStatus")
-                                                    : text("startModule.settings.branches.inactiveStatus")}
+                                                    ? text("modules.settings.branches.activeStatus")
+                                                    : text("modules.settings.branches.inactiveStatus")}
                                             </p>
                                         </div>
                                         <button className={
@@ -234,7 +234,7 @@ function BranchSettingsContent() {
                                             )
                                         } type="button" onClick={() => startEditing(branch)}>
                                             <Pencil size={15} />
-                                            {text("startModule.settings.branches.edit")}
+                                            {text("modules.settings.branches.edit")}
                                         </button>
                                     </li>
                                 ))}

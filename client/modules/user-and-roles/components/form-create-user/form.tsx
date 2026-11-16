@@ -17,22 +17,22 @@ export function CreateUserForm({ onCreated, onCancel }: CreateUserFormProps) {
   return (
     <form className="space-y-4" onSubmit={form.handleSubmit}>
       <div className="form-control w-full">
-        <span className="label-text text-sm mb-1">{text('startModule.userAndRoles.forms.person')}</span>
+        <span className="label-text text-sm mb-1">{text('modules.userAndRoles.forms.person')}</span>
         <span className="mb-1 ml-2 text-xs text-base-content/60">
-          {text('startModule.userAndRoles.forms.personHelp')}
+          {text('modules.userAndRoles.forms.personHelp')}
         </span>
         <input
           className="input input-sm outline-none w-full"
           value={form.personQuery}
           onChange={(event) => form.clearPersonSearch(event.target.value)}
-          placeholder={text('startModule.userAndRoles.forms.searchPersonPlaceholder')}
+          placeholder={text('modules.userAndRoles.forms.searchPersonPlaceholder')}
           autoComplete="off"
           aria-autocomplete="list"
           aria-expanded={form.people.length > 0}
           required
         />
         {form.peopleLoading && (
-          <span className="mt-1 text-xs text-base-content/60">{text('startModule.userAndRoles.forms.searchingPeople')}</span>
+          <span className="mt-1 text-xs text-base-content/60">{text('modules.userAndRoles.forms.searchingPeople')}</span>
         )}
         {form.people.length > 0 && (
           <ul className="menu mt-1 max-h-48 w-full flex-nowrap overflow-y-auto rounded-box border border-base-300 bg-base-100 p-1 shadow">
@@ -68,7 +68,7 @@ export function CreateUserForm({ onCreated, onCancel }: CreateUserFormProps) {
           form.people.length === 0 &&
           !form.peopleError && (
             <span className="mt-1 text-xs text-base-content/60">
-              {text('startModule.userAndRoles.forms.noPeopleFound')}
+              {text('modules.userAndRoles.forms.noPeopleFound')}
             </span>
           )}
         {form.peopleError && (
@@ -79,7 +79,7 @@ export function CreateUserForm({ onCreated, onCancel }: CreateUserFormProps) {
       </div>
 
       <div className="form-control w-full">
-        <span className="label-text text-sm mb-1">{text('startModule.userAndRoles.forms.username')}</span>
+        <span className="label-text text-sm mb-1">{text('modules.userAndRoles.forms.username')}</span>
         <input
           className="input outline-none input-sm w-full"
           value={form.username}
@@ -91,7 +91,7 @@ export function CreateUserForm({ onCreated, onCancel }: CreateUserFormProps) {
       </div>
 
       <div className="form-control w-full">
-        <span className="label-text text-sm mb-1">{text('startModule.userAndRoles.forms.email')}</span>
+        <span className="label-text text-sm mb-1">{text('modules.userAndRoles.forms.email')}</span>
         <input
           className="input outline-none input-sm w-full"
           type="email"
@@ -104,12 +104,12 @@ export function CreateUserForm({ onCreated, onCancel }: CreateUserFormProps) {
       </div>
 
       <p className="text-xs text-base-content/60">
-        {text('startModule.userAndRoles.forms.generatedPasswordHelp')}
+        {text('modules.userAndRoles.forms.generatedPasswordHelp')}
       </p>
 
       <div className="flex justify-end gap-2">
         <button className="btn btn-sm btn-ghost" type="button" onClick={onCancel}>
-          {text('startModule.userAndRoles.forms.cancel')}
+          {text('modules.userAndRoles.forms.cancel')}
         </button>
         <button
           className={clsx("btn btn-sm btn-error text-white ", primaryColor)}
@@ -117,7 +117,7 @@ export function CreateUserForm({ onCreated, onCancel }: CreateUserFormProps) {
           disabled={form.submitting || !form.selectedPerson}
         >
           {form.submitting && <span className="loading loading-spinner loading-xs" />}
-          {text('startModule.userAndRoles.forms.createUser')}
+          {text('modules.userAndRoles.forms.createUser')}
         </button>
       </div>
     </form>

@@ -20,7 +20,7 @@ export function describeUserAndRolesError(cause: unknown): UserAndRolesError {
     if (cause.status === 401) {
       return {
         kind: 'session',
-        message: text('startModule.userAndRoles.errors.sessionExpired'),
+        message: text('modules.userAndRoles.errors.sessionExpired'),
       };
     }
     if (cause.status === 403) {
@@ -28,7 +28,7 @@ export function describeUserAndRolesError(cause: unknown): UserAndRolesError {
       if (missingPermission) {
         return {
           kind: 'permission',
-          message: text('startModule.userAndRoles.errors.missingPermission', {
+          message: text('modules.userAndRoles.errors.missingPermission', {
             permission: missingPermission[1],
           }),
         };
@@ -36,36 +36,36 @@ export function describeUserAndRolesError(cause: unknown): UserAndRolesError {
       if (cause.message.toLowerCase().includes('super administrator')) {
         return {
           kind: 'permission',
-          message: text('startModule.userAndRoles.errors.superAdminRequired'),
+          message: text('modules.userAndRoles.errors.superAdminRequired'),
         };
       }
       return {
         kind: 'permission',
-        message: text('startModule.userAndRoles.errors.permissionDenied'),
+        message: text('modules.userAndRoles.errors.permissionDenied'),
       };
     }
     if (cause.status === 400) {
       return {
         kind: 'validation',
-        message: cause.message || text('startModule.userAndRoles.errors.checkInput'),
+        message: cause.message || text('modules.userAndRoles.errors.checkInput'),
       };
     }
     if (cause.status === 404) {
       return {
         kind: 'not-found',
-        message: text('startModule.userAndRoles.errors.recordUnavailable'),
+        message: text('modules.userAndRoles.errors.recordUnavailable'),
       };
     }
     if (cause.status === 409) {
       return {
         kind: 'conflict',
-        message: text('startModule.userAndRoles.errors.duplicateRecord'),
+        message: text('modules.userAndRoles.errors.duplicateRecord'),
       };
     }
     if (cause.status >= 500) {
       return {
         kind: 'server',
-        message: text('startModule.userAndRoles.errors.server'),
+        message: text('modules.userAndRoles.errors.server'),
       };
     }
     return { kind: 'network', message: cause.message };
@@ -76,6 +76,6 @@ export function describeUserAndRolesError(cause: unknown): UserAndRolesError {
   }
   return {
     kind: 'network',
-    message: text('startModule.userAndRoles.errors.operationFailed'),
+    message: text('modules.userAndRoles.errors.operationFailed'),
   };
 }

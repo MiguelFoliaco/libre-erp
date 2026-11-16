@@ -7,9 +7,9 @@ import { Outlet } from 'react-router';
 const primaryColor = 'bg-linear-to-tr to-gray-500 to-120% from-black'
 
 const navigation: LeftNavigation[] = [
-    { label: text('startModule.userAndRoles.navigation.home'), key: '', path: '/start/settings', icon: Settings },
-    { label: text('startModule.settings.navigation.company'), key: 'company', path: '/start/settings/company', icon: Building },
-    { label: text('startModule.settings.navigation.branches'), key: 'branches', path: '/start/settings/branches', icon: Store },
+    { label: text('modules.userAndRoles.navigation.home'), key: '', path: '/start/settings', icon: Settings },
+    { label: text('modules.settings.navigation.company'), key: 'company', path: '/start/settings/company', icon: Building },
+    { label: text('modules.settings.navigation.branches'), key: 'branches', path: '/start/settings/branches', icon: Store },
 ];
 
 
@@ -21,7 +21,7 @@ export const SettingPage = () => {
             <LeftPanel
                 navigation={navigation}
                 primaryColor={primaryColor}
-                nameModule={text('startModule.listAppliaction.settings')}
+                nameModule={text('modules.listAppliaction.settings')}
                 IconModule={Settings}
             />
 

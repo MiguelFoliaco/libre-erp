@@ -39,7 +39,7 @@ export function useSettingsForm() {
     event.preventDefault();
     notify(
       'info',
-      text('startModule.userAndRoles.notifications.settingsPreviewSaved'),
+      text('modules.userAndRoles.notifications.settingsPreviewSaved'),
     );
   }
 

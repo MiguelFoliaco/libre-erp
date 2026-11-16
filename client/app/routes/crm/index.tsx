@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router';
-import { apiClient } from '../../lib/sdk';
-import { SettingPage } from '../../modules/setting/page';
+import { apiClient } from '../../../lib/sdk';
+import { CRMPage } from './../../../modules/crm/index';
 
-export default function Settings() {
+export default function Crm() {
     const navigate = useNavigate(); // GLOBALIZA EN UNA SOLA LLAMADA
     const [status, setStatus] = useState<"checking" | "authenticated" | "error">("checking");
     const [error, setError] = useState("");
@@ -65,6 +65,6 @@ export default function Settings() {
 
 
     return (
-        <SettingPage />
+        <CRMPage />
     )
 }

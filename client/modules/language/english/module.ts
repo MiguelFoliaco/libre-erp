@@ -1,4 +1,4 @@
-export const startModule = {
+export const modules = {
     settings: {
         navigation: {
             home: "Settings",
@@ -68,6 +68,7 @@ export const startModule = {
     },
     listAppliaction: {
         userAndRoles: "User and roles",
+        crm: "CRM",
         settings: "Settings",
         selling: "Selling",
         pos: "POS",
@@ -221,6 +222,14 @@ export const startModule = {
             duplicateRecord: "A record with these details already exists.",
             server: "The server could not complete the operation.",
             operationFailed: "The operation could not be completed. Try again."
+        }
+    },
+    crm: {
+        navigation: {
+            people: "People",
+            clients: 'Clients',
+            contacts: 'Contacts',
+            processes: 'Processes',
         }
     }
 }

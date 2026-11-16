@@ -11,6 +11,9 @@ importers:
       '@fontsource-variable/work-sans':
         specifier: ^5.3.0
         version: 5.3.0
+      '@formkit/tempo':
+        specifier: ^1.1.1
+        version: 1.1.1
       '@react-router/node':
         specifier: ^8.5.1
         version: 8.5.1(react-router@8.5.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@5.9.3)
@@ -150,6 +153,9 @@ packages:
 
   '@fontsource-variable/work-sans@5.3.0':
     resolution: {integrity: sha512-le8h/OIIuhm5Z7TdvuMw0yKg2gaCZUiMec8zaumsVVjzeJRBPEF0bQI/MkaZDHCVzZDvZoP/O2LiGOSfDLSbaw==}
+
+  '@formkit/tempo@1.1.1':
+    resolution: {integrity: sha512-ONW1H43AfTbIgDALg89xzG0PAQZvMMM1l3z4Oq7ZXJ+GlTK486ni0MqDHiqa8oExWcGkqE8en9Mo8YXu4AGULQ==}
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -1264,6 +1270,8 @@ snapshots:
     optional: true
 
   '@fontsource-variable/work-sans@5.3.0': {}
+
+  '@formkit/tempo@1.1.1': {}
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:

@@ -19,7 +19,7 @@ export function EditUserForm({ user, onSaved, onCancel }: EditUserFormProps) {
     <>
       <form className="space-y-4" onSubmit={form.handleSubmit}>
         <label className="form-control w-full">
-          <span className="label-text mb-1">{text('startModule.userAndRoles.forms.username')}</span>
+          <span className="label-text mb-1">{text('modules.userAndRoles.forms.username')}</span>
           <input
             className="input input-bordered w-full"
             value={form.username}
@@ -31,7 +31,7 @@ export function EditUserForm({ user, onSaved, onCancel }: EditUserFormProps) {
         </label>
 
         <label className="form-control w-full">
-          <span className="label-text mb-1">{text('startModule.userAndRoles.forms.email')}</span>
+          <span className="label-text mb-1">{text('modules.userAndRoles.forms.email')}</span>
           <input
             className="input input-bordered w-full"
             type="email"
@@ -50,16 +50,16 @@ export function EditUserForm({ user, onSaved, onCancel }: EditUserFormProps) {
             checked={form.isActive}
             onChange={(event) => form.setIsActive(event.target.checked)}
           />
-          <span>{text('startModule.userAndRoles.forms.activeUser')}</span>
+          <span>{text('modules.userAndRoles.forms.activeUser')}</span>
         </label>
 
         <div className="flex justify-end gap-2">
           <button className="btn btn-ghost btn-sm" type="button" onClick={onCancel}>
-            {text('startModule.userAndRoles.forms.cancel')}
+            {text('modules.userAndRoles.forms.cancel')}
           </button>
           <button className={clsx("btn btn-sm btn-error", primaryColor)} type="submit" disabled={form.submitting}>
             {form.submitting && <span className="loading loading-spinner loading-xs" />}
-            {text('startModule.userAndRoles.forms.saveChanges')}
+            {text('modules.userAndRoles.forms.saveChanges')}
           </button>
         </div>
       </form>

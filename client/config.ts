@@ -40,13 +40,13 @@ export type AddressField = (typeof config.addressConfig.fields)[number];
 export type AddressValues = Record<AddressField, string>;
 
 export const addressFieldLabels: Record<AddressField, PathText> = {
-    streetNumber: "startModule.settings.addressFields.streetNumber",
-    route: "startModule.settings.addressFields.street",
-    subpremise: "startModule.settings.addressFields.subpremise",
-    neighborhood: "startModule.settings.addressFields.neighborhood",
-    locality: "startModule.settings.addressFields.city",
-    administrativeAreaLevel2: "startModule.settings.addressFields.county",
-    administrativeAreaLevel1: "startModule.settings.addressFields.state",
-    postalCode: "startModule.settings.addressFields.postalCode",
-    country: "startModule.settings.addressFields.country",
+    streetNumber: "modules.settings.addressFields.streetNumber",
+    route: "modules.settings.addressFields.street",
+    subpremise: "modules.settings.addressFields.subpremise",
+    neighborhood: "modules.settings.addressFields.neighborhood",
+    locality: "modules.settings.addressFields.city",
+    administrativeAreaLevel2: "modules.settings.addressFields.county",
+    administrativeAreaLevel1: "modules.settings.addressFields.state",
+    postalCode: "modules.settings.addressFields.postalCode",
+    country: "modules.settings.addressFields.country",
 };

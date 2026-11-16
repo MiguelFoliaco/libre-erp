@@ -2,8 +2,9 @@ import { LayoutDashboard, LogOut, SkipBack, UsersRound } from 'lucide-react';
 // import React from 'react'
 import { text } from '../language';
 import { clsx } from 'clsx';
-import { useLocation, useNavigate, useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { useSession } from '../auth/hook/store';
+import { Link } from 'react-router';
 
 
 // const primaryColor20 = 'bg-linear-to-tr from-red-500/10 to-120% to-orange-600/10'
@@ -37,7 +38,6 @@ export const LeftPanel = (
 
     const { logout, user } = useSession()
     const { section } = useParams()
-    const navigate = useNavigate()
     const location = useLocation()
 
     return (
@@ -59,32 +59,34 @@ export const LeftPanel = (
                     {text('common.leftPanel.workspace')}
                 </p>
 
-                <ul className="w-full flex flex-col gap-1 p-0">
+                <div className="w-full flex flex-col gap-1 p-0">
                     {navigation.map(({ label, icon: Icon, path, key }) => (
-                        <li
-                            onClick={() => navigate(path)}
+                        <Link
+                            to={path}
+                            viewTransition
                             key={label}
                             className={clsx(
                                 "w-full flex cursor-pointer p-1 items-center gap-2 pl-2 hover:pl-3 transition-all rounded-sm hover:bg-base-200/50",
                                 (location.pathname === path ||
                                     (section !== undefined && section === key)) &&
-                                    "active font-semibold text-white " + primaryColor
+                                "active font-semibold text-white " + primaryColor
                             )}>
                             <Icon size={17} />
                             <a
                                 aria-current={
                                     location.pathname === path ||
-                                    (section !== undefined && section === key)
+                                        (section !== undefined && section === key)
                                         ? "page"
                                         : undefined
                                 }
                             >
                                 {label}
                             </a>
-                        </li>
+                        </Link>
                     ))}
-                    <li
-                        onClick={() => navigate('/start')}
+                    <Link
+                        to={'/'}
+                        viewTransition
                         className={
                             clsx(
                                 "w-full mt-auto flex cursor-pointer p-1 items-center gap-2 pl-2 hover:pl-3 transition-all rounded-sm hover:bg-base-200/50",
@@ -97,8 +99,8 @@ export const LeftPanel = (
                         >
                             {text('common.leftPanel.returnHome')}
                         </a>
-                    </li>
-                </ul>
+                    </Link>
+                </div>
             </div>
 
             <div className="mt-auto border-t border-base-300 p-3">

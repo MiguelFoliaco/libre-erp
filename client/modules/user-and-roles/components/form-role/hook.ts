@@ -72,8 +72,8 @@ export function useRoleForm(
         'success',
         text(
           role
-            ? 'startModule.userAndRoles.notifications.roleUpdated'
-            : 'startModule.userAndRoles.notifications.roleCreated',
+            ? 'modules.userAndRoles.notifications.roleUpdated'
+            : 'modules.userAndRoles.notifications.roleCreated',
         ),
       );
       onSaved(savedRole);
