@@ -32,7 +32,7 @@ export function meta({ }: Route.MetaArgs) {
 }
 
 export default function Home() {
-  const { user, setUser, setSession, error, setError, isLoading  } = useSession();
+  const { user, setUser, setSession, error, setError, isLoading } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { toggleLanguage } = useLanguage()
@@ -107,6 +107,11 @@ export default function Home() {
       .join(" ")
     : "";
 
+  useEffect(() => {
+    if(user){
+      navigate('/start')
+    }
+  }, [user])
 
   return (
     <main className="min-h-screen bg-base-200 flex items-center justify-center p-3 sm:p-4">

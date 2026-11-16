@@ -29,6 +29,17 @@ export const startModule = {
             save: "Guardar cambios",
             saved: "Los datos de la compañía se actualizaron."
         },
+        addressFields: {
+            streetNumber: "Número de calle",
+            street: "Calle o vía",
+            subpremise: "Apartamento, oficina o local",
+            neighborhood: "Barrio",
+            city: "Ciudad o localidad",
+            county: "Municipio o provincia",
+            state: "Departamento o estado",
+            postalCode: "Código postal",
+            country: "País",
+        },
         branches: {
             title: "Sucursales",
             description: "Gestiona las sucursales asociadas al ambiente actual.",

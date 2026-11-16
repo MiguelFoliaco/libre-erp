@@ -41,7 +41,7 @@ export const LeftPanel = (
     const location = useLocation()
 
     return (
-        <aside className="h-screen sticky top-0 w-60 shrink-0 border-r border-base-300 bg-base-100 flex flex-col">
+        <aside className="h-screen select-none sticky top-0 w-60 shrink-0 border-r border-base-300 bg-base-100 flex flex-col">
             <div className="flex h-16 items-center gap-3 border-b border-base-300 px-5">
                 <div className={"grid size-9 place-items-center text-white rounded-md " + primaryColor}>
                     <IconModule size={19} />

@@ -233,8 +233,6 @@ function SettingsFormContent() {
 
 export default function UserAndRolesSettingsForm() {
   return (
-    <ToastProvider>
       <SettingsFormContent />
-    </ToastProvider>
   );
 }

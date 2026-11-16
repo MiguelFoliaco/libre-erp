@@ -53,6 +53,7 @@ export const spanish = {
         "success": "Exito",
         'confirm': 'Confirmar',
         'next': 'Siguiente',
+        "langugage-change": "Cambiar idioma",
         toast: {
             close: "Cerrar",
             closeNotification: "Cerrar notificación"

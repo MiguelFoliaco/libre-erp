@@ -9,8 +9,12 @@ import {
 
 import type { Route } from "./+types/root";
 import '@fontsource-variable/work-sans';
-import "./app.css";
 import { AuthProvider } from "./auth-provider";
+import { ToastProvider } from '../modules/common/toast'
+import "./app.css";
+
+
+
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -34,9 +38,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="bg-base-200 w-full  h-screen">
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <ToastProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ToastProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

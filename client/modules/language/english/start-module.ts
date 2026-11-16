@@ -5,7 +5,7 @@ export const startModule = {
             company: "Company",
             branches: "Branches"
         },
-        home: {
+        welcome: {
             title: "Company settings",
             description: "Manage the details of your single company and the branches in the current workspace.",
             companyTitle: "Company details",
@@ -28,6 +28,17 @@ export const startModule = {
             address: "Address",
             save: "Save changes",
             saved: "Company details were updated."
+        },
+        addressFields: {
+            streetNumber: "Street number",
+            street: "Street or avenue",
+            subpremise: "Apartment, office, or commercial space",
+            neighborhood: "Neighborhood",
+            city: "City or locality",
+            county: "Municipality or province",
+            state: "State or department",
+            postalCode: "Postal code",
+            country: "Country",
         },
         branches: {
             title: "Branches",

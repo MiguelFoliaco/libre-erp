@@ -1,23 +1,33 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { Pencil, Plus, Store } from "lucide-react";
+import { Languages, Pencil, Plus, Store } from "lucide-react";
 import { ApiError, apiClient } from "../../../lib/sdk";
-import { ToastProvider, useToast } from "../../common/toast";
+import { useToast } from "../../common/toast";
 import { text } from "../../language";
+import { AddressFields, emptyAddressValues, parseAddressValues } from "../components/address-fields";
+import { clsx } from "clsx";
+import { useLanguage } from './../../language/hook';
+import { type AddressValues } from '../../../config'
+
+const primaryColor = 'bg-linear-to-tr to-gray-500 to-120% from-black'
+const textPrimaryColorGradient = 'bg-linear-to-r from-black to-50% to-gray-500 bg-clip-text text-transparent'
+
 
 interface BranchRecord {
     id: string;
     name: string;
     code: string | null;
+    address: Partial<AddressValues> | null;
     is_active: boolean;
 }
 
 interface BranchFormValues {
     name: string;
     code: string;
+    address: AddressValues;
     isActive: boolean;
 }
 
-const emptyValues: BranchFormValues = { name: "", code: "", isActive: true };
+const emptyValues: BranchFormValues = { name: "", code: "", address: emptyAddressValues(), isActive: true };
 
 function errorMessage(cause: unknown): string {
     return cause instanceof ApiError || cause instanceof Error
@@ -27,6 +37,7 @@ function errorMessage(cause: unknown): string {
 
 function BranchSettingsContent() {
     const { notify } = useToast();
+    const { toggleLanguage } = useLanguage();
     const [branches, setBranches] = useState<BranchRecord[]>([]);
     const [values, setValues] = useState<BranchFormValues>(emptyValues);
     const [editing, setEditing] = useState<BranchRecord | null>(null);
@@ -58,6 +69,7 @@ function BranchSettingsContent() {
         setValues({
             name: branch.name,
             code: branch.code ?? "",
+            address: parseAddressValues(branch.address),
             isActive: branch.is_active,
         });
         setError("");
@@ -76,6 +88,7 @@ function BranchSettingsContent() {
             const payload = {
                 name: values.name.trim(),
                 code: values.code.trim() || null,
+                address: values.address,
                 isActive: values.isActive,
             };
             if (editing) {
@@ -98,12 +111,19 @@ function BranchSettingsContent() {
 
     return (
         <div className="min-h-full bg-base-200">
-            <header className="flex min-h-16 items-center gap-3 border-b border-base-300 bg-base-100 px-6 py-4">
-                <Store size={20} className="text-primary" />
+            <header className="flex h-16 items-center gap-3 border-b border-base-300 bg-base-100 px-6 py-4">
+                <Store size={20} className="text-neutral" />
                 <div>
-                    <h1 className="font-bold">{text("startModule.settings.branches.title")}</h1>
+                    <h1 className={
+                        "font-bold " + textPrimaryColorGradient
+                    }>{text("startModule.settings.branches.title")}</h1>
                     <p className="text-xs text-base-content/60">{text("startModule.settings.branches.description")}</p>
                 </div>
+
+                <button className="btn btn-sm ml-auto" onClick={() => void toggleLanguage()}>
+                    {text('common.langugage-change')}
+                    <Languages size={16} />
+                </button>
             </header>
             <main className="mx-auto max-w-5xl space-y-5 p-4 sm:p-6">
                 <div className="alert alert-info text-sm">
@@ -117,30 +137,37 @@ function BranchSettingsContent() {
                                 : text("startModule.settings.branches.createTitle")}
                         </h2>
                         <div className="grid gap-4 sm:grid-cols-2">
-                            <label className="form-control">
+                            <div className="flex flex-col">
                                 <span className="label-text mb-1">{text("startModule.settings.branches.name")}</span>
                                 <input
-                                    className="input input-bordered"
+                                    className="input input-sm"
                                     maxLength={150}
                                     required
                                     value={values.name}
                                     onChange={(event) => setValues((current) => ({ ...current, name: event.target.value }))}
                                 />
-                            </label>
-                            <label className="form-control">
+                            </div>
+                            <label className="flex flex-col">
                                 <span className="label-text mb-1">{text("startModule.settings.branches.code")}</span>
                                 <input
-                                    className="input input-bordered"
+                                    className="input input-sm"
                                     maxLength={50}
                                     value={values.code}
                                     onChange={(event) => setValues((current) => ({ ...current, code: event.target.value }))}
                                 />
                             </label>
                         </div>
+                        <AddressFields
+                            values={values.address}
+                            onChange={(field, value) => setValues((current) => ({
+                                ...current,
+                                address: { ...current.address, [field]: value },
+                            }))}
+                        />
                         {editing && (
                             <label className="flex items-center gap-3">
                                 <input
-                                    className="toggle toggle-primary"
+                                    className="toggle toggle-neutral"
                                     type="checkbox"
                                     checked={values.isActive}
                                     onChange={(event) => setValues((current) => ({ ...current, isActive: event.target.checked }))}
@@ -155,7 +182,12 @@ function BranchSettingsContent() {
                                     {text("startModule.settings.branches.cancel")}
                                 </button>
                             )}
-                            <button className="btn btn-primary" type="submit" disabled={saving}>
+                            <button className={
+                                clsx(
+                                    "btn btn-neutral btn-sm",
+                                    primaryColor
+                                )
+                            } type="submit" disabled={saving}>
                                 {saving ? <span className="loading loading-spinner loading-xs" /> : editing ? <Pencil size={16} /> : <Plus size={16} />}
                                 {editing
                                     ? text("startModule.settings.branches.save")
@@ -173,7 +205,12 @@ function BranchSettingsContent() {
                         ) : error && branches.length === 0 ? (
                             <div className="flex flex-wrap items-center justify-between gap-3 p-6">
                                 <p className="text-sm text-error" role="alert">{error}</p>
-                                <button className="btn btn-primary btn-sm" type="button" onClick={() => void loadBranches()}>
+                                <button className={
+                                    clsx(
+                                        "btn btn-neutral btn-sm",
+                                        primaryColor
+                                    )
+                                } type="button" onClick={() => void loadBranches()}>
                                     {text("startModule.settings.common.retry")}
                                 </button>
                             </div>
@@ -191,7 +228,11 @@ function BranchSettingsContent() {
                                                     : text("startModule.settings.branches.inactiveStatus")}
                                             </p>
                                         </div>
-                                        <button className="btn btn-ghost btn-sm" type="button" onClick={() => startEditing(branch)}>
+                                        <button className={
+                                            clsx(
+                                                "btn btn-ghost btn-sm",
+                                            )
+                                        } type="button" onClick={() => startEditing(branch)}>
                                             <Pencil size={15} />
                                             {text("startModule.settings.branches.edit")}
                                         </button>
@@ -208,8 +249,6 @@ function BranchSettingsContent() {
 
 export default function BranchSettings() {
     return (
-        <ToastProvider>
             <BranchSettingsContent />
-        </ToastProvider>
     );
 }

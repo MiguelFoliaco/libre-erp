@@ -52,6 +52,7 @@ export const english = {
         "success": "Success",
         'confirm': 'Confirm',
         'next': 'Next',
+        "langugage-change": "Change language",
         toast: {
             close: "Close",
             closeNotification: "Close notification"
@@ -80,5 +81,5 @@ export const english = {
             documentation: "Documentation"
         }
     },
-    startModule
+    modules: startModule
 } as const

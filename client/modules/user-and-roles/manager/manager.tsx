@@ -581,8 +581,6 @@ function ManagerContent() {
 
 export default function Manager() {
   return (
-    <ToastProvider>
       <ManagerContent />
-    </ToastProvider>
   );
 }
