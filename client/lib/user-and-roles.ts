@@ -1,12 +1,6 @@
-export interface PersonSearchResult {
-  id: string;
-  first_name: string;
-  middle_name: string | null;
-  last_name: string | null;
-  second_last_name: string | null;
-  document_number: string | null;
-  email: string | null;
-}
+import { type People } from './crm';
+
+export type PersonSearchResult = People;
 
 export interface UserRecord {
   id: string;

@@ -108,3 +108,7 @@ body {
   font-style: normal;
 
 }
+
+input {
+  outline: none !important;
+}

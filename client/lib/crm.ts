@@ -26,3 +26,6 @@ type ArrayValues<T extends readonly unknown[]> = T[number]
 export type Address = Record<ArrayValues<typeof config['addressConfig']['fields']>, string>
 
 export interface Metadata { }
+
+
+export type DocumentTypePeople = { name: string, id: string, description: string };

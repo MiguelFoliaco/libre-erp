@@ -30,16 +30,16 @@ export class PeopleSearchService {
       throw new BadRequestException('Search must contain at least 2 characters');
     }
 
-    const searchTerm = `%${searchValue.trim()}%`;
+    const searchTerm = `%${searchValue.trim()}%`.replaceAll(' ','');
     const result = await this.pool.query<PersonSearchResult>(
-      `SELECT id, first_name, middle_name, last_name, second_last_name,
-              document_number, email
+      `SELECT 
+        *
        FROM people
        WHERE company_id = $1
          AND environment_id = $2
          AND is_active = TRUE
          AND (
-           concat_ws(' ', first_name, middle_name, last_name, second_last_name)
+           concat_ws('', first_name, middle_name, last_name, second_last_name)
              ILIKE $3
            OR document_number ILIKE $3
          )

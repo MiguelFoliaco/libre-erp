@@ -1,178 +1,303 @@
-import { Eye, EyeClosed, Pencil, Plus, Trash2, User2 } from 'lucide-react';
-import React, { useEffect, useState } from 'react'
-import { text } from './../../language';
-import { Table, type TableAction, } from './../../common/table';
-import { apiClient } from './../../../lib/sdk';
-import { useToast } from './../../common/toast';
-import { type People } from './../../../lib/crm';
-import { format } from '@formkit/tempo';
-import { clsx } from 'clsx';
+import { AnimatePresence, motion } from "motion/react";
+import { CircleSlash, Eye, EyeClosed, Fingerprint, Mail, MapPin, Pencil, Phone, Plus, Search, Trash2, User2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { format } from "@formkit/tempo";
+import { clsx } from "clsx";
+import { text } from "./../../language";
+import { Table, type TableAction } from "./../../common/table";
+import { useToast } from "./../../common/toast";
+import type { People } from "./../../../lib/crm";
+import { PersonFormModal } from "./form/create-person";
+import { DisablePersonModal } from "./form/disable-person";
+import { usePeople } from "./form/hook";
+import { ViewPersonModal } from "./form/view-person";
 
-const primaryColor = 'bg-linear-to-tr from-emerald-500 via-green-500 to-120% to-yellow-400'
-
-
-
-const actions: TableAction<People>[] = [
-    {
-        label: 'Ver',
-        icon: <Eye size={16} />,
-        onClick: row => console.log('Ver', row)
-    },
-    {
-        label: 'Editar',
-        icon: <Pencil size={16} />,
-        onClick: row => console.log('Editar', row)
-    },
-    {
-        label: 'Eliminar',
-        icon: <Trash2 size={16} />,
-        className: 'text-error',
-        onClick: row => console.log('Eliminar', row)
-    }
-]
+export const primaryColor20 = "bg-linear-to-tr from-emerald-500/20 via-green-500/20 to-120% to-yellow-400/20";
+export const primaryColor = "bg-linear-to-tr from-emerald-500 via-green-500 to-120% to-yellow-400";
 
 export const Peoples = () => {
-
     const [closeInfoSecction, setCloseInfoSecction] = useState(false);
-    const [persons, setPersons] = useState<People[]>([])
-    const [documentType, setDocumentType] = useState<{ name: string, id: string, code: string }[]>([])
-
-    const { notify } = useToast()
+    const [searchValue, setSearchValue] = useState("");
+    const { notify } = useToast();
+    const {
+        people,
+        documentTypes,
+        loading,
+        loadingSearch,
+        saving,
+        modalMode,
+        selectedPerson,
+        search,
+        clearSearch,
+        openModal,
+        closeModal,
+        savePerson,
+        disablePerson,
+    } = usePeople();
 
     useEffect(() => {
-
-        apiClient.list<People>('people')
-            .then(res => {
-                setPersons(res.items);
-            })
-            .catch(err => {
-                notify('error', err.message)
-            })
-        apiClient.list<{ name: string, id: string, code: string }>('document-types-people')
-            .then(res => {
-                setDocumentType(res.items);
-            })
-            .catch(err => {
-                notify('error', err.message)
-            })
-        const closeInfoSecction = localStorage.getItem('closeInfoSecction');
-        if (closeInfoSecction) {
-            setCloseInfoSecction(JSON.parse(closeInfoSecction));
-        }
-    }, [])
-
+        const savedPreference = localStorage.getItem("closeInfoSecction");
+        if (savedPreference) setCloseInfoSecction(JSON.parse(savedPreference));
+    }, []);
 
     const toggleInfoSecction = () => {
-        localStorage.setItem('closeInfoSecction', JSON.stringify(!closeInfoSecction));
-        setCloseInfoSecction(!closeInfoSecction);
-    }
+        const nextValue = !closeInfoSecction;
+        localStorage.setItem("closeInfoSecction", JSON.stringify(nextValue));
+        setCloseInfoSecction(nextValue);
+    };
+
+    const actions: TableAction<People>[] = [
+        {
+            label: "Ver ficha",
+            icon: <Eye size={16} />,
+            onClick: (person) => openModal("view", person),
+        },
+        {
+            label: "Editar",
+            icon: <Pencil size={16} />,
+            hidden: (person) => !person.is_active,
+            onClick: (person) => openModal("edit", person),
+        },
+        {
+            label: "Deshabilitar",
+            icon: <CircleSlash size={16} />,
+            className: "text-error hover:bg-error/10",
+            hidden: (person) => !person.is_active,
+            onClick: (person) => openModal("disable", person),
+        },
+    ];
 
     return (
-        <div>
-            {/* Page header */}
-            <header className="flex h-16 bg-base-100 items-center gap-3 border-b border-base-300 px-6 py-4 lg:px-10">
-                <User2 size={21} className="text-base-content/60" />
-                <span className="text-sm font-medium text-base-content/70">
-                    {text('modules.crm.navigation.people')}
+        <div className="min-h-full bg-base-200/50 pb-8">
+            <header className="flex h-16 items-center gap-3 border-b border-base-300 bg-base-100 px-6 py-4 lg:px-10">
+                <span className={
+                    clsx(
+                        "flex size-9 items-center justify-center  rounded-sm ",
+                        primaryColor20
+                    )
+                }>
+                    <User2 size={19} />
                 </span>
+                <div>
+                    <span className="text-sm font-semibold text-base-content/80">
+                        {text("modules.crm.navigation.people")}
+                    </span>
+                    <p className="text-xs text-base-content/50">Directorio central de contactos</p>
+                </div>
             </header>
 
+            <main className="mx-auto max-w-7xl space-y-4 p-4 sm:p-6">
+                <AnimatePresence initial={false}>
+                    {!closeInfoSecction && (
+                        <motion.section
+                            key="people-intro"
+                            initial={{ opacity: 0, height: 0, y: -8 }}
+                            animate={{ opacity: 1, height: "auto", y: 0 }}
+                            exit={{ opacity: 0, height: 0, y: -8 }}
+                            transition={{ duration: 0.22, ease: "easeInOut" }}
+                            className="overflow-hidden"
+                        >
+                            <div className="relative overflow-hidden rounded-sm border border-emerald-800/10 bg-base-100 p-3 px-5 shadow-sm ">
 
-            {
-                closeInfoSecction ? null : (
-                    <div className="mx-auto max-w-7xl h-fit mt-2 p-4 bg-base-100 rounded-sm shadow-2xl shadow-base-300 relative">
-                        <div className="tooltip tooltip-left absolute top-4 right-4 " data-tip="Ocultar">
-                            <button onClick={toggleInfoSecction} className="btn btn-circle btn-sm btn-ghost"><EyeClosed size={15} /></button>
+                                <div className="absolute -right-8 -top-20 size-48 rounded-full bg-emerald-400/10 blur-2xl" />
+                                <button
+                                    type="button"
+                                    onClick={toggleInfoSecction}
+                                    className="btn btn-circle btn-sm btn-ghost absolute right-3 top-3"
+                                    aria-label="Ocultar información"
+                                    title="Ocultar"
+                                >
+                                    <EyeClosed size={15} />
+                                </button>
+                                <div className="relative max-w-3xl pl-2">
+                                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">Personas · CRM</p>
+                                    <h1 className="mt-1 text-xl font-semibold opacity-80 tracking-tight sm:text-2xl">
+                                        Un solo perfil, todas tus relaciones
+                                    </h1>
+                                    <p className="mt-2 text-sm leading-6 text-base-content/65">
+                                        Crea la ficha madre de cada contacto. Desde aquí podrás reconocerlo como cliente,
+                                        trabajador o proveedor sin duplicar sus datos personales.
+                                    </p>
+                                </div>
+                            </div>
+                        </motion.section>
+                    )}
+                    {closeInfoSecction && (
+                        <motion.button
+                            key="show-people-info"
+                            type="button"
+                            onClick={toggleInfoSecction}
+                            initial={{ opacity: 0, y: -4 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -4 }}
+                            className="btn btn-ghost btn-xs text-base-content/55"
+                        >
+                            <Eye size={14} /> Mostrar información
+                        </motion.button>
+                    )}
+                </AnimatePresence>
+
+                <section className="overflow-hidden rounded-sm border border-base-300 bg-base-100 shadow-sm">
+                    <div className="flex flex-col gap-4 border-b border-base-300 p-4">
+                        <div className="min-w-0">
+                            <h2 className="font-bold tracking-tight">Contactos registrados</h2>
+                            <p className="text-xs text-base-content/55">Busca por nombre o documento y administra cada ficha.</p>
                         </div>
-                        <p className="font-semibold text-lg">{text('modules.crm.navigation.people')}</p>
-                        <p className="text-sm opacity-80 mt-2">Aquí podras crear un nuevo contacto que será el registro madre para todos modelos o registros relacionados, clientes, trabajadores, proveedores, ventas, etc...</p>
+
+                        <div className="flex  gap-2 w-full">
+                            <form
+                                onSubmit={(event) => {
+                                    event.preventDefault();
+                                    void search(searchValue);
+                                }}
+                                className="join w-full sm:w-80"
+                            >
+                                <label className="input outline-none focus-within:border-primary input-sm join-item flex min-w-0 flex-1 items-center gap-2 border-base-300 bg-base-200/30">
+                                    <Search size={15} className="shrink-0 text-base-content/45" />
+                                    <input
+                                        value={searchValue}
+                                        onChange={(event) => setSearchValue(event.target.value)}
+                                        className="grow "
+                                        placeholder="Nombre o documento"
+                                        aria-label="Buscar persona por nombre o documento"
+                                    />
+                                </label>
+                                <button
+                                    type="submit"
+                                    disabled={loadingSearch}
+                                    aria-label="Buscar"
+                                    className={clsx("btn btn-sm join-item border-0 text-white", primaryColor)}
+                                >
+                                    {loadingSearch ? <span className="loading loading-spinner loading-xs" /> : <Search size={16} />}
+                                </button>
+                            </form>
+
+                            <button type="button" onClick={() => {
+                                clearSearch();
+                                setSearchValue("");
+                            }} className="btn btn-sm btn-ghost">
+                                Limpiar
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => openModal("create")}
+                                disabled={loading}
+                                className={`btn btn-sm ml-auto border-0 text-white shadow-sm ${primaryColor}`}
+                            >
+                                <Plus size={16} /> Crear persona
+                            </button>
+                        </div>
                     </div>
-                )
-            }
 
+                    <div className="p-3 sm:p-5 max-h-150">
+                        <Table<People>
+                            data={people}
+                            loading={loading || loadingSearch}
+                            emptyMessage={searchValue ? "No encontramos personas con esos datos." : "Aún no hay personas registradas."}
+                            columns={[
+                                {
+                                    key: "id",
+                                    label: "ID",
+                                    className: "w-20 font-medium",
+                                    render: (value) => <span className="kbd kbd-xs cursor-copy" title="Copiar ID" onClick={async () => {
+                                        if (typeof value !== "string") return;
+                                        try {
+                                            await navigator.clipboard.writeText(value);
+                                            notify("info", "ID copiado al portapapeles.");
+                                        } catch {
+                                            notify("error", "No se pudo copiar el ID al portapapeles.");
+                                        }
+                                    }}>{typeof value === "string" ? value.substring(0, 6) : "—"}</span>,
+                                },
+                                {
+                                    key: "first_name",
+                                    label: "Nombre",
+                                    className: "min-w-36 font-semibold",
+                                    render: (_, person) => <span>{[person.first_name, person.middle_name].filter(Boolean).join(" ")}</span>,
+                                },
+                                {
+                                    key: "last_name",
+                                    label: "Apellidos",
+                                    className: "min-w-36",
+                                    render: (_, person) => <span>{[person.last_name, person.second_last_name].filter(Boolean).join(" ") || "—"}</span>,
+                                },
+                                {
+                                    key: "document_number",
+                                    label: "Documento",
+                                    className: "min-w-36",
+                                    render: (value, person) => <span className="inline-flex items-center gap-1.5"><Fingerprint size={13} className="text-base-content/40" />{documentTypes.find((type) => type.id === person.document_types_people_id)?.name ?? "Documento"} {String(value ?? "—")}</span>,
+                                },
+                                {
+                                    key: "phone",
+                                    label: "Teléfono",
+                                    render: (value) => <span className="inline-flex items-center gap-1.5"><Phone size={13} className="text-base-content/40" />{String(value ?? "—")}</span>,
+                                },
+                                {
+                                    key: "email",
+                                    label: "Correo",
+                                    className: "max-w-52",
+                                    render: (value) => <span className="inline-flex max-w-full items-center gap-1.5 truncate"><Mail size={13} className="shrink-0 text-base-content/40" />{String(value ?? "—")}</span>,
+                                },
+                                {
+                                    key: "address_str",
+                                    label: "Domicilio",
+                                    className: "max-w-50 ",
+                                    render: (_, person) => {
+                                        const address = person.address_fields
+                                            .map((field) => person.address?.[field] ?? "")
+                                            .filter(Boolean)
+                                            .join(", ");
+                                        return <span className="inline-flex max-w-50 overflow-hidden items-center gap-1.5 truncate"><MapPin size={13} className="shrink-0 text-base-content/40" />{address || "—"}</span>
 
-            <div className='mt-2' />
+                                    },
+                                },
+                                {
+                                    key: "birth_date",
+                                    label: "Nacimiento",
+                                    className: "whitespace-nowrap",
+                                    render: (value) => value ? format(value as string | Date, "medium") : "—",
+                                },
+                                {
+                                    key: "is_active",
+                                    label: "Estado",
+                                    render: (value) => (
+                                        <span className={clsx("badge badge-sm border-0", value ? "bg-emerald-500/10 text-emerald-800" : "bg-base-300 text-base-content/60")}>
+                                            <span className={clsx("mr-1 size-1.5 rounded-full", value ? "bg-emerald-500" : "bg-base-content/40")} />
+                                            {value ? "Activo" : "Deshabilitado"}
+                                        </span>
+                                    ),
+                                },
+                            ]}
+                            actions={actions}
+                            pageSize={8}
+                        />
+                    </div>
+                </section>
+            </main>
 
-            <div className="mx-auto max-w-7xl p-4 bg-base-100 rounded-sm shadow-2xl shadow-base-300">
-
-                <div className="flex justify-between items-center mb-3">
-
-
-
-                    <button className={
-                        clsx("btn btn-sm text-white ml-auto",
-                            primaryColor
-                        )
-                    }>Crear contacto
-                        <Plus size={16} className="ml-1" />
-                    </button>
-                </div>
-
-                <Table<People>
-                    data={persons}
-                    columns={[
-                        {
-                            key: 'id',
-                            label: 'ID',
-                            className: 'w-16 font-medium',
-                            render: (value) => <span className="font-medium kbd kbd-xs cursor-copy hover:scale-90" onClick={async () => {
-                                await navigator.clipboard.writeText(value as string)
-                                notify('info', 'Copiado al portapapeles')
-                            }}>{(value as string).substring(0, 6)}</span>,
-                        },
-                        {
-                            key: 'first_name',
-                            label: 'Nombres',
-                            className: 'font-medium'
-                        },
-                        {
-                            key: 'middle_name',
-                            label: 'S. Nombre',
-                            className: 'font-medium'
-                        },
-                        {
-                            key: 'last_name',
-                            label: 'Apellidos',
-                            className: 'font-medium'
-                        },
-                        {
-                            key: 'address_str',
-                            label: 'Direccion',
-                            className: 'font-medium',
-                            render: (_, row) => <span>{row.address_fields.map(e => row?.address[e] ?? ' ').join(', ')}</span>
-                        },
-                        {
-                            key: 'phone',
-                            label: 'Telefono',
-                            className: 'font-medium'
-                        },
-                        {
-                            key: 'email',
-                            label: 'Correo',
-                            className: 'font-medium'
-                        },
-                        {
-                            key: 'birth_date',
-                            label: 'Fecha de Nacimiento',
-                            render: (value) => value ? format(value as string | Date, 'medium') : 'N/A',
-                            className: 'font-medium'
-                        },
-                        {
-                            key: 'document_number',
-                            label: 'Documento',
-                            className: 'font-medium'
-                        },
-                        {
-                            key: 'document_types_people_id',
-                            label: 'Tipo de Documento',
-                            render: (_, row) => documentType.find(e => e.id === row.document_types_people_id)?.name,
-                            className: 'font-medium'
-                        },
-                    ]}
-                    actions={actions}
-                    pageSize={5}
-                />
-            </div>
+            <PersonFormModal
+                open={modalMode === "create" || modalMode === "edit"}
+                person={modalMode === "edit" ? selectedPerson : null}
+                documentTypes={documentTypes}
+                saving={saving}
+                primaryColor={primaryColor}
+                onClose={closeModal}
+                onSave={savePerson}
+            />
+            <ViewPersonModal
+                person={modalMode === "view" ? selectedPerson : null}
+                documentTypes={documentTypes}
+                primaryColor={primaryColor}
+                onClose={closeModal}
+                onEdit={() => selectedPerson && openModal("edit", selectedPerson)}
+            />
+            <DisablePersonModal
+                person={modalMode === "disable" ? selectedPerson : null}
+                saving={saving}
+                primaryColor={primaryColor}
+                onClose={closeModal}
+                onConfirm={() => void disablePerson()}
+            />
         </div>
-    )
-}
+    );
+};
