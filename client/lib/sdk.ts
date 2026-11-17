@@ -1,4 +1,5 @@
 import type { PersonSearchResult } from './user-and-roles';
+import type { CustomerSearchResult } from './crm';
 
 export const API_RESOURCES = [
   "companies",
@@ -290,6 +291,13 @@ export class ApiClient {
   searchPeople(query: string, signal?: AbortSignal): Promise<PersonSearchResult[]> {
     const params = new URLSearchParams({ query });
     return this.request(`api/people/search?${params.toString()}`, { signal });
+  }
+
+  searchCustomers(query = "", signal?: AbortSignal): Promise<CustomerSearchResult[]> {
+    const params = new URLSearchParams();
+    if (query.trim()) params.set("query", query.trim());
+    const suffix = params.size > 0 ? `?${params.toString()}` : "";
+    return this.request(`api/customers/search${suffix}`, { signal });
   }
 
   get<T>(resource: ApiResource, id: string): Promise<T> {

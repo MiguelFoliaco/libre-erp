@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import { CircleSlash, Eye, EyeClosed, Fingerprint, Mail, MapPin, Pencil, Phone, Plus, Search, Trash2, User2 } from "lucide-react";
+import { CircleSlash, Eye, EyeClosed, Fingerprint, Mail, MapPin, Pencil, Phone, Plus, Search,  User2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { format } from "@formkit/tempo";
 import { clsx } from "clsx";

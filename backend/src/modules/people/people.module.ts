@@ -6,13 +6,16 @@ import { createResourceControllers } from '../../common/crud/resource-crud.contr
 import { PEOPLE_RESOURCES } from './resources';
 import { PeopleSearchController } from './people-search.controller';
 import { PeopleSearchService } from './people-search.service';
+import { CustomerSearchController } from './customer-search.controller';
+import { CustomerSearchService } from './customer-search.service';
 
 @Module({
   imports: [AuthModule, AuthorizationModule, CrudModule],
   controllers: [
     PeopleSearchController,
+    CustomerSearchController,
     ...createResourceControllers(PEOPLE_RESOURCES),
   ],
-  providers: [PeopleSearchService],
+  providers: [PeopleSearchService, CustomerSearchService],
 })
 export class PeopleModule {}
