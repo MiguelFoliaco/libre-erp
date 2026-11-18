@@ -28,7 +28,7 @@ export type Address = Record<ArrayValues<typeof config['addressConfig']['fields'
 export interface Metadata { }
 
 
-export type DocumentTypePeople = { name: string, id: string, description: string };
+export type DocumentTypePeople = { name: string, id: string, description: string | null };
 
 export interface Customer {
     id: string;

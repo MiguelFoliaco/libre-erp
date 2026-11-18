@@ -48,18 +48,18 @@ export const Peoples = () => {
 
     const actions: TableAction<People>[] = [
         {
-            label: "Ver ficha",
+            label: text("modules.crm.people.view"),
             icon: <Eye size={16} />,
             onClick: (person) => openModal("view", person),
         },
         {
-            label: "Editar",
+            label: text("modules.crm.people.edit"),
             icon: <Pencil size={16} />,
             hidden: (person) => !person.is_active,
             onClick: (person) => openModal("edit", person),
         },
         {
-            label: "Deshabilitar",
+            label: text("modules.crm.people.disable"),
             icon: <CircleSlash size={16} />,
             className: "text-error hover:bg-error/10",
             hidden: (person) => !person.is_active,
@@ -82,7 +82,7 @@ export const Peoples = () => {
                     <span className="text-sm font-semibold text-base-content/80">
                         {text("modules.crm.navigation.people")}
                     </span>
-                    <p className="text-xs text-base-content/50">Directorio central de contactos</p>
+                    <p className="text-xs text-base-content/50">{text("modules.crm.people.headerDescription")}</p>
                 </div>
             </header>
 
@@ -104,19 +104,18 @@ export const Peoples = () => {
                                     type="button"
                                     onClick={toggleInfoSecction}
                                     className="btn btn-circle btn-sm btn-ghost absolute right-3 top-3"
-                                    aria-label="Ocultar información"
-                                    title="Ocultar"
+                                    aria-label={text("modules.crm.people.hideInformation")}
+                                    title={text("modules.crm.people.hideInformation")}
                                 >
                                     <EyeClosed size={15} />
                                 </button>
                                 <div className="relative max-w-3xl pl-2">
-                                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">Personas · CRM</p>
+                                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">{text("modules.crm.people.introLabel")}</p>
                                     <h1 className="mt-1 text-xl font-semibold opacity-80 tracking-tight sm:text-2xl">
-                                        Un solo perfil, todas tus relaciones
+                                        {text("modules.crm.people.introTitle")}
                                     </h1>
                                     <p className="mt-2 text-sm leading-6 text-base-content/65">
-                                        Crea la ficha madre de cada contacto. Desde aquí podrás reconocerlo como cliente,
-                                        trabajador o proveedor sin duplicar sus datos personales.
+                                        {text("modules.crm.people.introDescription")}
                                     </p>
                                 </div>
                             </div>
@@ -132,7 +131,7 @@ export const Peoples = () => {
                             exit={{ opacity: 0, y: -4 }}
                             className="btn btn-ghost btn-xs text-base-content/55"
                         >
-                            <Eye size={14} /> Mostrar información
+                            <Eye size={14} />                             {text("modules.crm.people.showInformation")}
                         </motion.button>
                     )}
                 </AnimatePresence>
@@ -140,8 +139,8 @@ export const Peoples = () => {
                 <section className="overflow-hidden rounded-sm border border-base-300 bg-base-100 shadow-sm">
                     <div className="flex flex-col gap-4 border-b border-base-300 p-4">
                         <div className="min-w-0">
-                            <h2 className="font-bold tracking-tight">Contactos registrados</h2>
-                            <p className="text-xs text-base-content/55">Busca por nombre o documento y administra cada ficha.</p>
+                            <h2 className="font-bold tracking-tight">{text("modules.crm.people.listTitle")}</h2>
+                            <p className="text-xs text-base-content/55">{text("modules.crm.people.listDescription")}</p>
                         </div>
 
                         <div className="flex  gap-2 w-full">
@@ -158,14 +157,14 @@ export const Peoples = () => {
                                         value={searchValue}
                                         onChange={(event) => setSearchValue(event.target.value)}
                                         className="grow "
-                                        placeholder="Nombre o documento"
-                                        aria-label="Buscar persona por nombre o documento"
+                                        placeholder={text("modules.crm.people.searchPlaceholder")}
+                                        aria-label={text("modules.crm.people.searchAriaLabel")}
                                     />
                                 </label>
                                 <button
                                     type="submit"
                                     disabled={loadingSearch}
-                                    aria-label="Buscar"
+                                    aria-label={text("modules.crm.people.search")}
                                     className={clsx("btn btn-sm join-item border-0 text-white", primaryColor)}
                                 >
                                     {loadingSearch ? <span className="loading loading-spinner loading-xs" /> : <Search size={16} />}
@@ -176,7 +175,7 @@ export const Peoples = () => {
                                 clearSearch();
                                 setSearchValue("");
                             }} className="btn btn-sm btn-ghost">
-                                Limpiar
+                                {text("modules.crm.people.clear")}
                             </button>
                             <button
                                 type="button"
@@ -184,7 +183,7 @@ export const Peoples = () => {
                                 disabled={loading}
                                 className={`btn btn-sm ml-auto border-0 text-white shadow-sm ${primaryColor}`}
                             >
-                                <Plus size={16} /> Crear persona
+                                <Plus size={16} /> {text("modules.crm.people.create")}
                             </button>
                         </div>
                     </div>
@@ -193,54 +192,56 @@ export const Peoples = () => {
                         <Table<People>
                             data={people}
                             loading={loading || loadingSearch}
-                            emptyMessage={searchValue ? "No encontramos personas con esos datos." : "Aún no hay personas registradas."}
+                            emptyMessage={searchValue
+                                ? text("modules.crm.people.noSearchResults")
+                                : text("modules.crm.people.empty")}
                             columns={[
                                 {
                                     key: "id",
-                                    label: "ID",
+                                    label: text("modules.crm.people.id"),
                                     className: "w-20 font-medium",
-                                    render: (value) => <span className="kbd kbd-xs cursor-copy" title="Copiar ID" onClick={async () => {
+                                    render: (value) => <span className="kbd kbd-xs cursor-copy" title={text("modules.crm.people.copyId")} onClick={async () => {
                                         if (typeof value !== "string") return;
                                         try {
                                             await navigator.clipboard.writeText(value);
-                                            notify("info", "ID copiado al portapapeles.");
+                                            notify("info", text("modules.crm.people.idCopied"));
                                         } catch {
-                                            notify("error", "No se pudo copiar el ID al portapapeles.");
+                                            notify("error", text("modules.crm.people.copyFailed"));
                                         }
                                     }}>{typeof value === "string" ? value.substring(0, 6) : "—"}</span>,
                                 },
                                 {
                                     key: "first_name",
-                                    label: "Nombre",
+                                    label: text("modules.crm.people.name"),
                                     className: "min-w-36 font-semibold",
                                     render: (_, person) => <span>{[person.first_name, person.middle_name].filter(Boolean).join(" ")}</span>,
                                 },
                                 {
                                     key: "last_name",
-                                    label: "Apellidos",
+                                    label: text("modules.crm.people.lastNames"),
                                     className: "min-w-36",
                                     render: (_, person) => <span>{[person.last_name, person.second_last_name].filter(Boolean).join(" ") || "—"}</span>,
                                 },
                                 {
                                     key: "document_number",
-                                    label: "Documento",
+                                    label: text("modules.crm.people.document"),
                                     className: "min-w-36",
-                                    render: (value, person) => <span className="inline-flex items-center gap-1.5"><Fingerprint size={13} className="text-base-content/40" />{documentTypes.find((type) => type.id === person.document_types_people_id)?.name ?? "Documento"} {String(value ?? "—")}</span>,
+                                    render: (value, person) => <span className="inline-flex items-center gap-1.5"><Fingerprint size={13} className="text-base-content/40" />{documentTypes.find((type) => type.id === person.document_types_people_id)?.name ?? text("modules.crm.people.genericDocument")} {String(value ?? "—")}</span>,
                                 },
                                 {
                                     key: "phone",
-                                    label: "Teléfono",
+                                    label: text("modules.crm.people.phone"),
                                     render: (value) => <span className="inline-flex items-center gap-1.5"><Phone size={13} className="text-base-content/40" />{String(value ?? "—")}</span>,
                                 },
                                 {
                                     key: "email",
-                                    label: "Correo",
+                                    label: text("modules.crm.people.email"),
                                     className: "max-w-52",
                                     render: (value) => <span className="inline-flex max-w-full items-center gap-1.5 truncate"><Mail size={13} className="shrink-0 text-base-content/40" />{String(value ?? "—")}</span>,
                                 },
                                 {
                                     key: "address_str",
-                                    label: "Domicilio",
+                                    label: text("modules.crm.people.address"),
                                     className: "max-w-50 ",
                                     render: (_, person) => {
                                         const address = person.address_fields
@@ -253,17 +254,19 @@ export const Peoples = () => {
                                 },
                                 {
                                     key: "birth_date",
-                                    label: "Nacimiento",
+                                    label: text("modules.crm.people.birthDate"),
                                     className: "whitespace-nowrap",
                                     render: (value) => value ? format(value as string | Date, "medium") : "—",
                                 },
                                 {
                                     key: "is_active",
-                                    label: "Estado",
+                                    label: text("modules.crm.people.status"),
                                     render: (value) => (
                                         <span className={clsx("badge badge-sm border-0", value ? "bg-emerald-500/10 text-emerald-800" : "bg-base-300 text-base-content/60")}>
                                             <span className={clsx("mr-1 size-1.5 rounded-full", value ? "bg-emerald-500" : "bg-base-content/40")} />
-                                            {value ? "Activo" : "Deshabilitado"}
+                                            {value
+                                                ? text("modules.crm.people.active")
+                                                : text("modules.crm.people.inactive")}
                                         </span>
                                     ),
                                 },

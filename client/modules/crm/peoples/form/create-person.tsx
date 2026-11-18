@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowDownRight, BriefcaseBusiness, CalendarDays, Fingerprint, Mail, MapPin, Phone, UserRound, X } from "lucide-react";
 import type { DocumentTypePeople, People } from "../../../../lib/crm";
+import { text } from "../../../language";
 import { AddressFields } from "../../../setting/components/address-fields";
 import { usePersonForm, type PersonWritePayload } from "./hook";
 
@@ -62,25 +63,27 @@ export function PersonFormModal({
                                 </div>
                                 <div className="min-w-0 flex-1">
                                     <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-emerald-700">
-                                        Directorio de personas
+                                        {text("modules.crm.personForm.directory")}
                                     </p>
                                     <h2 id="person-form-title" className="mt-1 text-xl font-bold tracking-tight sm:text-2xl">
-                                        {editing ? "Editar ficha personal" : "Crear una persona"}
+                                        {editing
+                                            ? text("modules.crm.personForm.editTitle")
+                                            : text("modules.crm.personForm.createTitle")}
                                     </h2>
                                     <p className="mt-1 max-w-xl text-sm text-base-content/60">
                                         {editing
-                                            ? "Actualiza la información de contacto e identificación de este registro."
-                                            : "Registra una persona para vincularla luego como cliente, proveedor o integrante del equipo."}
+                                            ? text("modules.crm.personForm.editDescription")
+                                            : text("modules.crm.personForm.createDescription")}
                                     </p>
                                 </div>
-                                <button type="button" className="btn btn-circle btn-ghost btn-sm" aria-label="Cerrar formulario" onClick={onClose}>
+                                <button type="button" className="btn btn-circle btn-ghost btn-sm" aria-label={text("modules.crm.personForm.close")} onClick={onClose}>
                                     <X size={18} />
                                 </button>
                             </div>
                             <div className="relative mt-5 flex items-center gap-2 text-xs font-medium text-base-content/55">
-                                <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-emerald-800">01 · Identidad</span>
+                                <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-emerald-800">{text("modules.crm.personForm.identityStep")}</span>
                                 <ArrowDownRight size={13} />
-                                <span>02 · Contacto y domicilio</span>
+                                <span>{text("modules.crm.personForm.contactStep")}</span>
                             </div>
                         </div>
 
@@ -92,25 +95,25 @@ export function PersonFormModal({
                                             <UserRound size={17} />
                                         </span>
                                         <div>
-                                            <h3 className="font-semibold">Datos personales</h3>
-                                            <p className="text-xs text-base-content/55">Usa el nombre tal como aparece en su documento.</p>
+                                            <h3 className="font-semibold">{text("modules.crm.personForm.personalData")}</h3>
+                                            <p className="text-xs text-base-content/55">{text("modules.crm.personForm.personalDataHelp")}</p>
                                         </div>
                                     </div>
                                     <div className="grid gap-4 sm:grid-cols-2">
                                         <label className="form-control">
-                                            <span className="label-text text-sm mb-1.5 font-medium">Primer nombre <span className="text-error">*</span></span>
+                                            <span className="label-text text-sm mb-1.5 font-medium">{text("modules.crm.personForm.firstName")} <span className="text-error">*</span></span>
                                             <input autoFocus className={inputClass} maxLength={150} required value={values.first_name} onChange={(event) => updateField("first_name", event.target.value)} />
                                         </label>
                                         <label className="form-control">
-                                            <span className="label-text text-sm mb-1.5 font-medium">Segundo nombre</span>
+                                            <span className="label-text text-sm mb-1.5 font-medium">{text("modules.crm.personForm.middleName")}</span>
                                             <input className={inputClass} maxLength={150} value={values.middle_name} onChange={(event) => updateField("middle_name", event.target.value)} />
                                         </label>
                                         <label className="form-control">
-                                            <span className="label-text text-sm mb-1.5 font-medium">Primer apellido <span className="text-error">*</span></span>
+                                            <span className="label-text text-sm mb-1.5 font-medium">{text("modules.crm.personForm.lastName")} <span className="text-error">*</span></span>
                                             <input className={inputClass} maxLength={150} required value={values.last_name} onChange={(event) => updateField("last_name", event.target.value)} />
                                         </label>
                                         <label className="form-control">
-                                            <span className="label-text text-sm mb-1.5 font-medium">Segundo apellido</span>
+                                            <span className="label-text text-sm mb-1.5 font-medium">{text("modules.crm.personForm.secondLastName")}</span>
                                             <input className={inputClass} maxLength={150} value={values.second_last_name} onChange={(event) => updateField("second_last_name", event.target.value)} />
                                         </label>
                                     </div>
@@ -122,26 +125,26 @@ export function PersonFormModal({
                                             <Fingerprint size={17} />
                                         </span>
                                         <div>
-                                            <h3 className="font-semibold">Identificación</h3>
-                                            <p className="text-xs text-base-content/55">El tipo y número ayudan a evitar registros duplicados.</p>
+                                            <h3 className="font-semibold">{text("modules.crm.personForm.identification")}</h3>
+                                            <p className="text-xs text-base-content/55">{text("modules.crm.personForm.identificationHelp")}</p>
                                         </div>
                                     </div>
                                     <div className="grid gap-4 sm:grid-cols-2">
                                         <label className="form-control">
-                                            <span className="label-text text-sm mb-1.5 font-medium">Tipo de documento <span className="text-error">*</span></span>
+                                            <span className="label-text text-sm mb-1.5 font-medium">{text("modules.crm.personForm.documentType")} <span className="text-error">*</span></span>
                                             <select
                                                 className="select select-sm outline-none bg-base-200"
                                                 required
                                                 value={values.document_types_people_id}
                                                 onChange={(event) => updateField("document_types_people_id", event.target.value)}
                                             >
-                                                <option value="" disabled>Selecciona un tipo</option>
+                                                <option value="" disabled>{text("modules.crm.personForm.selectDocumentType")}</option>
                                                 {documentTypes.map((type) => <option key={type.id} value={type.id}>{type.name}</option>)}
                                             </select>
-                                            {documentTypes.length === 0 && <span className="mt-1 text-xs text-error">No hay tipos de documento disponibles.</span>}
+                                            {documentTypes.length === 0 && <span className="mt-1 text-xs text-error">{text("modules.crm.personForm.noDocumentTypes")}</span>}
                                         </label>
                                         <label className="form-control">
-                                            <span className="label-text text-sm mb-1.5 font-medium">Número de documento</span>
+                                            <span className="label-text text-sm mb-1.5 font-medium">{text("modules.crm.personForm.documentNumber")}</span>
                                             <input className={inputClass} maxLength={100} value={values.document_number} onChange={(event) => updateField("document_number", event.target.value)} />
                                         </label>
                                     </div>
@@ -153,21 +156,21 @@ export function PersonFormModal({
                                             <Phone size={17} />
                                         </span>
                                         <div>
-                                            <h3 className="font-semibold">Contacto</h3>
-                                            <p className="text-xs text-base-content/55">Canales para comunicaciones y seguimiento.</p>
+                                            <h3 className="font-semibold">{text("modules.crm.personForm.contact")}</h3>
+                                            <p className="text-xs text-base-content/55">{text("modules.crm.personForm.contactHelp")}</p>
                                         </div>
                                     </div>
                                     <div className="grid gap-4 sm:grid-cols-2">
                                         <label className="form-control">
-                                            <span className="label-text text-sm mb-1.5 flex items-center gap-1.5 font-medium"><Mail size={14} /> Correo electrónico</span>
+                                            <span className="label-text text-sm mb-1.5 flex items-center gap-1.5 font-medium"><Mail size={14} /> {text("modules.crm.personForm.email")}</span>
                                             <input className={inputClass} maxLength={255} type="email" value={values.email} onChange={(event) => updateField("email", event.target.value)} />
                                         </label>
                                         <label className="form-control">
-                                            <span className="label-text text-sm mb-1.5 flex items-center gap-1.5 font-medium"><Phone size={14} /> Teléfono</span>
+                                            <span className="label-text text-sm mb-1.5 flex items-center gap-1.5 font-medium"><Phone size={14} /> {text("modules.crm.personForm.phone")}</span>
                                             <input className={inputClass} maxLength={50} type="tel" value={values.phone} onChange={(event) => updateField("phone", event.target.value)} />
                                         </label>
                                         <label className="form-control sm:col-span-2">
-                                            <span className="label-text text-sm mb-1.5 flex items-center gap-1.5 font-medium"><CalendarDays size={14} /> Fecha de nacimiento</span>
+                                            <span className="label-text text-sm mb-1.5 flex items-center gap-1.5 font-medium"><CalendarDays size={14} /> {text("modules.crm.personForm.birthDate")}</span>
                                             <input className={inputClass} type="date" value={values.birth_date} onChange={(event) => updateField("birth_date", event.target.value)} />
                                         </label>
                                     </div>
@@ -179,8 +182,8 @@ export function PersonFormModal({
                                             <MapPin size={17} />
                                         </span>
                                         <div>
-                                            <h3 className="font-semibold">Domicilio</h3>
-                                            <p className="text-xs text-base-content/55">Completa los campos marcados para dejar una dirección localizable.</p>
+                                            <h3 className="font-semibold">{text("modules.crm.personForm.address")}</h3>
+                                            <p className="text-xs text-base-content/55">{text("modules.crm.personForm.addressHelp")}</p>
                                         </div>
                                     </div>
                                     <AddressFields
@@ -192,14 +195,16 @@ export function PersonFormModal({
                             </div>
 
                             <footer className="flex flex-col-reverse gap-2 border-t border-base-300 bg-base-200/35 px-5 py-4 sm:flex-row sm:justify-end sm:px-8">
-                                <button type="button" className="btn btn-ghost" onClick={onClose} disabled={saving}>Cancelar</button>
+                                <button type="button" className="btn btn-ghost" onClick={onClose} disabled={saving}>{text("modules.crm.personForm.cancel")}</button>
                                 <button
                                     type="submit"
                                     className={`btn border-0 text-white shadow-md shadow-emerald-900/15 ${primaryColor}`}
                                     disabled={saving || documentTypes.length === 0}
                                 >
                                     {saving ? <span className="loading loading-spinner loading-sm" /> : <UserRound size={16} />}
-                                    {editing ? "Guardar cambios" : "Crear persona"}
+                                    {editing
+                                        ? text("modules.crm.personForm.save")
+                                        : text("modules.crm.personForm.create")}
                                 </button>
                             </footer>
                         </form>

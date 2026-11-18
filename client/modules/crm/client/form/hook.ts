@@ -11,6 +11,7 @@ import type {
 import type { PersonSearchResult } from "../../../../lib/user-and-roles";
 import type { PersonWritePayload } from "../../peoples/form/hook";
 import { useToast } from "../../../common/toast";
+import { text } from "../../../language";
 
 export type ClientModalMode = "create" | "edit" | "view" | "disable" | null;
 export type CustomerWritePayload = Pick<
@@ -28,7 +29,7 @@ export interface CustomerFormValues {
 function getErrorMessage(cause: unknown): string {
     return cause instanceof ApiError || cause instanceof Error
         ? cause.message
-        : "No fue posible completar la operación.";
+        : text("modules.crm.common.operationFailed");
 }
 
 export function useClients() {
@@ -74,7 +75,7 @@ export function useClients() {
     const search = useCallback(async (query: string) => {
         const value = query.trim();
         if (value.length < 2) {
-            notify("info", "Escribe al menos 2 caracteres para buscar un cliente.");
+            notify("info", text("modules.crm.clientMessages.searchTooShort"));
             return;
         }
         setLoadingSearch(true);
@@ -116,7 +117,7 @@ export function useClients() {
                 savedPerson = client.person;
             } else {
                 if (!person && !newPerson) {
-                    throw new Error("Selecciona o crea la persona relacionada con este cliente.");
+                    throw new Error(text("modules.crm.clientMessages.personRequired"));
                 }
                 const body = newPerson
                     ? { ...payload, person: newPerson }
@@ -127,7 +128,7 @@ export function useClients() {
                 } else if (newPerson) {
                     savedPerson = { ...newPerson, id: saved.person_id };
                 } else {
-                    throw new Error("No se encontró la ficha personal relacionada.");
+                    throw new Error(text("modules.crm.clientMessages.personUnavailable"));
                 }
             }
             const result: CustomerSearchResult = {
@@ -138,10 +139,10 @@ export function useClients() {
             if (client) {
                 setClients((current) => current.map((item) => item.id === result.id ? result : item));
                 setSearchResults((current) => current?.map((item) => item.id === result.id ? result : item) ?? null);
-                notify("success", "El cliente se actualizó correctamente.");
+                notify("success", text("modules.crm.clientMessages.updated"));
             } else {
                 setClients((current) => [...current, result]);
-                notify("success", "El cliente se creó correctamente.");
+                notify("success", text("modules.crm.clientMessages.created"));
             }
             setModalMode(null);
             setSelectedClient(null);
@@ -160,7 +161,7 @@ export function useClients() {
             const result: CustomerSearchResult = { ...selectedClient, ...updated };
             setClients((current) => current.map((item) => item.id === result.id ? result : item));
             setSearchResults((current) => current?.map((item) => item.id === result.id ? result : item) ?? null);
-            notify("success", "El cliente quedó deshabilitado.");
+            notify("success", text("modules.crm.clientMessages.disabled"));
             setModalMode(null);
             setSelectedClient(null);
         } catch (cause: unknown) {
@@ -241,7 +242,7 @@ export function useCustomerForm({
     const searchPeople = useCallback(async () => {
         const query = personQuery.trim();
         if (query.length < 2) {
-            notify("info", "Escribe al menos 2 caracteres para buscar una persona.");
+            notify("info", text("modules.crm.clientMessages.personSearchTooShort"));
             return;
         }
         setSearchingPeople(true);
@@ -284,17 +285,17 @@ export function useCustomerForm({
     const submit = useCallback(async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (!client && !selectedPerson && !newPerson) {
-            notify("error", "Vincula una persona existente o crea una nueva ficha para el cliente.");
+            notify("error", text("modules.crm.clientMessages.personRequiredOnSubmit"));
             return;
         }
         const creditLimit = Number(values.credit_limit);
         const paymentTermsDays = Number(values.payment_terms_days);
         if (!Number.isFinite(creditLimit) || creditLimit < 0) {
-            notify("error", "El límite de crédito debe ser un valor válido mayor o igual a cero.");
+            notify("error", text("modules.crm.clientMessages.invalidCreditLimit"));
             return;
         }
         if (!Number.isSafeInteger(paymentTermsDays) || paymentTermsDays < 0) {
-            notify("error", "Los días de pago deben ser un número entero mayor o igual a cero.");
+            notify("error", text("modules.crm.clientMessages.invalidPaymentDays"));
             return;
         }
         await onSave(client, {

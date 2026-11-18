@@ -19,7 +19,57 @@ export default function CrmHome() {
                     textColorBase: 'text-white'
                 }}
                 name={text('modules.listAppliaction.crm')}
-                description={text('modules.settings.welcome.description')}
+                description={text('modules.crm.welcome.description')}
+                flow={[
+                    {
+                        flowName: text('modules.crm.welcome.peopleFlowName'),
+                        description: text('modules.crm.welcome.peopleFlowDescription'),
+                        steps: [
+                            {
+                                title: text('modules.crm.welcome.createPersonTitle'),
+                                description: text('modules.crm.welcome.createPersonDescription'),
+                                path: '/start/crm/peoples',
+                                buttonTitle: text('modules.crm.welcome.openPeople'),
+                            },
+                            {
+                                title: text('modules.crm.welcome.findPersonTitle'),
+                                description: text('modules.crm.welcome.findPersonDescription'),
+                                path: '/start/crm/peoples',
+                                buttonTitle: text('modules.crm.welcome.managePeople'),
+                            },
+                        ],
+                    },
+                    {
+                        flowName: text('modules.crm.welcome.clientsFlowName'),
+                        description: text('modules.crm.welcome.clientsFlowDescription'),
+                        steps: [
+                            {
+                                title: text('modules.crm.welcome.linkPersonTitle'),
+                                description: text('modules.crm.welcome.linkPersonDescription'),
+                                path: '/start/crm/clients',
+                                buttonTitle: text('modules.crm.welcome.openClients'),
+                            },
+                            {
+                                title: text('modules.crm.welcome.setTermsTitle'),
+                                description: text('modules.crm.welcome.setTermsDescription'),
+                                path: '/start/crm/clients',
+                                buttonTitle: text('modules.crm.welcome.manageClients'),
+                            },
+                        ],
+                    },
+                    {
+                        flowName: text('modules.crm.welcome.documentTypesFlowName'),
+                        description: text('modules.crm.welcome.documentTypesFlowDescription'),
+                        steps: [
+                            {
+                                title: text('modules.crm.welcome.createDocumentTypeTitle'),
+                                description: text('modules.crm.welcome.createDocumentTypeDescription'),
+                                path: '/start/crm/document-types',
+                                buttonTitle: text('modules.crm.welcome.openDocumentTypes'),
+                            },
+                        ],
+                    },
+                ]}
             />
         </div>
     );

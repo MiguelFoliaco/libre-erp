@@ -3,6 +3,7 @@ import { config, type AddressValues } from "../../../../config";
 import { apiClient, ApiError } from "../../../../lib/sdk";
 import type { DocumentTypePeople, People } from "../../../../lib/crm";
 import { useToast } from "../../../common/toast";
+import { text } from "../../../language";
 
 export type PersonModalMode = "create" | "edit" | "view" | "disable" | null;
 
@@ -46,7 +47,7 @@ export type PersonWritePayload = Omit<
 function getErrorMessage(cause: unknown): string {
     return cause instanceof ApiError || cause instanceof Error
         ? cause.message
-        : "No fue posible completar la operación.";
+        : text("modules.crm.common.operationFailed");
 }
 
 function emptyAddress(): AddressValues {
@@ -117,11 +118,11 @@ export function usePeople() {
     const search = useCallback(async (query: string) => {
         const value = query.trim();
         if (!value) {
-            notify("info", "Ingrese un valor para realizar la búsqueda.");
+            notify("info", text("modules.crm.peopleMessages.searchRequired"));
             return;
         }
         if (value.length <= 2) {
-            notify("info", "El valor debe ser mayor a 2 caracteres.");
+            notify("info", text("modules.crm.peopleMessages.searchTooShort"));
             return;
         }
 
@@ -160,11 +161,11 @@ export function usePeople() {
                 const updated = await apiClient.update<People>("people", person.id, payload);
                 setPeople((current) => current.map((item) => item.id === updated.id ? updated : item));
                 setSearchResults((current) => current?.map((item) => item.id === updated.id ? updated : item) ?? null);
-                notify("success", "Los datos de la persona se actualizaron correctamente.");
+                notify("success", text("modules.crm.peopleMessages.updated"));
             } else {
                 const created = await apiClient.create<People>("people", payload);
                 setPeople((current) => [...current, created]);
-                notify("success", "La persona se creó correctamente.");
+                notify("success", text("modules.crm.peopleMessages.created"));
             }
             setModalMode(null);
             setSelectedPerson(null);
@@ -182,7 +183,7 @@ export function usePeople() {
             const updated = await apiClient.update<People>("people", selectedPerson.id, { is_active: false });
             setPeople((current) => current.map((item) => item.id === updated.id ? updated : item));
             setSearchResults((current) => current?.map((item) => item.id === updated.id ? updated : item) ?? null);
-            notify("success", "La persona quedó deshabilitada.");
+            notify("success", text("modules.crm.peopleMessages.disabled"));
             setModalMode(null);
             setSelectedPerson(null);
         } catch (cause: unknown) {

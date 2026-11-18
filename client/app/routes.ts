@@ -15,6 +15,10 @@ export default [
     route("/start/crm", "routes/crm/index.tsx", [
         route("peoples", "routes/crm/crm-peoples.tsx"),
         route("clients", "routes/crm/crm-clients.tsx"),
+        route("document-types", "routes/crm/crm-document-types.tsx"),
         index("routes/crm/crm-home.tsx"),
+    ]),
+    route("/start/inventory", "routes/inventory/index.tsx", [
+        index("routes/inventory/inventory-home.tsx"),
     ])
 ] satisfies RouteConfig;

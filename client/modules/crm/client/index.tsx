@@ -5,6 +5,7 @@ import { clsx } from "clsx";
 import { Table, type TableAction } from "../../common/table";
 import { useToast } from "../../common/toast";
 import type { CustomerSearchResult } from "../../../lib/crm";
+import { text } from "../../language";
 import { CustomerFormModal } from "./form/customer-form";
 import { DisableClientModal } from "./form/disable-client";
 import { useClients } from "./form/hook";
@@ -47,18 +48,18 @@ export function Clients() {
 
     const actions: TableAction<CustomerSearchResult>[] = [
         {
-            label: "Ver cliente",
+            label: text("modules.crm.clients.view"),
             icon: <Eye size={16} />,
             onClick: (client) => openModal("view", client),
         },
         {
-            label: "Editar",
+            label: text("modules.crm.clients.edit"),
             icon: <Pencil size={16} />,
             hidden: (client) => !client.is_active,
             onClick: (client) => openModal("edit", client),
         },
         {
-            label: "Deshabilitar",
+            label: text("modules.crm.clients.disable"),
             icon: <CircleSlash size={16} />,
             className: "text-error hover:bg-error/10",
             hidden: (client) => !client.is_active,
@@ -78,8 +79,8 @@ export function Clients() {
                     <Coins size={19} />
                 </span>
                 <div>
-                    <span className="text-sm font-semibold text-base-content/80">Clientes</span>
-                    <p className="text-xs text-base-content/50">Cuentas y condiciones comerciales</p>
+                    <span className="text-sm font-semibold text-base-content/80">{text("modules.crm.navigation.clients")}</span>
+                    <p className="text-xs text-base-content/50">{text("modules.crm.clients.headerDescription")}</p>
                 </div>
             </header>
 
@@ -100,17 +101,16 @@ export function Clients() {
                                     type="button"
                                     onClick={toggleInfoSection}
                                     className="btn btn-circle btn-sm btn-ghost absolute right-3 top-3"
-                                    aria-label="Ocultar información"
-                                    title="Ocultar"
+                                    aria-label={text("modules.crm.clients.hideInformation")}
+                                    title={text("modules.crm.clients.hideInformation")}
                                 >
                                     <EyeClosed size={15} />
                                 </button>
                                 <div className="relative max-w-3xl pl-2">
-                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">Clientes · CRM</p>
-                                    <h1 className="mt-1 text-xl font-semibold opacity-90 tracking-tight sm:text-2xl">Relaciones comerciales, en contexto</h1>
+                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">{text("modules.crm.clients.introLabel")}</p>
+                                    <h1 className="mt-1 text-xl font-semibold opacity-90 tracking-tight sm:text-2xl">{text("modules.crm.clients.introTitle")}</h1>
                                     <p className="mt-2 text-sm leading-6 text-base-content/65">
-                                        Administra el tipo de cliente, el crédito y sus plazos de pago en una cuenta vinculada
-                                        a la ficha personal. Deshabilitar conserva el historial y los datos relacionados.
+                                        {text("modules.crm.clients.introDescription")}
                                     </p>
                                 </div>
                             </div>
@@ -126,7 +126,7 @@ export function Clients() {
                             exit={{ opacity: 0, y: -4 }}
                             className="btn btn-ghost btn-xs text-base-content/55"
                         >
-                            <Eye size={14} /> Mostrar información
+                            <Eye size={14} /> {text("modules.crm.clients.showInformation")}
                         </motion.button>
                     )}
                 </AnimatePresence>
@@ -134,8 +134,8 @@ export function Clients() {
                 <section className="overflow-hidden rounded-sm border border-base-300 bg-base-100 shadow-sm">
                     <div className="flex flex-col gap-4 border-b border-base-300 p-4">
                         <div className="min-w-0">
-                            <h2 className="font-bold tracking-tight">Cuentas de clientes</h2>
-                            <p className="text-xs text-base-content/55">Busca por persona, documento o código de cliente.</p>
+                            <h2 className="font-bold tracking-tight">{text("modules.crm.clients.listTitle")}</h2>
+                            <p className="text-xs text-base-content/55">{text("modules.crm.clients.listDescription")}</p>
                         </div>
                         <div className="flex gap-2 ">
                             <form
@@ -150,14 +150,14 @@ export function Clients() {
                                     <input
                                         value={searchValue}
                                         onChange={(event) => setSearchValue(event.target.value)}
-                                        placeholder="Nombre, documento o código"
-                                        aria-label="Buscar clientes"
+                                        placeholder={text("modules.crm.clients.searchPlaceholder")}
+                                        aria-label={text("modules.crm.clients.searchAriaLabel")}
                                     />
                                 </label>
                                 <button
                                     type="submit"
                                     disabled={loadingSearch}
-                                    aria-label="Buscar clientes"
+                                    aria-label={text("modules.crm.clients.search")}
                                     className={clsx("btn btn-sm join-item border-0 text-white", primaryColor)}
                                 >
                                     {loadingSearch ? <span className="loading loading-spinner loading-xs" /> : <Search size={16} />}
@@ -171,7 +171,7 @@ export function Clients() {
                                 }}
                                 className="btn btn-sm btn-ghost"
                             >
-                                Limpiar
+                                {text("modules.crm.clients.clear")}
                             </button>
                             <button
                                 type="button"
@@ -179,7 +179,7 @@ export function Clients() {
                                 disabled={loading}
                                 className={`btn btn-sm ml-auto  border-0 text-white  ${primaryColor}`}
                             >
-                                <Plus size={16} /> Crear cliente
+                                <Plus size={16} /> {text("modules.crm.clients.create")}
                             </button>
                         </div>
                     </div>
@@ -188,46 +188,48 @@ export function Clients() {
                         <Table<CustomerSearchResult>
                             data={clients}
                             loading={loading || loadingSearch}
-                            emptyMessage={searchValue ? "No encontramos clientes con esos datos." : "Aún no hay clientes registrados."}
+                            emptyMessage={searchValue
+                                ? text("modules.crm.clients.noSearchResults")
+                                : text("modules.crm.clients.empty")}
                             columns={[
                                 {
                                     key: "id",
-                                    label: "ID",
+                                    label: text("modules.crm.clients.id"),
                                     className: "w-20 font-medium",
-                                    render: (value) => <span className="kbd kbd-xs cursor-copy" title="Copiar ID" onClick={async () => {
+                                    render: (value) => <span className="kbd kbd-xs cursor-copy" title={text("modules.crm.clients.copyId")} onClick={async () => {
                                         if (typeof value !== "string") return;
                                         try {
                                             await navigator.clipboard.writeText(value);
-                                            notify("info", "ID copiado al portapapeles.");
+                                            notify("info", text("modules.crm.clients.idCopied"));
                                         } catch {
-                                            notify("error", "No se pudo copiar el ID al portapapeles.");
+                                            notify("error", text("modules.crm.clients.copyFailed"));
                                         }
                                     }}>{typeof value === "string" ? value.substring(0, 6) : "—"}</span>,
                                 },
                                 {
                                     key: "person_id",
-                                    label: "Persona",
+                                    label: text("modules.crm.clients.person"),
                                     className: "min-w-40 font-semibold",
                                     render: (_, client) => <span>{[client.person.first_name, client.person.middle_name, client.person.last_name, client.person.second_last_name].filter(Boolean).join(" ")}</span>,
                                 },
                                 {
                                     key: "customer_code",
-                                    label: "Código",
+                                    label: text("modules.crm.clients.code"),
                                     render: (value) => String(value ?? "—"),
                                 },
                                 {
                                     key: "customer_type_name",
-                                    label: "Documento",
+                                    label: text("modules.crm.clients.document"),
                                     render: (_, client) => <span className="inline-flex items-center gap-1.5"><Fingerprint size={13} className="text-base-content/40" />{client.person.document_number || "—"}</span>,
                                 },
                                 {
                                     key: "customer_type_id",
-                                    label: "Tipo",
+                                    label: text("modules.crm.clients.type"),
                                     render: (_, client) => client.customer_type_name || customerTypes.find((type) => type.id === client.customer_type_id)?.name || "—",
                                 },
                                 {
                                     key: "person",
-                                    label: "Teléfono",
+                                    label: text("modules.crm.clients.phone"),
                                     
                                     render: (_, client) => (
                                         <span className="flex flex-col gap-1 text-xs">
@@ -237,7 +239,7 @@ export function Clients() {
                                 },
                                 {
                                     key: "updated_at",
-                                    label: "Email",
+                                    label: text("modules.crm.clients.email"),
                                     
                                     render: (_, client) => (
                                         <span className="flex flex-col gap-1 text-xs">
@@ -247,23 +249,25 @@ export function Clients() {
                                 },
                                 {
                                     key: "credit_limit",
-                                    label: "Límite",
+                                    label: text("modules.crm.clients.creditLimit"),
                                     className: "whitespace-nowrap",
                                     render: (value) => Number(value ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
                                 },
                                 {
                                     key: "payment_terms_days",
-                                    label: "Pago",
+                                    label: text("modules.crm.clients.payment"),
                                     className: "whitespace-nowrap",
-                                    render: (value) => `${String(value ?? 0)} días`,
+                                    render: (value) => text("modules.crm.clients.paymentDays", { count: String(value ?? 0) }),
                                 },
                                 {
                                     key: "is_active",
-                                    label: "Estado",
+                                    label: text("modules.crm.clients.status"),
                                     render: (value) => (
                                         <span className={clsx("badge badge-sm border-0", value ? "bg-emerald-500/10 text-emerald-800" : "bg-base-300 text-base-content/60")}>
                                             <span className={clsx("mr-1 size-1.5 rounded-full", value ? "bg-emerald-500" : "bg-base-content/40")} />
-                                            {value ? "Activo" : "Deshabilitado"}
+                                            {value
+                                                ? text("modules.crm.clients.active")
+                                                : text("modules.crm.clients.inactive")}
                                         </span>
                                     ),
                                 },

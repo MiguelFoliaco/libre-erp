@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router';
 import { apiClient } from '../../../lib/sdk';
 import { CRMPage } from './../../../modules/crm/index';
+import { text } from '../../../modules/language';
 
 export default function Crm() {
     const navigate = useNavigate(); // GLOBALIZA EN UNA SOLA LLAMADA
@@ -25,7 +26,7 @@ export default function Crm() {
                 if (!active) return;
                 setError(cause instanceof Error
                     ? cause.message
-                    : "No se pudo verificar la sesión.");
+                    : text("modules.crm.session.verificationFailed"));
                 setStatus("error");
             });
 
@@ -38,7 +39,7 @@ export default function Crm() {
         return (
             <main className="min-h-screen flex items-center justify-center">
                 <span className="loading loading-spinner loading-lg text-primary" />
-                <span className="sr-only">Verificando tu sesión...</span>
+                <span className="sr-only">{text("modules.crm.session.checking")}</span>
             </main>
         );
     }
@@ -56,7 +57,7 @@ export default function Crm() {
                         setAttempt((current) => current + 1);
                     }}
                 >
-                    Reintentar
+                    {text("modules.crm.common.retry")}
                 </button>
             </main>
         );
