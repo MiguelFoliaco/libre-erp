@@ -489,5 +489,96 @@ export const modules = {
             accessNotice: "Los tipos son compartidos. Solo un superadministrador puede crearlos; no se pueden eliminar ni desactivar.",
             noDescription: "Sin descripción"
         },
+    },
+    products: {
+        navigation: {
+            search: "Buscar productos",
+            create: "Crear productos"
+        },
+        search: {
+            description: "Consulta el catálogo y aplica filtros para encontrar productos.",
+            queryPlaceholder: "Nombre, SKU o código de barras",
+            queryTooShort: "Escribe al menos 2 caracteres para buscar.",
+            allTypes: "Todos los tipos",
+            allStatuses: "Todos los estados",
+            salePriceMin: "Precio de venta desde",
+            salePriceMax: "Precio de venta hasta",
+            submit: "Buscar",
+            empty: "No se encontraron productos.",
+            pageCount: "{from}–{to} productos",
+            previous: "Anterior",
+            next: "Siguiente"
+        },
+        fields: {
+            query: "Nombre, SKU o código de barras",
+            brand: "Marca",
+            category: "Categoría",
+            department: "Departamento",
+            productType: "Tipo de producto",
+            status: "Estado",
+            sku: "SKU",
+            barcode: "Código de barras",
+            name: "Nombre",
+            salePrice: "Precio de venta",
+            costPrice: "Precio de costo",
+            currencyCode: "Moneda (ISO 4217)",
+            unit: "Unidad",
+            description: "Descripción",
+            metadata: "Metadata (JSON)"
+        },
+        types: {
+            physical: "Físico",
+            virtual: "Virtual",
+            service: "Servicio"
+        },
+        status: {
+            active: "Activo",
+            inactive: "Inactivo"
+        },
+        autocomplete: {
+            placeholder: "Escribe para buscar",
+            tooShort: "Escribe al menos 2 caracteres.",
+            noResults: "No hay coincidencias.",
+            loadFailed: "No se pudieron cargar las opciones."
+        },
+        create: {
+            description: "Registra productos individualmente o mediante una plantilla CSV.",
+            individual: "Individual",
+            csv: "Importar CSV",
+            individualTitle: "Datos del producto",
+            scopeNotice: "La empresa y el entorno se asignan desde tu sesión activa.",
+            save: "Guardar producto"
+        },
+        csv: {
+            title: "Importar productos desde CSV",
+            description: "Carga hasta 500 productos en una sola operación. La importación se completa para todas las filas o no crea ninguna.",
+            downloadTemplate: "Descargar plantilla",
+            templateNotice: "La plantilla incluye company_id y environment_id como referencia; el servidor siempre usa el ámbito de tu sesión. No incluyas ID ni timestamps generados.",
+            fileTooLarge: "El archivo CSV no puede superar 5 MB.",
+            parseFailed: "No se pudo interpretar el CSV. Revisa las comillas y los separadores.",
+            unknownColumn: "Columna no reconocida: {column}.",
+            requiredColumn: "Falta la columna obligatoria: {column}.",
+            noRows: "El archivo no contiene filas de productos.",
+            tooManyRows: "El límite es de 500 productos por importación.",
+            imported: "Se importaron {count} productos correctamente.",
+            rowError: "Fila {row}: {message}",
+            previewCount: "{count} productos listos para validar e importar.",
+            previewRemainder: "Se muestran los primeros 15 productos; hay {count} más.",
+            import: "Validar e importar",
+            row: "Fila",
+            validationErrors: "Corrige los siguientes problemas en el CSV:",
+            importFailed: "No se pudo completar la importación.",
+            selectFile: "Selecciona un archivo CSV",
+            fileLimits: "CSV · máximo 5 MB y 500 filas"
+        },
+        messages: {
+            invalidMetadata: "Metadata debe ser un objeto JSON válido.",
+            created: "El producto se creó correctamente.",
+            createFailed: "No se pudo crear el producto.",
+            searchFailed: "No se pudieron buscar productos.",
+            sessionFailed: "No se pudo verificar la sesión.",
+            checkingSession: "Verificando tu sesión...",
+            retry: "Reintentar"
+        }
     }
 }

@@ -32,6 +32,13 @@ export const config = {
             'postalCode',
             'country'
         ] as const
+    },
+    currency: {
+        symbol: '$',
+        code: 'COP', //  ISO 4217
+        lang: 'es-CO',
+        maximumFractionDigits: 2,
+        style: 'currency' as 'currency' | 'percent' | 'unit'
     }
 };
 

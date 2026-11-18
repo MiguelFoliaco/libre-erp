@@ -18,7 +18,7 @@ mediante el SDK compartido `lib/sdk.ts`; no accede directamente a PostgreSQL.
 - `modules/`: pantallas y componentes por funcionalidad, por ejemplo `crm`,
   `setting`, `user-and-roles` y `start`.
 - `modules/common/`: componentes compartidos, como panel de navegación, tabla,
-  notificaciones y bienvenida.
+  notificaciones, bienvenida y autocompletados de catálogos.
 - `modules/auth/`: estado de sesión mediante Zustand.
 - `modules/language/`: textos y soporte de idiomas.
 - `lib/sdk.ts`: tipos de API, errores, autenticación y métodos CRUD compartidos.
@@ -66,6 +66,16 @@ El proyecto utiliza React, TypeScript, React Router, Zustand, Tailwind CSS y
 DaisyUI. Mantén los textos en el sistema de `modules/language/` cuando aplique,
 en vez de dispersar cadenas traducibles por los componentes. Sigue los patrones
 de componentes y estilos ya presentes en las pantallas del módulo relevante.
+
+El módulo de productos está en `modules/products/` y sus rutas viven en
+`app/routes/products/`. La búsqueda usa `apiClient.searchProducts` para enviar
+filtros como query params. La importación CSV ofrece una vista previa y
+validaciones iniciales en el cliente; el backend valida y procesa la carga
+atómica de hasta 500 filas. Usa `CatalogAutocomplete` de `modules/common/` para
+consultar marcas, categorías y departamentos sin duplicar la lógica de búsqueda.
+La plantilla omite los campos generados, precarga `company_id` y
+`environment_id` como referencia, y ofrece columnas de ID/nombre para resolver
+las asociaciones con marcas, categorías y departamentos.
 
 ## Comandos
 

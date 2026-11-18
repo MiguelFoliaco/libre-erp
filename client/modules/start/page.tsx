@@ -54,7 +54,7 @@ const MODULES: {
         {
             icon: Groceries,
             titleKeyPath: 'modules.listAppliaction.product',
-            request: ['*', 'Reports'],
+            request: ['*', 'Product[READ', 'Product[INSERT'],
             className: 'from-blue-500 to-120% to-cyan-400',
             path: '/products'
         },
@@ -68,7 +68,7 @@ const MODULES: {
         {
             icon: StoreIcon,
             titleKeyPath: 'modules.listAppliaction.marketplace',
-            request: ['*', 'Reports'],
+            request: ['*', 'Marketplace'],
             className: 'to-blue-500 via-pink-500 to-120% from-red-500',
             path: '/marketplace'
         },

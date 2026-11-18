@@ -8,7 +8,7 @@ import {
 } from 'lucide-react'
 
 export type TableColumn<T> = {
-    key: keyof T ;
+    key: keyof T;
     label: string
     render?: (value: unknown, row: T, index: number) => React.ReactNode
     className?: string
@@ -157,21 +157,23 @@ export function Table<T>({
 
             {pagination && (
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-                    <div className="flex items-center gap-2 text-sm text-base-content/60">
-                        <span>Mostrar</span>
+                    <div className="text-sm text-base-content/60">
+                        <div className="flex items-center gap-2 ">
+                            <span>Mostrar</span>
 
-                        <select
-                            className="select select-xs"
-                            value={limit}
-                            onChange={event => {
-                                setLimit(Number(event.target.value))
-                                setPage(1)
-                            }}
-                        >
-                            {pageSizeOptions.map(size => (
-                                <option key={size} value={size}>{size}</option>
-                            ))}
-                        </select>
+                            <select
+                                className="select select-xs"
+                                value={limit}
+                                onChange={event => {
+                                    setLimit(Number(event.target.value))
+                                    setPage(1)
+                                }}
+                            >
+                                {pageSizeOptions.map(size => (
+                                    <option key={size} value={size}>{size}</option>
+                                ))}
+                            </select>
+                        </div>
 
                         <span>
                             {data.length === 0

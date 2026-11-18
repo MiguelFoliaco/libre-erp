@@ -489,5 +489,96 @@ export const modules = {
             accessNotice: "Document types are shared. Only a super administrator can create them; they cannot be deleted or deactivated.",
             noDescription: "No description"
         },
+    },
+    products: {
+        navigation: {
+            search: "Search products",
+            create: "Create products"
+        },
+        search: {
+            description: "Browse the catalog and filter to find products.",
+            queryPlaceholder: "Name, SKU, or barcode",
+            queryTooShort: "Enter at least 2 characters to search.",
+            allTypes: "All types",
+            allStatuses: "All statuses",
+            salePriceMin: "Sale price from",
+            salePriceMax: "Sale price to",
+            submit: "Search",
+            empty: "No products found.",
+            pageCount: "{from}–{to} products",
+            previous: "Previous",
+            next: "Next"
+        },
+        fields: {
+            query: "Name, SKU, or barcode",
+            brand: "Brand",
+            category: "Category",
+            department: "Department",
+            productType: "Product type",
+            status: "Status",
+            sku: "SKU",
+            barcode: "Barcode",
+            name: "Name",
+            salePrice: "Sale price",
+            costPrice: "Cost price",
+            currencyCode: "Currency (ISO 4217)",
+            unit: "Unit",
+            description: "Description",
+            metadata: "Metadata (JSON)"
+        },
+        types: {
+            physical: "Physical",
+            virtual: "Virtual",
+            service: "Service"
+        },
+        status: {
+            active: "Active",
+            inactive: "Inactive"
+        },
+        autocomplete: {
+            placeholder: "Type to search",
+            tooShort: "Enter at least 2 characters.",
+            noResults: "No matching options.",
+            loadFailed: "Could not load options."
+        },
+        create: {
+            description: "Register products individually or upload a CSV template.",
+            individual: "Individual",
+            csv: "Import CSV",
+            individualTitle: "Product details",
+            scopeNotice: "Company and environment are assigned from your active session.",
+            save: "Save product"
+        },
+        csv: {
+            title: "Import products from CSV",
+            description: "Upload up to 500 products at once. The import is all-or-nothing; invalid rows prevent every row from being created.",
+            downloadTemplate: "Download template",
+            templateNotice: "The template includes company_id and environment_id for reference; the server always uses your session scope. Do not include generated IDs or timestamps.",
+            fileTooLarge: "The CSV file cannot exceed 5 MB.",
+            parseFailed: "Could not parse the CSV. Check its quotes and delimiters.",
+            unknownColumn: "Unrecognized column: {column}.",
+            requiredColumn: "Required column is missing: {column}.",
+            noRows: "The file contains no product rows.",
+            tooManyRows: "The maximum is 500 products per import.",
+            imported: "{count} products imported successfully.",
+            rowError: "Row {row}: {message}",
+            previewCount: "{count} products ready to validate and import.",
+            previewRemainder: "Showing the first 15 products; {count} more are included.",
+            import: "Validate and import",
+            row: "Row",
+            validationErrors: "Fix the following CSV issues:",
+            importFailed: "The import could not be completed.",
+            selectFile: "Choose a CSV file",
+            fileLimits: "CSV · maximum 5 MB and 500 rows"
+        },
+        messages: {
+            invalidMetadata: "Metadata must be a valid JSON object.",
+            created: "Product created successfully.",
+            createFailed: "Could not create the product.",
+            searchFailed: "Could not search products.",
+            sessionFailed: "Could not verify the session.",
+            checkingSession: "Verifying your session...",
+            retry: "Retry"
+        }
     }
 }

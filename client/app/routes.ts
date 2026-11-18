@@ -18,6 +18,11 @@ export default [
         route("document-types", "routes/crm/crm-document-types.tsx"),
         index("routes/crm/crm-home.tsx"),
     ]),
+    route("/start/products", "routes/products/index.tsx", [
+        index("routes/products/products-home.tsx"),
+        route("search", "routes/products/products-search.tsx"),
+        route("create", "routes/products/products-create.tsx"),
+    ]),
     route("/start/inventory", "routes/inventory/index.tsx", [
         index("routes/inventory/inventory-home.tsx"),
     ])

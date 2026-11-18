@@ -84,6 +84,74 @@ export interface ListResult<T> {
   offset: number;
 }
 
+export interface CatalogOption {
+  id: string;
+  name: string;
+}
+
+export type CatalogResource = "brands" | "categories" | "departments";
+
+export interface ProductSearchFilters {
+  query?: string;
+  brand_id?: string;
+  category_id?: string;
+  department_id?: string;
+  product_type?: "physical" | "virtual" | "service";
+  is_active?: boolean;
+  sale_price_min?: string;
+  sale_price_max?: string;
+  limit?: number;
+  offset?: number;
+}
+
+export interface ProductSearchResult {
+  id: string;
+  company_id: string;
+  environment_id: string;
+  brand_id: string | null;
+  category_id: string | null;
+  department_id: string | null;
+  sku: string | null;
+  barcode: string | null;
+  name: string;
+  description: string | null;
+  product_type: "physical" | "virtual" | "service";
+  cost_price: string;
+  sale_price: string;
+  currency_code: string;
+  unit: string;
+  metadata: Record<string, unknown>;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  brand_name: string | null;
+  category_name: string | null;
+  department_name: string | null;
+}
+
+export interface ProductImportRow {
+  row_number: number;
+  company_id?: string;
+  environment_id?: string;
+  brand_id?: string;
+  brand_name?: string;
+  category_id?: string;
+  category_name?: string;
+  department_id?: string;
+  department_name?: string;
+  sku?: string;
+  barcode?: string;
+  name?: string;
+  description?: string;
+  product_type?: string;
+  cost_price?: string;
+  sale_price?: string;
+  currency_code?: string;
+  unit?: string;
+  metadata?: string;
+  is_active?: string;
+}
+
 export interface ApiClientOptions {
   baseUrl?: string;
   fetcher?: typeof fetch;
@@ -298,6 +366,39 @@ export class ApiClient {
     if (query.trim()) params.set("query", query.trim());
     const suffix = params.size > 0 ? `?${params.toString()}` : "";
     return this.request(`api/customers/search${suffix}`, { signal });
+  }
+
+  searchCatalog(
+    resource: CatalogResource,
+    query: string,
+    signal?: AbortSignal,
+  ): Promise<CatalogOption[]> {
+    const params = new URLSearchParams({ query });
+    return this.request(
+      `api/catalogs/${resource}/search?${params.toString()}`,
+      { signal },
+    );
+  }
+
+  searchProducts(
+    filters: ProductSearchFilters = {},
+    signal?: AbortSignal,
+  ): Promise<ListResult<ProductSearchResult>> {
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(filters)) {
+      if (value !== undefined && value !== "") {
+        params.set(key, String(value));
+      }
+    }
+    const suffix = params.size > 0 ? `?${params.toString()}` : "";
+    return this.request(`api/products/search${suffix}`, { signal });
+  }
+
+  importProducts(rows: ProductImportRow[]): Promise<{ created: number }> {
+    return this.request("api/products/import", {
+      method: "POST",
+      body: { rows },
+    });
   }
 
   get<T>(resource: ApiResource, id: string): Promise<T> {

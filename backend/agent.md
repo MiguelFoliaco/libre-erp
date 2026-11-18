@@ -45,6 +45,18 @@ conversión de nombres de propiedades y escrituras compartidas pertenece a
 patrón de servicios y controladores dedicados, como los de personas, clientes
 y reportes.
 
+El catálogo de productos también usa controladores dedicados en
+`src/modules/catalog/`: `GET /api/products/search` autoriza `Product[READ]`;
+`GET /api/catalogs/{brands|categories|departments}/search` autoriza el permiso
+`READ` del catálogo; y `POST /api/products/import` autoriza `Product[INSERT]`.
+La búsqueda admite `query`, `brand_id`, `category_id`, `department_id`,
+`product_type`, `is_active`, `sale_price_min`, `sale_price_max`, `limit` y
+`offset` como query params. La importación recibe `{ rows }`, admite hasta 500
+filas y es atómica. Las relaciones aceptan ID o nombre (`brand_id`/`brand_name`,
+`category_id`/`category_name`, `department_id`/`department_name`); el ID tiene
+prioridad. El ámbito se deriva siempre de la sesión, aunque el CSV incluya
+`company_id` y `environment_id`.
+
 ## Persistencia y ámbito de datos
 
 PostgreSQL es la base de datos. `DatabaseModule` expone un `pg.Pool` compartido
