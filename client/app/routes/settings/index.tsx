@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router';
-import { apiClient } from '../../../lib/sdk';
-import { SettingPage } from '../../../modules/setting/page';
+import { apiClient } from '@/lib/sdk';
+import { SettingPage } from '@/modules/setting/page';
 
 export default function Settings() {
     const navigate = useNavigate(); // GLOBALIZA EN UNA SOLA LLAMADA

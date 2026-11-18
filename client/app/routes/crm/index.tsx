@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router';
-import { apiClient } from '../../../lib/sdk';
-import { CRMPage } from './../../../modules/crm/index';
-import { text } from '../../../modules/language';
+import { apiClient } from '@/lib/sdk';
+import { CRMPage } from '@/modules/crm/index';
+import { text } from '@/modules/language';
 
 export default function Crm() {
     const navigate = useNavigate(); // GLOBALIZA EN UNA SOLA LLAMADA

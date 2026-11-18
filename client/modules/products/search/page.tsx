@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { clsx } from "clsx";
-import { apiClient, type CatalogOption, type ProductSearchFilters, type ProductSearchResult } from "../../../lib/sdk";
-import { CatalogAutocomplete } from "../../common/catalog-autocomplete";
-import { Table } from "../../common/table";
-import { useToast } from "../../common/toast";
-import { text } from "../../language";
-import { formatCurrency } from '../../common/utils/parse-value-currency';
+import { apiClient, type CatalogOption, type ProductSearchFilters, type ProductSearchResult } from "@/lib/sdk";
+import { CatalogAutocomplete } from "@/modules/common/catalog-autocomplete";
+import { Table } from "@/modules/common/table";
+import { useToast } from "@/modules/common/toast";
+import { text } from "@/modules/language";
+import { formatCurrency } from '@/modules/common/utils/parse-value-currency';
 
 const PAGE_SIZE = 50;
 type ProductType = NonNullable<ProductSearchFilters["product_type"]>;

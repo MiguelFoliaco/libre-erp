@@ -1,10 +1,10 @@
 import { AnimatePresence, motion } from "motion/react";
 import { CalendarDays, Copy, Fingerprint, Mail, MapPin, Pencil, Phone, X } from "lucide-react";
 import type { ReactNode } from "react";
-import { config, addressFieldLabels } from "../../../../config";
-import type { DocumentTypePeople, People } from "../../../../lib/crm";
-import { text } from "../../../language";
-import { useToast } from './../../../common/toast';
+import { config, addressFieldLabels } from "@/config";
+import type { DocumentTypePeople, People } from "@/lib/crm";
+import { text } from "@/modules/language";
+import { useToast } from '@/modules/common/toast';
 import { clsx } from "clsx";
 
 

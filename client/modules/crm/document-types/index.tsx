@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { FileText, Plus } from "lucide-react";
-import { ApiError, apiClient } from "../../../lib/sdk";
-import type { DocumentTypePeople } from "../../../lib/crm";
-import { useToast } from "../../common/toast";
-import { text } from "../../language";
+import { ApiError, apiClient } from "@/lib/sdk";
+import type { DocumentTypePeople } from "@/lib/crm";
+import { useToast } from "@/modules/common/toast";
+import { text } from "@/modules/language";
 
 const primaryColor = "bg-linear-to-tr from-emerald-500 via-green-500 to-120% to-yellow-400";
 

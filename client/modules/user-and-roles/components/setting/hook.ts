@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
-import { useToast } from '../../../common/toast';
-import { text } from '../../../language';
+import { useToast } from '@/modules/common/toast';
+import { text } from '@/modules/language';
 
 export type AuthProvider = 'local' | 'google' | 'github' | 'gitlab' | 'microsoft';
 

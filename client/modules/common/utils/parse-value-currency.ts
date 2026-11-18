@@ -1,4 +1,4 @@
-import { config } from '../../../config';
+import { config } from '@/config';
 
 export const formatCurrency = (value: string | number) => {
     let numberValue: number = 0;

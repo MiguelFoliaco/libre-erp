@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowDownRight, BriefcaseBusiness, CalendarDays, Fingerprint, Mail, MapPin, Phone, UserRound, X } from "lucide-react";
-import type { DocumentTypePeople, People } from "../../../../lib/crm";
-import { text } from "../../../language";
-import { AddressFields } from "../../../setting/components/address-fields";
+import type { DocumentTypePeople, People } from "@/lib/crm";
+import { text } from "@/modules/language";
+import { AddressFields } from "@/modules/setting/components/address-fields";
 import { usePersonForm, type PersonWritePayload } from "./hook";
 
 export function PersonFormModal({

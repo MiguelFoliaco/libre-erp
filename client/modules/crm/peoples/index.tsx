@@ -3,10 +3,10 @@ import { CircleSlash, Eye, EyeClosed, Fingerprint, Mail, MapPin, Pencil, Phone, 
 import { useEffect, useState } from "react";
 import { format } from "@formkit/tempo";
 import { clsx } from "clsx";
-import { text } from "./../../language";
-import { Table, type TableAction } from "./../../common/table";
-import { useToast } from "./../../common/toast";
-import type { People } from "./../../../lib/crm";
+import { text } from "@/modules/language";
+import { Table, type TableAction } from "@/modules/common/table";
+import { useToast } from "@/modules/common/toast";
+import type { People } from "@/lib/crm";
 import { PersonFormModal } from "./form/create-person";
 import { DisablePersonModal } from "./form/disable-person";
 import { usePeople } from "./form/hook";

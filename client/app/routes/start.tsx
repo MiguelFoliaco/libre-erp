@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { apiClient } from "../../lib/sdk";
-import { StartPage } from "../../modules/start/page";
+import { apiClient } from "@/lib/sdk";
+import { StartPage } from "@/modules/start/page";
 
 export default function Start() {
     const navigate = useNavigate();

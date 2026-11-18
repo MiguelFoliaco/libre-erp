@@ -1,9 +1,9 @@
 import { useMemo, useState, type ChangeEvent } from "react";
 import Papa from "papaparse";
 import { Download, FileSpreadsheet, Upload } from "lucide-react";
-import { apiClient } from "../../../lib/sdk";
-import { useToast } from "../../common/toast";
-import { text } from "../../language";
+import { apiClient } from "@/lib/sdk";
+import { useToast } from "@/modules/common/toast";
+import { text } from "@/modules/language";
 import { MAX_FILE_SIZE, MAX_ROWS, messageFromError, parseActive, resourceLabel, type CatalogResource, type CsvRow } from "./catalog-types";
 
 export function CatalogCsvImport({ resource, onImported }: { resource: CatalogResource; onImported: () => Promise<void> }) {

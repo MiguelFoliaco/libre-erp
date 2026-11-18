@@ -1,6 +1,6 @@
 import React from 'react'
-import { WelcomeBase } from './../../common/welcome';
-import { text } from './../../language';
+import { WelcomeBase } from '@/modules/common/welcome';
+import { text } from '@/modules/language';
 
 
 

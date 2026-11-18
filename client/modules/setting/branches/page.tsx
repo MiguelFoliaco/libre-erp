@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { Languages, Pencil, Plus, Store } from "lucide-react";
-import { ApiError, apiClient } from "../../../lib/sdk";
-import { useToast } from "../../common/toast";
-import { text } from "../../language";
+import { ApiError, apiClient } from "@/lib/sdk";
+import { useToast } from "@/modules/common/toast";
+import { text } from "@/modules/language";
 import { AddressFields, emptyAddressValues, parseAddressValues } from "../components/address-fields";
 import { clsx } from "clsx";
-import { useLanguage } from './../../language/hook';
-import { type AddressValues } from '../../../config'
+import { useLanguage } from '@/modules/language/hook';
+import { type AddressValues } from '@/config'
 
 const primaryColor = 'bg-linear-to-tr to-gray-500 to-120% from-black'
 const textPrimaryColorGradient = 'bg-linear-to-r from-black to-50% to-gray-500 bg-clip-text text-transparent'

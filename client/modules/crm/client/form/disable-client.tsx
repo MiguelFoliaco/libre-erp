@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { AlertTriangle, Ban, X } from "lucide-react";
-import type { CustomerSearchResult } from "../../../../lib/crm";
-import { text } from "../../../language";
+import type { CustomerSearchResult } from "@/lib/crm";
+import { text } from "@/modules/language";
 
 export function DisableClientModal({
     client,

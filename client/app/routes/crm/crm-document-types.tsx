@@ -1,4 +1,4 @@
-import DocumentTypes from "../../../modules/crm/document-types";
+import DocumentTypes from "@/modules/crm/document-types";
 
 export default function DocumentTypesPage() {
     return <DocumentTypes />;

@@ -11,10 +11,10 @@ import {
 import { CreateUserForm } from '../components/form-create-user/form';
 import { EditUserForm } from '../components/form-edit-user/form';
 import { RoleForm } from '../components/form-role/form';
-import { ToastProvider, } from '../../common/toast';
+import { ToastProvider, } from '@/modules/common/toast';
 import { useManager } from './hook';
 import { clsx } from 'clsx';
-import { text } from '../../language';
+import { text } from '@/modules/language';
 
 
 const primaryColor = 'bg-linear-to-tr from-red-500 to-120% to-orange-500'

@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { Building, Save } from "lucide-react";
-import { ApiError, apiClient } from "../../../lib/sdk";
-import { useToast } from "../../common/toast";
-import { text } from "../../language";
-import { useSession } from "../../auth/hook/store";
-import { config } from "../../../config";
+import { ApiError, apiClient } from "@/lib/sdk";
+import { useToast } from "@/modules/common/toast";
+import { text } from "@/modules/language";
+import { useSession } from "@/modules/auth/hook/store";
+import { config } from "@/config";
 import { AddressFields, emptyAddressValues, parseAddressValues, } from "../components/address-fields";
-import { type AddressValues } from '../../../config'
+import { type AddressValues } from '@/config'
 import { clsx } from "clsx";
 
 interface CompanyRecord {

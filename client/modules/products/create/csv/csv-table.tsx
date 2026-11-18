@@ -1,10 +1,10 @@
 import { Download, FileSpreadsheet, Upload } from 'lucide-react';
 import Papa from "papaparse";
 import { useState, type ChangeEvent } from 'react'
-import { ApiError, type ProductImportRow, apiClient } from '../../../../lib/sdk';
-import { text } from '../../../language'
-import { useToast } from '../../../common/toast'
-import { useSession } from '../../../auth/hook/store'
+import { ApiError, type ProductImportRow, apiClient } from '@/lib/sdk';
+import { text } from '@/modules/language'
+import { useToast } from '@/modules/common/toast'
+import { useSession } from '@/modules/auth/hook/store'
 
 
 export const CSVTableProduct = () => {

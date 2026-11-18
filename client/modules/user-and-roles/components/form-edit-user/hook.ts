@@ -1,9 +1,9 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { apiClient } from '../../../../lib/sdk';
-import type { UpdateUserInput, UserRecord } from '../../../../lib/user-and-roles';
-import { describeUserAndRolesError } from '../../../../lib/user-and-roles-errors';
-import { useToast } from '../../../common/toast';
-import { text } from '../../../language';
+import { apiClient } from '@/lib/sdk';
+import type { UpdateUserInput, UserRecord } from '@/lib/user-and-roles';
+import { describeUserAndRolesError } from '@/lib/user-and-roles-errors';
+import { useToast } from '@/modules/common/toast';
+import { text } from '@/modules/language';
 
 export function useEditUserForm(
   user: UserRecord,

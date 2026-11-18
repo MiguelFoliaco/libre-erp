@@ -1,5 +1,5 @@
-import { config, type AddressField, type AddressValues, addressFieldLabels } from "../../../config";
-import { text, type PathText } from "../../language";
+import { config, type AddressField, type AddressValues, addressFieldLabels } from "@/config";
+import { text, } from "@/modules/language";
 
 
 

@@ -1,1 +1,1 @@
-export { default } from "../../../modules/setting/branches/page";
+export { default } from "@/modules/setting/branches/page";

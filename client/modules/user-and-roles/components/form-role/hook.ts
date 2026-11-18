@@ -1,20 +1,20 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { apiClient } from '../../../../lib/sdk';
+import { apiClient } from '@/lib/sdk';
 import type {
   RolePermissionAction,
   RolePermissionModule,
   RolePermissionSelection,
   RoleRecord,
   SaveRoleInput,
-} from '../../../../lib/user-and-roles';
+} from '@/lib/user-and-roles';
 import {
   emptyRolePermissionSelection,
   roleActionsToSelection,
   selectionToRoleActions,
-} from '../../../../lib/user-and-roles';
-import { describeUserAndRolesError } from '../../../../lib/user-and-roles-errors';
-import { useToast } from '../../../common/toast';
-import { text } from '../../../language';
+} from '@/lib/user-and-roles';
+import { describeUserAndRolesError } from '@/lib/user-and-roles-errors';
+import { useToast } from '@/modules/common/toast';
+import { text } from '@/modules/language';
 
 export function useRoleForm(
   role: RoleRecord | null,

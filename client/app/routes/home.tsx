@@ -18,10 +18,10 @@ import {
 } from "lucide-react";
 import {
   apiClient,
-} from "../../lib/sdk";
-import { text } from "../../modules/language";
-import { useLanguage } from "../../modules/language/hook";
-import { useSession } from "../../modules/auth/hook/store";
+} from "@/lib/sdk";
+import { text } from "@/modules/language";
+import { useLanguage } from "@/modules/language/hook";
+import { useSession } from "@/modules/auth/hook/store";
 import { useNavigate } from "react-router";
 
 export function meta({ }: Route.MetaArgs) {
@@ -108,7 +108,7 @@ export default function Home() {
     : "";
 
   useEffect(() => {
-    if(user){
+    if (user) {
       navigate('/start')
     }
   }, [user])

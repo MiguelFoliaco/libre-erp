@@ -5,11 +5,11 @@ import { clsx } from "clsx";
 import {
   apiClient,
   type CatalogOption,
-} from "../../../lib/sdk";
+} from "@/lib/sdk";
 import { CSVTableProduct, isRecord } from './csv/csv-table'
-import { CatalogAutocomplete } from "../../common/catalog-autocomplete";
-import { useToast } from "../../common/toast";
-import { text } from "../../language";
+import { CatalogAutocomplete } from "@/modules/common/catalog-autocomplete";
+import { useToast } from "@/modules/common/toast";
+import { text } from "@/modules/language";
 
 type ProductType = "physical" | "virtual" | "service";
 type CreationMode = "individual" | "csv";

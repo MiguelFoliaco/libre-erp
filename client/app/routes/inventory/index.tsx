@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router';
-import { apiClient } from './../../../lib/sdk';
-import { InventoryPage } from './../../../modules/inventory/index';
+import { apiClient } from '@/lib/sdk';
+import { InventoryPage } from '@/modules/inventory/index';
 
 export default function Inventory() {
     const navigate = useNavigate(); // GLOBALIZA EN UNA SOLA LLAMADA

@@ -1,9 +1,9 @@
 import { AnimatePresence, motion } from "motion/react";
 import { CalendarDays, CreditCard, Fingerprint, Mail, MapPin, Pencil, Phone, UserRound, X } from "lucide-react";
 import type { ReactNode } from "react";
-import type { CustomerSearchResult } from "../../../../lib/crm";
-import { config } from "../../../../config";
-import { text } from "../../../language";
+import type { CustomerSearchResult } from "@/lib/crm";
+import { config } from "@/config";
+import { text } from "@/modules/language";
 import { clsx } from "clsx";
 
 

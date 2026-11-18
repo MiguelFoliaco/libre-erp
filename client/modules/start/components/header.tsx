@@ -1,7 +1,7 @@
 import { Grid3X3, Languages, LogOutIcon } from 'lucide-react';
-import { text } from '../../language';
-import { useSession } from '../../auth/hook/store';
-import { useLanguage } from '../../language/hook';
+import { text } from '@/modules/language';
+import { useSession } from '@/modules/auth/hook/store';
+import { useLanguage } from '@/modules/language/hook';
 
 export const HeaderStart = () => {
 

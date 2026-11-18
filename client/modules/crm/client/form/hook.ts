@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { apiClient, ApiError } from "../../../../lib/sdk";
+import { apiClient, ApiError } from "@/lib/sdk";
 import type {
     Customer,
     CustomerPerson,
@@ -7,11 +7,11 @@ import type {
     CustomerType,
     DocumentTypePeople,
     People,
-} from "../../../../lib/crm";
-import type { PersonSearchResult } from "../../../../lib/user-and-roles";
-import type { PersonWritePayload } from "../../peoples/form/hook";
-import { useToast } from "../../../common/toast";
-import { text } from "../../../language";
+} from "@/lib/crm";
+import type { PersonSearchResult } from "@/lib/user-and-roles";
+import type { PersonWritePayload } from "@/modules/crm/peoples/form/hook";
+import { useToast } from "@/modules/common/toast";
+import { text } from "@/modules/language";
 
 export type ClientModalMode = "create" | "edit" | "view" | "disable" | null;
 export type CustomerWritePayload = Pick<

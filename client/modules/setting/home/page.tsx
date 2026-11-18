@@ -1,5 +1,5 @@
-import { WelcomeBase } from './../../common/welcome';
-import { text } from './../../language';
+import { WelcomeBase } from '@/modules/common/welcome';
+import { text } from '@/modules/language';
 
 
 const primaryColor = 'bg-linear-to-tr to-gray-500 to-120% from-black'

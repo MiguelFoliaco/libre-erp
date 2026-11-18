@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { Check } from "lucide-react";
-import { apiClient } from "../../../lib/sdk";
-import { useToast } from "../../common/toast";
-import { text } from "../../language";
+import { apiClient } from "@/lib/sdk";
+import { useToast } from "@/modules/common/toast";
+import { text } from "@/modules/language";
 import { loadAll, messageFromError, resourceLabel, type CatalogRecord } from "./catalog-types";
 
 export function CategoryTreePanel() {

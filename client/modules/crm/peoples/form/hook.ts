@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { config, type AddressValues } from "../../../../config";
-import { apiClient, ApiError } from "../../../../lib/sdk";
-import type { DocumentTypePeople, People } from "../../../../lib/crm";
-import { useToast } from "../../../common/toast";
-import { text } from "../../../language";
+import { config, type AddressValues } from "@/config";
+import { apiClient, ApiError } from "@/lib/sdk";
+import type { DocumentTypePeople, People } from "@/lib/crm";
+import { useToast } from "@/modules/common/toast";
+import { text } from "@/modules/language";
 
 export type PersonModalMode = "create" | "edit" | "view" | "disable" | null;
 

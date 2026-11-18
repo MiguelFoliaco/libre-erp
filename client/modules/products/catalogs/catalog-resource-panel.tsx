@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { Plus } from "lucide-react";
 import { clsx } from "clsx";
-import { apiClient } from "../../../lib/sdk";
-import { useToast } from "../../common/toast";
-import { text } from "../../language";
+import { apiClient } from "@/lib/sdk";
+import { useToast } from "@/modules/common/toast";
+import { text } from "@/modules/language";
 import { CatalogCsvImport } from "./catalog-csv-import";
 import {
     EMPTY_FORM,

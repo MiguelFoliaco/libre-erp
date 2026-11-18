@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { apiClient } from '../../../lib/sdk';
+import { apiClient } from '@/lib/sdk';
 import type {
     AssignRoleInput,
     RoleRecord,
     UserRecord,
     UserRoleRecord,
-} from '../../../lib/user-and-roles';
-import { describeUserAndRolesError } from '../../../lib/user-and-roles-errors';
-import { useToast } from '../../common/toast';
-import { text } from '../../language';
+} from '@/lib/user-and-roles';
+import { describeUserAndRolesError } from '@/lib/user-and-roles-errors';
+import { useToast } from '@/modules/common/toast';
+import { text } from '@/modules/language';
 
 type ManagerTab = 'users' | 'roles';
 type RoleModal = { role: RoleRecord | null } | null;

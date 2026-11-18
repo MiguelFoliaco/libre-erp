@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
-import { UserAndRolesPage } from '../../modules/user-and-roles/page'
+import { UserAndRolesPage } from '@/modules/user-and-roles/page'
 import { useEffect, useState } from 'react';
-import { apiClient } from '../../lib/sdk';
+import { apiClient } from '@/lib/sdk';
 
 export default function UserAndRoles() {
 

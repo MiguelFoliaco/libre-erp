@@ -6,8 +6,8 @@ import {
   Server,
   ShieldCheck,
 } from 'lucide-react';
-import { ToastProvider } from '../../../common/toast';
-import { text } from '../../../language';
+import { ToastProvider } from '@/modules/common/toast';
+import { text } from '@/modules/language';
 import { useSettingsForm, type AuthProvider } from './hook';
 
 const authProviders: { value: AuthProvider; label: string }[] = [

@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { Tags } from "lucide-react";
 import { clsx } from "clsx";
-import { text } from "../../language";
+import { text } from "@/modules/language";
 import { CategoryTreePanel } from "./category-tree-panel";
 import { CatalogResourcePanel } from "./catalog-resource-panel";
 import { resourceLabel, type CatalogResource, type CatalogTab } from "./catalog-types";

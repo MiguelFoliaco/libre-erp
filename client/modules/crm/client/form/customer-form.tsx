@@ -1,9 +1,9 @@
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowDownRight, BriefcaseBusiness, Check, Code, Fingerprint, Plus, Search, UserRound, X } from "lucide-react";
-import type { CustomerPerson, CustomerSearchResult, CustomerType, DocumentTypePeople } from "../../../../lib/crm";
-import { text } from "../../../language";
-import { PersonFormModal } from "../../peoples/form/create-person";
-import type { PersonWritePayload } from "../../peoples/form/hook";
+import type { CustomerPerson, CustomerSearchResult, CustomerType, DocumentTypePeople } from "@/lib/crm";
+import { text } from "@/modules/language";
+import { PersonFormModal } from "@/modules/crm/peoples/form/create-person";
+import type { PersonWritePayload } from "@/modules/crm/peoples/form/hook";
 import { useCustomerForm, type CustomerWritePayload } from "./hook";
 
 export function CustomerFormModal({

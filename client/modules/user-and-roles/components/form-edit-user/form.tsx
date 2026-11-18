@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
-import type { UserRecord } from '../../../../lib/user-and-roles';
-import { text } from '../../../language';
+import type { UserRecord } from '@/lib/user-and-roles';
+import { text } from '@/modules/language';
 import { useEditUserForm } from './hook';
 
 interface EditUserFormProps {

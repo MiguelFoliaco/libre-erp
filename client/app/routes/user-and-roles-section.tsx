@@ -1,8 +1,8 @@
 import React, { Suspense } from 'react'
 import { useParams } from 'react-router';
 
-const LazyManager = React.lazy(() => import('../../modules/user-and-roles/manager/manager'));
-const LazySettings = React.lazy(() => import('../../modules/user-and-roles/components/setting/form'));
+const LazyManager = React.lazy(() => import('@/modules/user-and-roles/manager/manager'));
+const LazySettings = React.lazy(() => import('@/modules/user-and-roles/components/setting/form'));
 
 
 const SectionRoles = () => {

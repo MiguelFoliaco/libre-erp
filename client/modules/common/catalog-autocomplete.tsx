@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from "react";
 import { Search, X } from "lucide-react";
-import { apiClient, type CatalogOption, type CatalogResource } from "../../lib/sdk";
+import { apiClient, type CatalogOption, type CatalogResource } from "@/lib/sdk";
 
 interface CatalogAutocompleteProps {
   resource: CatalogResource;

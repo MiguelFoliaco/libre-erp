@@ -1,5 +1,5 @@
-import { apiClient } from "../../../lib/sdk";
-import { text } from "../../language";
+import { apiClient } from "@/lib/sdk";
+import { text } from "@/modules/language";
 
 export type CatalogResource = "brands" | "categories" | "departments";
 export type CatalogTab = CatalogResource | "tree";

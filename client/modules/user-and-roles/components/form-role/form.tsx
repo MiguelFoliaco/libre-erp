@@ -3,8 +3,8 @@ import {
   ROLE_PERMISSION_ACTIONS,
   ROLE_PERMISSION_MODULES,
   type RoleRecord,
-} from '../../../../lib/user-and-roles';
-import { text } from '../../../language';
+} from '@/lib/user-and-roles';
+import { text } from '@/modules/language';
 import { useRoleForm } from './hook';
 
 interface RoleFormProps {

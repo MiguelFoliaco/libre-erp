@@ -1,6 +1,5 @@
-import React from 'react'
-import { text } from './../../language/index';
-import { WelcomeBase } from './../../common/welcome';
+import { text } from '@/modules/language';
+import { WelcomeBase } from '@/modules/common/welcome';
 
 
 const primaryColor = 'bg-linear-to-tr from-blue-500 to-120% to-cyan-400'

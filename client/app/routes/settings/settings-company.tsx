@@ -1,1 +1,1 @@
-export { default } from "../../../modules/setting/company/page";
+export { default } from "@/modules/setting/company/page";

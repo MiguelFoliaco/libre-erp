@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { apiClient, type AuthenticatedUser } from "../../../lib/sdk";
-import { text } from "../../language";
+import { apiClient, type AuthenticatedUser } from "@/lib/sdk";
+import { text } from "@/modules/language";
 
 
 type SessionState = {

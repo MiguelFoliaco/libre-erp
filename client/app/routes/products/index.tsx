@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { apiClient } from "../../../lib/sdk";
-import { text } from "../../../modules/language";
-import { ProductsPage } from "../../../modules/products";
+import { apiClient } from "@/lib/sdk";
+import { text } from "@/modules/language";
+import { ProductsPage } from "@/modules/products";
 
 export default function Products() {
   const navigate = useNavigate();

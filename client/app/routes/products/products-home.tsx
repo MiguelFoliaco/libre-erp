@@ -1,1 +1,1 @@
-export { default } from '../../../modules/products/home'
+export { default } from '@/modules/products/home'

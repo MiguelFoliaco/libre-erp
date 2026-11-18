@@ -1,2 +1,2 @@
-import { InventoryHome } from '../../../modules/inventory/home'
+import { InventoryHome } from '@/modules/inventory/home'
 export default InventoryHome;
