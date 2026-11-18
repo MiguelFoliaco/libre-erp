@@ -109,6 +109,6 @@ body {
 
 }
 
-input {
+input, textarea, select {
   outline: none !important;
 }

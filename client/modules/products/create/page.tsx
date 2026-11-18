@@ -159,7 +159,7 @@ export function ProductCreatePage() {
                 <CatalogAutocomplete key={`department-${formKey}`} resource="departments" value={department} onChange={setDepartment} label={text("modules.products.fields.department")} placeholder={text("modules.products.autocomplete.placeholder")} {...autocompleteProps} />
                 <label className="space-y-1">
                   <span className="label py-0 text-xs font-medium">{text("modules.products.fields.productType")}</span>
-                  <select className="select select-sm w-full bg-base-200/35" value={productType} onChange={(event) => setProductType(event.target.value as ProductType)}>
+                  <select className="select select-sm w-full bg-base-200" value={productType} onChange={(event) => setProductType(event.target.value as ProductType)}>
                     <option value="physical">{text("modules.products.types.physical")}</option>
                     <option value="virtual">{text("modules.products.types.virtual")}</option>
                     <option value="service">{text("modules.products.types.service")}</option>

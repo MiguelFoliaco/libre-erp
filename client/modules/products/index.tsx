@@ -1,4 +1,4 @@
-import { Ad, Boxes, ChartNoAxesGantt, FilePlus2, Home, PackagePlus, Search, ShelvingUnit } from "lucide-react";
+import { Ad, Boxes, ChartNoAxesGantt, FilePlus2, Home, Search } from "lucide-react";
 import { Outlet } from "react-router";
 import { LeftPanel, type LeftNavigation } from "../common/left-panel";
 import { text } from "../language";
@@ -12,24 +12,24 @@ const navigation: LeftNavigation[] = [
     path: "/start/products",
     icon: Home,
   },
+  // {
+  //   label: text("modules.products.fields.brand"),
+  //   key: "brands",
+  //   path: "/start/products/brands",
+  //   icon: Ad,
+  // },
   {
-    label: text("modules.products.fields.brand"),
-    key: "brands",
-    path: "/start/brands",
-    icon: Ad,
-  },
-  {
-    label: text("modules.products.fields.category"),
-    key: "categories",
-    path: "/start/categories",
+    label: text("modules.products.catalogs.categoriesDepartments"),
+    key: "categories-departments",
+    path: "/start/products/categories-departments",
     icon: ChartNoAxesGantt,
   },
-  {
-    label: text("modules.products.fields.department"),
-    key: "departments",
-    path: "/start/departments",
-    icon: ShelvingUnit,
-  },
+  // {
+  //   label: text("modules.products.fields.department"),
+  //   key: "departments",
+  //   path: "/start/departments",
+  //   icon: ShelvingUnit,
+  // },
   // { // Future feature combos - groups of products
   //   label: 'Combos',
   //   key: "combos",

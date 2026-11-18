@@ -22,6 +22,7 @@ export default [
         index("routes/products/products-home.tsx"),
         route("search", "routes/products/products-search.tsx"),
         route("create", "routes/products/products-create.tsx"),
+        route("categories-departments", "routes/products/products-categories-departments.tsx"),
     ]),
     route("/start/inventory", "routes/inventory/index.tsx", [
         index("routes/inventory/inventory-home.tsx"),
