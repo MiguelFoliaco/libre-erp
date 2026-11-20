@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { apiClient, type InventoryMovementInput, type InventoryMovementRow } from '@/lib/sdk';
 import { errorMessage, type PersonOption, type ProductOption, type SupplierRecord, type WarehouseRecord } from '../types';
+import { Table } from '@/modules/common/table/index';
 
 type OperationKind = InventoryMovementInput['movementType'] | 'transfer';
 type EntrySource = 'supplier' | 'return';
@@ -235,37 +236,42 @@ export function InventoryMovementsPage() {
         ) : movements.length === 0 ? (
           <p className="p-6 text-sm text-base-content/60">Aún no hay movimientos registrados.</p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="table table-sm">
-              <thead>
-                <tr>
-                  <th>Fecha</th>
-                  <th>Producto</th>
-                  <th>Bodega</th>
-                  <th>Movimiento / origen</th>
-                  <th className="text-right">Cantidad</th>
-                </tr>
-              </thead>
-              <tbody>
-                {movements.map((movement) => (
-                  <tr key={movement.id}>
-                    <td className="whitespace-nowrap">{new Date(movement.created_at).toLocaleString()}</td>
-                    <td>
-                      <p className="font-medium">{movement.product_name}</p>
-                      {movement.sku && <p className="text-xs text-base-content/50">SKU: {movement.sku}</p>}
-                    </td>
-                    <td>{movement.warehouse_name}</td>
-                    <td>
-                      <p>{movementLabels[movement.movement_type]}</p>
-                      <p className="text-xs text-base-content/50">{originLabel(movement)}</p>
-                      {movement.notes && <p className="max-w-56 truncate text-xs text-base-content/50">{movement.notes}</p>}
-                    </td>
-                    <td className="text-right tabular-nums">{movement.quantity}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <Table
+            data={movements}
+            columns={[
+              {
+                key: 'id',
+                label: '',
+                render: () => <></>
+              },
+              {
+                key: 'product_name',
+                label: 'Nombre',
+                className: 'font-normal'
+              },
+              {
+                key: 'quantity',
+                label: 'Cantidad',
+                className: 'font-normal'
+              },
+              {
+                key: 'movement_type',
+                className: 'font-normal',
+                label: 'Tipo de movimiento',
+                render: (_, row) => <span>{row.movement_type}</span>
+              },
+              {
+                className: 'font-normal',
+                key: 'supplier_name',
+                label: 'Proveedor',
+              },
+              {
+                className: 'font-normal',
+                key: 'warehouse_name',
+                label: 'Bodega',
+              }
+            ]}
+          />
         )}
       </section>
     </div>
