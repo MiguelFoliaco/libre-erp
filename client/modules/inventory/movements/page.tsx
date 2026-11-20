@@ -1,122 +1,9 @@
-import { useCallback, useEffect, useState, type FormEvent } from 'react';
-import { apiClient, type InventoryMovementInput, type InventoryMovementRow } from '@/lib/sdk';
-import { errorMessage, type PersonOption, type ProductOption, type SupplierRecord, type WarehouseRecord } from '../types';
-import { Table } from '@/modules/common/table/index';
-
-type OperationKind = InventoryMovementInput['movementType'] | 'transfer';
-type EntrySource = 'supplier' | 'return';
-
-const movementLabels: Record<InventoryMovementRow['movement_type'], string> = {
-  entry: 'Entrada',
-  exit: 'Salida',
-  adjustment_in: 'Ajuste de entrada',
-  adjustment_out: 'Ajuste de salida',
-  transfer_in: 'Traslado recibido',
-  transfer_out: 'Traslado enviado',
-  reversal: 'Reversión',
-};
-
-function originLabel(movement: InventoryMovementRow): string {
-  if (movement.reference_type === 'supplier') {
-    return `Proveedor${movement.supplier_name ? `: ${movement.supplier_name}` : ''}`;
-  }
-  if (movement.reference_type === 'return') return 'Devolución';
-  if (movement.reference_type === 'transfer') return 'Traslado entre bodegas';
-  return movement.reference_type || 'Manual';
-}
+import { MovementForm } from './movement-form';
+import { MovementHistory } from './movement-history';
+import { useInventoryMovements } from './use-inventory-movements';
 
 export function InventoryMovementsPage() {
-  const [warehouses, setWarehouses] = useState<WarehouseRecord[]>([]);
-  const [products, setProducts] = useState<ProductOption[]>([]);
-  const [suppliers, setSuppliers] = useState<SupplierRecord[]>([]);
-  const [people, setPeople] = useState<PersonOption[]>([]);
-  const [movements, setMovements] = useState<InventoryMovementRow[]>([]);
-  const [operation, setOperation] = useState<OperationKind>('entry');
-  const [source, setSource] = useState<EntrySource>('supplier');
-  const [warehouseId, setWarehouseId] = useState('');
-  const [sourceWarehouseId, setSourceWarehouseId] = useState('');
-  const [destinationWarehouseId, setDestinationWarehouseId] = useState('');
-  const [productId, setProductId] = useState('');
-  const [supplierId, setSupplierId] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [notes, setNotes] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
-
-  const loadData = useCallback(async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const [warehouseResult, productResult, supplierResult, peopleResult, movementResult] = await Promise.all([
-        apiClient.list<WarehouseRecord>('warehouses', { limit: 200 }),
-        apiClient.inventoryProducts(),
-        apiClient.list<SupplierRecord>('suppliers', { limit: 200 }),
-        apiClient.inventoryPeople(),
-        apiClient.inventoryMovements(),
-      ]);
-      setWarehouses(warehouseResult.items);
-      setProducts(productResult.items);
-      setSuppliers(supplierResult.items);
-      setPeople(peopleResult.items);
-      setMovements(movementResult.items);
-      const activeWarehouses = warehouseResult.items.filter((warehouse) => warehouse.is_active);
-      const defaultSourceId = activeWarehouses[0]?.id || '';
-      setWarehouseId((current) => current || defaultSourceId);
-      setSourceWarehouseId((current) => current || defaultSourceId);
-      setDestinationWarehouseId((current) => current || activeWarehouses.find((warehouse) => warehouse.id !== defaultSourceId)?.id || '');
-      setProductId((current) => current || productResult.items[0]?.id || '');
-      setSupplierId((current) => current || supplierResult.items.find((supplier) => supplier.is_active)?.id || '');
-    } catch (cause) {
-      setError(errorMessage(cause));
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    void loadData();
-  }, [loadData]);
-
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setSaving(true);
-    setError('');
-    try {
-      if (operation === 'transfer') {
-        await apiClient.createInventoryTransfer({
-          sourceWarehouseId,
-          destinationWarehouseId,
-          items: [{ productId, quantity }],
-          notes: notes.trim() || undefined,
-        });
-      } else {
-        const input: InventoryMovementInput = {
-          movementType: operation,
-          warehouseId,
-          productId,
-          quantity,
-          notes: notes.trim() || undefined,
-        };
-        if (operation === 'entry') {
-          input.source = source;
-          if (source === 'supplier') input.supplierId = supplierId;
-        }
-        await apiClient.createInventoryMovement(input);
-      }
-      setQuantity('');
-      setNotes('');
-      await loadData();
-    } catch (cause) {
-      setError(errorMessage(cause));
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  const activeWarehouses = warehouses.filter((warehouse) => warehouse.is_active);
-  const personNames = new Map(people.map((person) => [person.id, person.name]));
-  const activeSuppliers = suppliers.filter((supplier) => supplier.is_active);
+  const movements = useInventoryMovements();
 
   return (
     <div className="space-y-6 p-5 sm:p-8">
@@ -128,152 +15,36 @@ export function InventoryMovementsPage() {
         </p>
       </header>
 
-      {error && <p className="alert alert-error py-2 text-sm" role="alert">{error}</p>}
+      {movements.error && <p className="alert alert-error py-2 text-sm" role="alert">{movements.error}</p>}
 
-      <section className="rounded-lg border border-base-300 bg-base-100 p-5">
-        <h2 className="text-lg font-semibold">Nuevo movimiento</h2>
-        <form className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3" onSubmit={(event) => void submit(event)}>
-          <label className="form-control">
-            <span className="label-text mb-1 text-xs">Tipo de movimiento</span>
-            <select className="select select-bordered select-sm" value={operation} onChange={(event) => setOperation(event.target.value as OperationKind)}>
-              <option value="entry">Entrada</option>
-              <option value="exit">Salida</option>
-              <option value="adjustment_in">Ajuste de entrada</option>
-              <option value="adjustment_out">Ajuste de salida</option>
-              <option value="transfer">Traslado entre bodegas</option>
-            </select>
-          </label>
+      <MovementForm
+        warehouses={movements.warehouses}
+        suppliers={movements.suppliers}
+        people={movements.people}
+        operation={movements.operation}
+        setOperation={movements.setOperation}
+        source={movements.source}
+        setSource={movements.setSource}
+        warehouseId={movements.warehouseId}
+        setWarehouseId={movements.setWarehouseId}
+        sourceWarehouseId={movements.sourceWarehouseId}
+        setSourceWarehouseId={movements.setSourceWarehouseId}
+        destinationWarehouseId={movements.destinationWarehouseId}
+        setDestinationWarehouseId={movements.setDestinationWarehouseId}
+        product={movements.product}
+        setProduct={movements.setProduct}
+        supplierId={movements.supplierId}
+        setSupplierId={movements.setSupplierId}
+        quantity={movements.quantity}
+        setQuantity={movements.setQuantity}
+        notes={movements.notes}
+        setNotes={movements.setNotes}
+        loading={movements.loading}
+        saving={movements.saving}
+        onSubmit={movements.submit}
+      />
 
-          {operation === 'transfer' ? (
-            <>
-              <label className="form-control">
-                <span className="label-text mb-1 text-xs">Bodega de origen *</span>
-                <select className="select select-bordered select-sm" value={sourceWarehouseId} onChange={(event) => {
-                  const nextSource = event.target.value;
-                  setSourceWarehouseId(nextSource);
-                  if (nextSource === destinationWarehouseId) {
-                    setDestinationWarehouseId(activeWarehouses.find((warehouse) => warehouse.id !== nextSource)?.id || '');
-                  }
-                }} required>
-                  <option value="">Selecciona bodega</option>
-                  {activeWarehouses.map((warehouse) => <option key={warehouse.id} value={warehouse.id}>{warehouse.name}</option>)}
-                </select>
-              </label>
-              <label className="form-control">
-                <span className="label-text mb-1 text-xs">Bodega de destino *</span>
-                <select className="select select-bordered select-sm" value={destinationWarehouseId} onChange={(event) => setDestinationWarehouseId(event.target.value)} required>
-                  <option value="">Selecciona bodega</option>
-                  {activeWarehouses.filter((warehouse) => warehouse.id !== sourceWarehouseId).map((warehouse) => <option key={warehouse.id} value={warehouse.id}>{warehouse.name}</option>)}
-                </select>
-              </label>
-            </>
-          ) : (
-            <label className="form-control">
-              <span className="label-text mb-1 text-xs">Bodega *</span>
-              <select className="select select-bordered select-sm" value={warehouseId} onChange={(event) => setWarehouseId(event.target.value)} required>
-                <option value="">Selecciona bodega</option>
-                {activeWarehouses.map((warehouse) => <option key={warehouse.id} value={warehouse.id}>{warehouse.name}</option>)}
-              </select>
-            </label>
-          )}
-
-          <label className="form-control">
-            <span className="label-text mb-1 text-xs">Producto *</span>
-            <select className="select select-bordered select-sm" value={productId} onChange={(event) => setProductId(event.target.value)} required>
-              <option value="">Selecciona producto</option>
-              {products.map((product) => <option key={product.id} value={product.id}>{product.name}{product.sku ? ` · ${product.sku}` : ''}</option>)}
-            </select>
-          </label>
-          <label className="form-control">
-            <span className="label-text mb-1 text-xs">Cantidad *</span>
-            <input className="input input-bordered input-sm" type="number" min="0.000001" step="0.000001" value={quantity} onChange={(event) => setQuantity(event.target.value)} required />
-          </label>
-
-          {operation === 'entry' && (
-            <>
-              <label className="form-control">
-                <span className="label-text mb-1 text-xs">Origen del ingreso *</span>
-                <select className="select select-bordered select-sm" value={source} onChange={(event) => setSource(event.target.value as EntrySource)}>
-                  <option value="supplier">Ingreso de proveedor</option>
-                  <option value="return">Devolución</option>
-                </select>
-              </label>
-              {source === 'supplier' && (
-                <label className="form-control">
-                  <span className="label-text mb-1 text-xs">Proveedor *</span>
-                  <select className="select select-bordered select-sm" value={supplierId} onChange={(event) => setSupplierId(event.target.value)} required>
-                    <option value="">Selecciona proveedor</option>
-                    {activeSuppliers.map((supplier) => <option key={supplier.id} value={supplier.id}>{personNames.get(supplier.person_id) || supplier.supplier_code || 'Proveedor'}</option>)}
-                  </select>
-                </label>
-              )}
-            </>
-          )}
-
-          <label className="form-control sm:col-span-2 xl:col-span-3">
-            <span className="label-text mb-1 text-xs">Notas</span>
-            <textarea className="textarea textarea-bordered textarea-sm" value={notes} onChange={(event) => setNotes(event.target.value)} rows={2} maxLength={2000} />
-          </label>
-          <div className="flex items-center justify-between gap-3 sm:col-span-2 xl:col-span-3">
-            <p className="text-xs text-base-content/50">Los cambios de existencias y su historial se guardan juntos.</p>
-            <button className="btn btn-warning btn-sm" type="submit" disabled={saving || loading || activeWarehouses.length === 0 || products.length === 0 || (operation === 'transfer' && activeWarehouses.length < 2)}>
-              {saving && <span className="loading loading-spinner loading-xs" />}
-              Registrar movimiento
-            </button>
-          </div>
-        </form>
-        {activeWarehouses.length === 0 && <p className="mt-3 text-sm text-warning">Habilita al menos una bodega para registrar movimientos.</p>}
-        {operation === 'entry' && source === 'supplier' && activeSuppliers.length === 0 && <p className="mt-3 text-sm text-warning">Registra un proveedor en la sección Bodegas antes de continuar.</p>}
-      </section>
-
-      <section className="overflow-hidden rounded-lg border border-base-300 bg-base-100">
-        <div className="flex items-center justify-between border-b border-base-300 px-4 py-3">
-          <h2 className="font-semibold">Historial de movimientos</h2>
-          <span className="badge badge-ghost">{movements.length} registros recientes</span>
-        </div>
-        {loading ? (
-          <div className="flex min-h-40 items-center justify-center"><span className="loading loading-spinner loading-md text-warning" /></div>
-        ) : movements.length === 0 ? (
-          <p className="p-6 text-sm text-base-content/60">Aún no hay movimientos registrados.</p>
-        ) : (
-          <Table
-            data={movements}
-            columns={[
-              {
-                key: 'id',
-                label: '',
-                render: () => <></>
-              },
-              {
-                key: 'product_name',
-                label: 'Nombre',
-                className: 'font-normal'
-              },
-              {
-                key: 'quantity',
-                label: 'Cantidad',
-                className: 'font-normal'
-              },
-              {
-                key: 'movement_type',
-                className: 'font-normal',
-                label: 'Tipo de movimiento',
-                render: (_, row) => <span>{row.movement_type}</span>
-              },
-              {
-                className: 'font-normal',
-                key: 'supplier_name',
-                label: 'Proveedor',
-              },
-              {
-                className: 'font-normal',
-                key: 'warehouse_name',
-                label: 'Bodega',
-              }
-            ]}
-          />
-        )}
-      </section>
+      <MovementHistory movements={movements.movements} loading={movements.loading} />
     </div>
   );
 }

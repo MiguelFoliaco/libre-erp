@@ -1,4 +1,5 @@
 import type { AddressValues } from '@/config';
+import type { InventoryProductOption } from '@/lib/sdk';
 
 export interface WarehouseRecord {
   id: string;
@@ -23,11 +24,7 @@ export interface PersonOption {
   name: string;
 }
 
-export interface ProductOption {
-  id: string;
-  name: string;
-  sku: string | null;
-}
+export type ProductOption = InventoryProductOption;
 
 export function errorMessage(cause: unknown): string {
   return cause instanceof Error

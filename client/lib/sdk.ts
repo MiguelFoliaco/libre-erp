@@ -143,6 +143,12 @@ export interface InventoryStockRow {
   updated_at: string;
 }
 
+export interface InventoryProductOption {
+  id: string;
+  name: string;
+  sku: string | null;
+}
+
 export interface InventoryMovementRow {
   id: string;
   product_id: string;
@@ -506,9 +512,20 @@ export class ApiClient {
   }
 
   inventoryProducts(): Promise<
-    ListResult<{ id: string; name: string; sku: string | null }>
+    ListResult<InventoryProductOption>
   > {
     return this.request("api/inventory/products");
+  }
+
+  searchInventoryProducts(
+    query: string,
+    signal?: AbortSignal,
+  ): Promise<ListResult<InventoryProductOption>> {
+    const params = new URLSearchParams({ query });
+    return this.request(
+      `api/inventory/products/search?${params.toString()}`,
+      { signal },
+    );
   }
 
   inventoryMovements(): Promise<ListResult<InventoryMovementRow>> {

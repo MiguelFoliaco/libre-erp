@@ -194,6 +194,33 @@ export class InventoryOperationsService {
     return { items: result.rows, limit: result.rows.length, offset: 0 };
   }
 
+  async searchProducts(userId: string, query: unknown) {
+    if (
+      typeof query !== 'string' ||
+      query.trim().length < 2 ||
+      query.length > 100
+    ) {
+      throw new BadRequestException('El filtro de búsqueda no es válido');
+    }
+    const { context } = await this.authorizationService.authorize(
+      userId,
+      'inventory',
+      'READ',
+    );
+    const searchTerm = `%${query.trim()}%`;
+    const result = await this.pool.query(
+      `SELECT id, name, sku
+       FROM products
+       WHERE company_id = $1 AND environment_id = $2
+         AND is_active = TRUE
+         AND (name ILIKE $3 OR sku ILIKE $3 OR barcode ILIKE $3)
+       ORDER BY name
+       LIMIT 20`,
+      [context.companyId, context.environmentId, searchTerm],
+    );
+    return { items: result.rows, limit: result.rows.length, offset: 0 };
+  }
+
   async listPeople(userId: string) {
     const { context } = await this.authorizationService.authorize(
       userId,

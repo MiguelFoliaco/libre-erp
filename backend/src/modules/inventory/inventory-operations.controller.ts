@@ -39,6 +39,17 @@ export class InventoryOperationsController {
     return this.inventoryOperationsService.listProducts(request.userId);
   }
 
+  @Get('products/search')
+  searchProducts(
+    @Req() request: AuthenticatedRequest,
+    @Query('query') query: unknown,
+  ) {
+    return this.inventoryOperationsService.searchProducts(
+      request.userId,
+      query,
+    );
+  }
+
   @Get('people')
   people(@Req() request: AuthenticatedRequest) {
     return this.inventoryOperationsService.listPeople(request.userId);

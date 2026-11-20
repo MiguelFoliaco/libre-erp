@@ -83,6 +83,29 @@ describe('InventoryOperationsService', () => {
     expect(query).not.toHaveBeenCalled();
   });
 
+  it('searches active inventory products by name, SKU, or barcode', async () => {
+    query.mockResolvedValue({ rows: [], rowCount: 0 });
+
+    await service.searchProducts('user-id', '  tea  ');
+
+    expect(authorize).toHaveBeenCalledWith('user-id', 'inventory', 'READ');
+    expect(query).toHaveBeenCalledWith(
+      expect.stringContaining('name ILIKE $3 OR sku ILIKE $3 OR barcode ILIKE $3'),
+      [
+        '11111111-1111-4111-8111-111111111111',
+        '22222222-2222-4222-8222-222222222222',
+        '%tea%',
+      ],
+    );
+  });
+
+  it('rejects inventory product searches shorter than two characters', async () => {
+    await expect(service.searchProducts('user-id', ' a ')).rejects.toBeInstanceOf(
+      BadRequestException,
+    );
+    expect(query).not.toHaveBeenCalled();
+  });
+
   it('rolls back an exit when available stock is insufficient', async () => {
     query.mockImplementation(async (sql: string) => {
       if (sql === 'BEGIN' || sql === 'ROLLBACK') {

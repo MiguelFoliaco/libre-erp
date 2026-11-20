@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import { text } from '../language';
+import { clsx } from 'clsx';
 
 export type ToastKind = 'success' | 'error' | 'warning' | 'info';
 
@@ -16,6 +17,25 @@ interface ToastMessage {
   kind: ToastKind;
   message: string;
 }
+
+const classBgByKind: Record<ToastKind, { text: string; bg: string }> = {
+  success: {
+    bg: 'bg-linear-to-tr from-emerald-500 to-green-500',
+    text: 'text-white',
+  },
+  error: {
+    bg: 'bg-linear-to-tr from-red-500 to-rose-600',
+    text: 'text-white',
+  },
+  warning: {
+    bg: 'bg-linear-to-tr from-amber-400 to-orange-500',
+    text: 'text-white',
+  },
+  info: {
+    bg: 'bg-linear-to-tr from-blue-500 to-indigo-500',
+    text: 'text-white',
+  },
+};
 
 interface ToastContextValue {
   notify: (kind: ToastKind, message: string) => void;
@@ -55,13 +75,24 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         <div className="toast z-10000 toast-top toast-end ">
           <div
             key={toast.id}
-            className={`alert alert-${toast.kind} max-w-sm shadow-lg`}
+            className={
+              clsx(
+                `alert w-fit min-w-50 shadow-lg`,
+                classBgByKind[toast.kind].bg
+              )
+            }
             role={toast.kind === 'error' ? 'alert' : 'status'}
           >
-            <span>{toast.message}</span>
+            <span className={classBgByKind[toast.kind].text} >{toast.message}</span>
             <button
               type="button"
-              className="btn btn-ghost btn-xs"
+              className={
+                clsx(
+                  "btn btn-ghost btn-xs",
+                  classBgByKind[toast.kind].text
+
+                )
+              }
               aria-label={text('common.toast.closeNotification')}
               onClick={dismiss}
             >
