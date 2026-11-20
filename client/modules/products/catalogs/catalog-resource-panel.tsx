@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { Plus } from "lucide-react";
 import { clsx } from "clsx";
 import { apiClient } from "@/lib/sdk";
+import { Table } from "@/modules/common/table";
 import { useToast } from "@/modules/common/toast";
 import { text } from "@/modules/language";
 import { CatalogCsvImport } from "./catalog-csv-import";
@@ -115,27 +116,33 @@ function CatalogRecordList({
     return (
         <section className="rounded-sm border border-base-300 bg-base-100 shadow-sm">
             <h2 className="border-b border-base-300 p-4 text-sm font-semibold">{text("modules.products.catalogs.records", { resource: resourceLabel(resource).toLowerCase() })}</h2>
-            {loading ? (
-                <div className="flex min-h-24 items-center justify-center"><span className="loading loading-spinner loading-md text-primary" /></div>
-            ) : error && records.length === 0 ? (
-                <div className="flex items-center justify-between gap-3 p-4"><p role="alert" className="text-sm text-error">{error}</p><button className="btn btn-sm" type="button" onClick={onRetry}>{text("modules.products.catalogs.retry")}</button></div>
-            ) : records.length === 0 ? (
-                <p className="p-4 text-sm text-base-content/60">{text("modules.products.catalogs.empty", { resource: resourceLabel(resource).toLowerCase() })}</p>
-            ) : (
-                <ul className="divide-y divide-base-300">
-                    {records.map((record) => (
-                        <li key={record.id} className="flex items-center justify-between gap-3 p-4">
-                            <div className="min-w-0">
-                                <p className="font-medium">{record.name}</p>
-                                {record.description && <p className="truncate text-sm text-base-content/60">{record.description}</p>}
-                            </div>
-                            <span className={clsx("badge badge-sm", record.is_active ? "badge-success" : "badge-ghost")}>
-                                {record.is_active ? text("modules.products.status.active") : text("modules.products.status.inactive")}
-                            </span>
-                        </li>
-                    ))}
-                </ul>
+            {error && records.length === 0 && !loading && (
+                <div className="flex items-center justify-between gap-3 p-4">
+                    <p role="alert" className="text-sm text-error">{error}</p>
+                    <button className="btn btn-sm" type="button" onClick={onRetry}>{text("modules.products.catalogs.retry")}</button>
+                </div>
             )}
+            <div className="p-4">
+                <Table<CatalogRecord>
+                    data={records}
+                    loading={loading}
+                    emptyMessage={text("modules.products.catalogs.empty", { resource: resourceLabel(resource).toLowerCase() })}
+                    columns={[
+                        { key: "name", label: text("modules.products.fields.name"), className: "min-w-40 font-medium" },
+                        { key: "description", label: text("modules.products.fields.description"), className: "min-w-48 font-medium", render: (value) => value ? String(value) : "—" },
+                        {
+                            key: "is_active",
+                            label: text("modules.products.fields.status"),
+                            className: 'font-medium',
+                            render: (value) => (
+                                <span className={clsx("badge badge-xs", value ? "badge-success" : "badge-ghost")}>
+                                    {value ? text("modules.products.status.active") : text("modules.products.status.inactive")}
+                                </span>
+                            ),
+                        },
+                    ]}
+                />
+            </div>
         </section>
     );
 }

@@ -22,6 +22,20 @@
       "when": 1794588166460,
       "tag": "0002_classy_silver_centurion",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1795138809895,
+      "tag": "0003_cheerful_falcon",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1795139079647,
+      "tag": "0004_public_red_skull",
+      "breakpoints": true
     }
   ]
 }

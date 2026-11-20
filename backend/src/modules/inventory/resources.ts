@@ -1,6 +1,7 @@
 export const INVENTORY_RESOURCES = {
   branches: { table: 'branches', module: 'Inventory' },
   warehouses: { table: 'warehouses', module: 'Inventory' },
+  suppliers: { table: 'suppliers', module: 'Inventory' },
   inventory: { table: 'inventory', module: 'Inventory' },
   'inventory-movements': {
     table: 'inventory_movements',

@@ -10,6 +10,7 @@ export const API_RESOURCES = [
   "products",
   "branches",
   "warehouses",
+  "suppliers",
   "inventory",
   "inventory-movements",
   "transfers",
@@ -127,6 +128,78 @@ export interface ProductSearchResult {
   brand_name: string | null;
   category_name: string | null;
   department_name: string | null;
+}
+
+export interface InventoryStockRow {
+  id: string;
+  product_id: string;
+  product_name: string;
+  sku: string | null;
+  warehouse_id: string;
+  warehouse_name: string;
+  quantity: string;
+  reserved_quantity: string;
+  available_quantity: string;
+  updated_at: string;
+}
+
+export interface InventoryMovementRow {
+  id: string;
+  product_id: string;
+  product_name: string;
+  sku: string | null;
+  warehouse_id: string;
+  warehouse_name: string;
+  movement_type:
+    | "entry"
+    | "exit"
+    | "adjustment_in"
+    | "adjustment_out"
+    | "transfer_in"
+    | "transfer_out"
+    | "reversal";
+  quantity: string;
+  reference_type: string | null;
+  reference_id: string | null;
+  supplier_id: string | null;
+  supplier_name: string | null;
+  transfer_id: string | null;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface InventorySupplierRecord {
+  id: string;
+  person_id: string;
+  supplier_code: string | null;
+  is_active: boolean;
+  person_name: string;
+  first_name: string;
+  middle_name: string | null;
+  last_name: string | null;
+  second_last_name: string | null;
+  document_type_name: string | null;
+  document_number: string | null;
+  email: string | null;
+  phone: string | null;
+}
+
+export interface InventoryMovementInput {
+  movementType: "entry" | "exit" | "adjustment_in" | "adjustment_out";
+  warehouseId: string;
+  productId: string;
+  quantity: string;
+  source?: "supplier" | "return";
+  supplierId?: string;
+  referenceId?: string;
+  notes?: string;
+}
+
+export interface InventoryTransferInput {
+  sourceWarehouseId: string;
+  destinationWarehouseId: string;
+  items: { productId: string; quantity: string }[];
+  notes?: string;
 }
 
 export interface ProductImportRow {
@@ -398,6 +471,63 @@ export class ApiClient {
     return this.request("api/products/import", {
       method: "POST",
       body: { rows },
+    });
+  }
+
+  inventoryStock(
+    filters: { warehouseId?: string; query?: string } = {},
+  ): Promise<ListResult<InventoryStockRow>> {
+    const params = new URLSearchParams();
+    if (filters.warehouseId) params.set("warehouseId", filters.warehouseId);
+    if (filters.query) params.set("query", filters.query);
+    const suffix = params.size > 0 ? `?${params.toString()}` : "";
+    return this.request(`api/inventory/stock${suffix}`);
+  }
+
+  inventoryPeople(): Promise<ListResult<{ id: string; name: string }>> {
+    return this.request("api/inventory/people");
+  }
+
+  inventorySuppliers(
+    signal?: AbortSignal,
+  ): Promise<ListResult<InventorySupplierRecord>> {
+    return this.request("api/inventory/suppliers", { signal });
+  }
+
+  searchInventorySuppliers(
+    query: string,
+    signal?: AbortSignal,
+  ): Promise<ListResult<InventorySupplierRecord>> {
+    const params = new URLSearchParams({ query });
+    return this.request(
+      `api/inventory/suppliers/search?${params.toString()}`,
+      { signal },
+    );
+  }
+
+  inventoryProducts(): Promise<
+    ListResult<{ id: string; name: string; sku: string | null }>
+  > {
+    return this.request("api/inventory/products");
+  }
+
+  inventoryMovements(): Promise<ListResult<InventoryMovementRow>> {
+    return this.request("api/inventory/operations");
+  }
+
+  createInventoryMovement(
+    input: InventoryMovementInput,
+  ): Promise<InventoryMovementRow> {
+    return this.request("api/inventory/operations", {
+      method: "POST",
+      body: input,
+    });
+  }
+
+  createInventoryTransfer(input: InventoryTransferInput): Promise<unknown> {
+    return this.request("api/inventory/transfers", {
+      method: "POST",
+      body: input,
     });
   }
 

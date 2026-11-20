@@ -1,37 +1,29 @@
+import { ArrowLeftRight, Boxes, Home, Warehouse } from 'lucide-react';
 import { Outlet } from 'react-router';
-import { LeftPanel, type LeftNavigation } from '../common/left-panel'
-import { text } from './../language/index';
-import { CarFront, Coins, Home, Package, Store, UserGroup, Users, FileBadge } from 'lucide-react';
+import { LeftPanel, type LeftNavigation } from '../common/left-panel';
+import { text } from '../language';
 
-
-
-const primaryColor = 'bg-linear-to-tr from-yellow-500 to-120% to-orange-400'
+const primaryColor = 'bg-linear-to-tr from-yellow-500 to-120% to-orange-400';
 
 const navigation: LeftNavigation[] = [
-    { label: 'Bodegas', key: '', path: '/start/crm', icon: Store },
-    { label: 'Traslados', key: 'peoples', path: '/start/crm/peoples', icon: CarFront },
-    { label: 'Movimientos', key: 'clients', path: '/start/crm/clients', icon: Package },
-    { label: 'Reportes', key: 'clients', path: '/start/crm/clients', icon: FileBadge },
-    // { label: text('modules.crm.navigation.processes'), key: 'processes', path: '/start/crm/processes', icon: Workflow },
+    { label: 'Inicio', key: '', path: '/start/inventory', icon: Home },
+    { label: 'Bodegas', key: 'warehouses', path: '/start/inventory/warehouses', icon: Warehouse },
+    { label: 'Inventario', key: 'stock', path: '/start/inventory/stock', icon: Boxes },
+    { label: 'Movimientos', key: 'movements', path: '/start/inventory/movements', icon: ArrowLeftRight },
 ];
-
 
 export const InventoryPage = () => {
     return (
-        <div className="h-screen overflow-y-auto bg-base-200 text-base-content p-0 lg:flex">
-
-            {/* Sidebar */}
+        <div className="h-screen overflow-y-auto bg-base-100 p-0 text-base-content lg:flex">
             <LeftPanel
                 navigation={navigation}
                 primaryColor={primaryColor}
-                nameModule={text('modules.listAppliaction.crm')}
-                IconModule={UserGroup}
+                nameModule={text('modules.listAppliaction.inventory')}
+                IconModule={Boxes}
             />
-
-            {/* Main */}
-            <main className="min-w-0 w-full h-full " >
+            <main className="h-full min-w-0 w-full">
                 <Outlet />
-            </main >
-        </div >
-    )
-}
+            </main>
+        </div>
+    );
+};

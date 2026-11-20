@@ -615,10 +615,23 @@ export const modules = {
             treePreview: "Tree preview",
             orphanCategories: "Some categories have a parent that is not available in this workspace.",
             linkCategories: "Link categories",
+            parent: "Parent category",
             parentOf: "Parent category for {name}",
             noParent: "No parent category (root)",
             saveLink: "Save link",
             parentUpdated: "Category relationship updated."
+        }
+    },
+    inventory: {
+        title: "Inventory",
+        description: "Inventory management for your products.",
+        warehouses: {
+            title: "Warehouses",
+            description: "Manage your warehouses and their locations."
+        },
+        movimients: {
+            title: "Movements",
+            description: "Manage your inventory movements."
         }
     }
 }

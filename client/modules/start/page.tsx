@@ -42,7 +42,7 @@ const MODULES: {
             titleKeyPath: 'modules.listAppliaction.inventory',
             request: ['*', 'Inventory'],
             className: 'from-yellow-500 to-120% to-orange-400',
-            path: '/inventory'
+            path: 'inventory'
         },
         {
             icon: Summary,

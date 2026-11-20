@@ -3,7 +3,7 @@ import { Languages, Pencil, Plus, Store } from "lucide-react";
 import { ApiError, apiClient } from "@/lib/sdk";
 import { useToast } from "@/modules/common/toast";
 import { text } from "@/modules/language";
-import { AddressFields, emptyAddressValues, parseAddressValues } from "../components/address-fields";
+import { AddressFields, emptyAddressValues, parseAddressValues } from "@/modules/common/address-fields";
 import { clsx } from "clsx";
 import { useLanguage } from '@/modules/language/hook';
 import { type AddressValues } from '@/config'

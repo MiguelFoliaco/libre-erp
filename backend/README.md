@@ -107,11 +107,34 @@ Las rutas CRUD siguen `GET /api/:resource`, `GET /api/:resource/:id`,
 `accounts`, `fiscal-periods`, `journal-entries`, `journal-entry-lines`,
 `document-taxes`, `cash-registers`, `cash-sessions`, `payment-methods`, `sales`,
 `sale-items`, `sale-item-taxes`, `sale-payments`, `cash-movements`,
-`sale-returns` y `sale-return-items`.
+`sale-returns`, `sale-return-items` y `suppliers`. Cada proveedor se vincula
+con una persona del mismo ámbito de compañía y environment.
 
 `/api/sellers` usa la tabla `users` y requiere permisos del módulo `Seller`;
-`/api/users` usa la misma tabla con permisos del módulo `User`. No existe una
-tabla de proveedores en el esquema actual.
+`/api/users` usa la misma tabla con permisos del módulo `User`.
+
+### Operaciones de inventario
+
+Además del CRUD de bodegas, existencias, proveedores y movimientos, la API
+ofrece operaciones que mantienen el stock y el historial en una misma
+transacción:
+
+- `GET /api/inventory/stock?warehouseId=...&query=...`: consulta cantidades
+  totales, reservadas y disponibles por producto y bodega.
+- `GET /api/inventory/operations`: historial reciente de movimientos.
+- `POST /api/inventory/operations`: registra una entrada (`movementType:
+  "entry"` con origen `supplier` o `return`), salida (`exit`) o ajuste
+  (`adjustment_in` / `adjustment_out`). Las entradas de proveedor requieren
+  `supplierId`.
+- `POST /api/inventory/transfers`: traslada uno o más productos entre bodegas
+  habilitadas; actualiza las dos existencias y registra ambos movimientos.
+- `GET /api/inventory/products` y `GET /api/inventory/people`: listas limitadas
+  al workspace actual para seleccionar productos y asociar proveedores.
+
+Las operaciones requieren permisos del módulo `Inventory`. Las bodegas
+bloqueadas conservan el stock y el historial, pero no pueden recibir nuevos
+movimientos. Las salidas y ajustes de salida no pueden reducir el stock por
+debajo de las unidades reservadas.
 
 El autocomplete de personas puede buscar por nombre o número de documento con
 `GET /api/people/search?query=...`. Requiere `Client[READ]`, mínimo dos

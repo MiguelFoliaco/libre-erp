@@ -615,10 +615,21 @@ export const modules = {
             treePreview: "Vista previa del árbol",
             orphanCategories: "Hay categorías con un padre que no está disponible en este ambiente.",
             linkCategories: "Enlazar categorías",
+            parent: "Categoría padre",
             parentOf: "Categoría padre de {name}",
             noParent: "Sin categoría padre (raíz)",
             saveLink: "Guardar enlace",
             parentUpdated: "Se actualizó la relación de categoría."
+        }
+    },
+    inventory: {
+        title: "Inventario",
+        description: "Gestionar el inventario de tus productos.",
+        warehouses: {
+            title: "Bodegas",
+        },
+        movimients: {
+            title: "Movimientos"
         }
     }
 }

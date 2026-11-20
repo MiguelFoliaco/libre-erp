@@ -1,5 +1,6 @@
 import { config, type AddressField, type AddressValues, addressFieldLabels } from "@/config";
 import { text, } from "@/modules/language";
+import { clsx } from "clsx";
 
 
 
@@ -34,16 +35,23 @@ export function AddressFields({
     values,
     onChange,
     className = "grid gap-4 sm:grid-cols-2",
+    labelClassName
 }: {
     values: AddressValues;
     onChange: (field: AddressField, value: string) => void;
     className?: string;
+    labelClassName?: string;
 }) {
     return (
         <div className={className}>
             {config.addressConfig.order.map((field) => (
                 <label className="flex flex-col gap-1" key={field}>
-                    <span className="label-text text-sm mb-1">{text(addressFieldLabels[field])}</span>
+                    <span className={
+                        clsx(
+                            "label-text text-sm mb-1 ",
+                            labelClassName
+                        )
+                    }>{text(addressFieldLabels[field])}</span>
                     <input
                         className="input input-sm"
                         maxLength={255}

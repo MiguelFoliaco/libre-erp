@@ -5,7 +5,7 @@ import { useToast } from "@/modules/common/toast";
 import { text } from "@/modules/language";
 import { useSession } from "@/modules/auth/hook/store";
 import { config } from "@/config";
-import { AddressFields, emptyAddressValues, parseAddressValues, } from "../components/address-fields";
+import { AddressFields, emptyAddressValues, parseAddressValues, } from "@/modules/common/address-fields";
 import { type AddressValues } from '@/config'
 import { clsx } from "clsx";
 

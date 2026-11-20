@@ -1,4 +1,4 @@
-import { pgTable, index, foreignKey, unique, uuid, text, timestamp, boolean, bigint, varchar, check, char, jsonb, uniqueIndex, numeric, date, integer, inet, pgEnum } from "drizzle-orm/pg-core"
+import { pgTable, index, foreignKey, unique, uuid, text, timestamp, boolean, bigint, varchar, check, jsonb, char, uniqueIndex, numeric, date, integer, inet, pgEnum } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 export const environmentType = pgEnum("environment_type", ['development', 'production', 'test'])
@@ -34,6 +34,34 @@ export const schemaMigrations = pgTable("schema_migrations", {
 	executedAt: timestamp("executed_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
 	unique("schema_migrations_filename_key").on(table.filename),
+]);
+
+export const suppliers = pgTable("suppliers", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	companyId: uuid("company_id").notNull(),
+	environmentId: uuid("environment_id").notNull(),
+	personId: uuid("person_id").notNull(),
+	supplierCode: varchar("supplier_code", { length: 100 }),
+	metadata: jsonb().default({}).notNull(),
+	isActive: boolean("is_active").default(true).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	index("idx_suppliers_person").using("btree", table.companyId.asc().nullsLast().op("uuid_ops"), table.environmentId.asc().nullsLast().op("uuid_ops"), table.personId.asc().nullsLast().op("uuid_ops")),
+	foreignKey({
+			columns: [table.companyId, table.environmentId],
+			foreignColumns: [environments.id, environments.companyId],
+			name: "suppliers_company_id_environment_id_fkey"
+		}),
+	foreignKey({
+			columns: [table.companyId, table.environmentId, table.personId],
+			foreignColumns: [people.id, people.companyId, people.environmentId],
+			name: "suppliers_company_id_environment_id_person_id_fkey"
+		}),
+	unique("suppliers_company_id_environment_id_id_key").on(table.companyId, table.environmentId, table.id),
+	unique("suppliers_company_id_environment_id_person_id_key").on(table.companyId, table.environmentId, table.personId),
+	unique("suppliers_company_id_environment_id_supplier_code_key").on(table.companyId, table.environmentId, table.supplierCode),
+	check("suppliers_metadata_check", sql`jsonb_typeof(metadata) = 'object'::text`),
 ]);
 
 export const companies = pgTable("companies", {
@@ -140,27 +168,6 @@ export const categories = pgTable("categories", {
 	check("categories_metadata_check", sql`jsonb_typeof(metadata) = 'object'::text`),
 ]);
 
-export const departments = pgTable("departments", {
-	id: uuid().defaultRandom().primaryKey().notNull(),
-	companyId: uuid("company_id").notNull(),
-	environmentId: uuid("environment_id").notNull(),
-	name: varchar({ length: 150 }).notNull(),
-	description: text(),
-	metadata: jsonb().default({}).notNull(),
-	isActive: boolean("is_active").default(true).notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-}, (table) => [
-	foreignKey({
-			columns: [table.companyId, table.environmentId],
-			foreignColumns: [environments.id, environments.companyId],
-			name: "departments_company_id_environment_id_fkey"
-		}),
-	unique("departments_company_id_environment_id_id_key").on(table.companyId, table.environmentId, table.id),
-	unique("departments_company_id_environment_id_name_key").on(table.companyId, table.environmentId, table.name),
-	check("departments_metadata_check", sql`jsonb_typeof(metadata) = 'object'::text`),
-]);
-
 export const products = pgTable("products", {
 	id: uuid().defaultRandom().primaryKey().notNull(),
 	companyId: uuid("company_id").notNull(),
@@ -214,6 +221,60 @@ export const products = pgTable("products", {
 	check("products_sale_price_check", sql`sale_price >= (0)::numeric`),
 ]);
 
+export const warehouses = pgTable("warehouses", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	companyId: uuid("company_id").notNull(),
+	environmentId: uuid("environment_id").notNull(),
+	branchId: uuid("branch_id"),
+	name: varchar({ length: 150 }).notNull(),
+	code: varchar({ length: 50 }),
+	warehouseType: varchar("warehouse_type", { length: 30 }).default('standard').notNull(),
+	isActive: boolean("is_active").default(true).notNull(),
+	metadata: jsonb().default({}).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	addressStr: varchar("address_str", { length: 255 }),
+	address: jsonb().default({}).notNull(),
+	addressFields: text("address_fields").array().default([""]).notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.companyId, table.environmentId, table.branchId],
+			foreignColumns: [branches.id, branches.companyId, branches.environmentId],
+			name: "warehouses_company_id_environment_id_branch_id_fkey"
+		}),
+	foreignKey({
+			columns: [table.companyId, table.environmentId],
+			foreignColumns: [environments.id, environments.companyId],
+			name: "warehouses_company_id_environment_id_fkey"
+		}),
+	unique("warehouses_company_id_environment_id_id_key").on(table.companyId, table.environmentId, table.id),
+	unique("warehouses_company_id_environment_id_code_key").on(table.code, table.companyId, table.environmentId),
+	check("warehouses_metadata_check", sql`jsonb_typeof(metadata) = 'object'::text`),
+	check("warehouses_warehouse_type_check", sql`(warehouse_type)::text = ANY ((ARRAY['standard'::character varying, 'returns'::character varying, 'damaged'::character varying, 'transit'::character varying])::text[])`),
+]);
+
+export const departments = pgTable("departments", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	companyId: uuid("company_id").notNull(),
+	environmentId: uuid("environment_id").notNull(),
+	name: varchar({ length: 150 }).notNull(),
+	description: text(),
+	metadata: jsonb().default({}).notNull(),
+	isActive: boolean("is_active").default(true).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	logoUrl: text("logo_url"),
+}, (table) => [
+	foreignKey({
+			columns: [table.companyId, table.environmentId],
+			foreignColumns: [environments.id, environments.companyId],
+			name: "departments_company_id_environment_id_fkey"
+		}),
+	unique("departments_company_id_environment_id_id_key").on(table.companyId, table.environmentId, table.id),
+	unique("departments_company_id_environment_id_name_key").on(table.companyId, table.environmentId, table.name),
+	check("departments_metadata_check", sql`jsonb_typeof(metadata) = 'object'::text`),
+]);
+
 export const branches = pgTable("branches", {
 	id: uuid().defaultRandom().primaryKey().notNull(),
 	companyId: uuid("company_id").notNull(),
@@ -235,35 +296,6 @@ export const branches = pgTable("branches", {
 	unique("branches_company_id_environment_id_name_key").on(table.companyId, table.environmentId, table.name),
 	check("branches_address_check", sql`jsonb_typeof(address) = 'object'::text`),
 	check("branches_metadata_check", sql`jsonb_typeof(metadata) = 'object'::text`),
-]);
-
-export const warehouses = pgTable("warehouses", {
-	id: uuid().defaultRandom().primaryKey().notNull(),
-	companyId: uuid("company_id").notNull(),
-	environmentId: uuid("environment_id").notNull(),
-	branchId: uuid("branch_id"),
-	name: varchar({ length: 150 }).notNull(),
-	code: varchar({ length: 50 }),
-	warehouseType: varchar("warehouse_type", { length: 30 }).default('standard').notNull(),
-	isActive: boolean("is_active").default(true).notNull(),
-	metadata: jsonb().default({}).notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-}, (table) => [
-	foreignKey({
-			columns: [table.companyId, table.environmentId, table.branchId],
-			foreignColumns: [branches.id, branches.companyId, branches.environmentId],
-			name: "warehouses_company_id_environment_id_branch_id_fkey"
-		}),
-	foreignKey({
-			columns: [table.companyId, table.environmentId],
-			foreignColumns: [environments.id, environments.companyId],
-			name: "warehouses_company_id_environment_id_fkey"
-		}),
-	unique("warehouses_company_id_environment_id_id_key").on(table.companyId, table.environmentId, table.id),
-	unique("warehouses_company_id_environment_id_code_key").on(table.code, table.companyId, table.environmentId),
-	check("warehouses_metadata_check", sql`jsonb_typeof(metadata) = 'object'::text`),
-	check("warehouses_warehouse_type_check", sql`(warehouse_type)::text = ANY ((ARRAY['standard'::character varying, 'returns'::character varying, 'damaged'::character varying, 'transit'::character varying])::text[])`),
 ]);
 
 export const inventory = pgTable("inventory", {
@@ -312,6 +344,7 @@ export const inventoryMovements = pgTable("inventory_movements", {
 	metadata: jsonb().default({}).notNull(),
 	createdBy: uuid("created_by"),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	supplierId: uuid("supplier_id"),
 }, (table) => [
 	index("idx_inventory_movements_created_at").using("btree", table.companyId.asc().nullsLast().op("timestamptz_ops"), table.environmentId.asc().nullsLast().op("uuid_ops"), table.createdAt.asc().nullsLast().op("timestamptz_ops")),
 	index("idx_inventory_movements_product").using("btree", table.companyId.asc().nullsLast().op("uuid_ops"), table.environmentId.asc().nullsLast().op("uuid_ops"), table.productId.asc().nullsLast().op("uuid_ops")),
@@ -332,6 +365,11 @@ export const inventoryMovements = pgTable("inventory_movements", {
 			name: "inventory_movements_company_id_environment_id_warehouse_id_fkey"
 		}),
 	foreignKey({
+			columns: [table.companyId, table.environmentId, table.supplierId],
+			foreignColumns: [suppliers.id, suppliers.companyId, suppliers.environmentId],
+			name: "inventory_movements_supplier_fk"
+		}),
+	foreignKey({
 			columns: [table.companyId, table.environmentId, table.transferId],
 			foreignColumns: [transfers.id, transfers.companyId, transfers.environmentId],
 			name: "inventory_movements_transfer_fk"
@@ -339,6 +377,7 @@ export const inventoryMovements = pgTable("inventory_movements", {
 	check("inventory_movements_metadata_check", sql`jsonb_typeof(metadata) = 'object'::text`),
 	check("inventory_movements_movement_type_check", sql`movement_type = ANY (ARRAY['entry'::movement_type, 'exit'::movement_type, 'adjustment_in'::movement_type, 'adjustment_out'::movement_type, 'transfer_in'::movement_type, 'transfer_out'::movement_type, 'reversal'::movement_type])`),
 	check("inventory_movements_quantity_check", sql`quantity > (0)::numeric`),
+	check("inventory_movements_supplier_source_check", sql`(supplier_id IS NULL) OR ((movement_type = 'entry'::movement_type) AND ((reference_type)::text = 'supplier'::text))`),
 ]);
 
 export const transfers = pgTable("transfers", {

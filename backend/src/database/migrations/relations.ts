@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { users, session, companies, environments, brands, categories, departments, products, branches, warehouses, inventory, inventoryMovements, transfers, transferItems, people, documentTypesPeople, customers, customerTypes, roles, userRoles, documentTypes, documentTypeFields, documentTypeHeaders, documentTypeFooters, documents, documentItems, taxes, productTaxes, auditLogs, accounts, fiscalPeriods, journalEntries, journalEntryLines, documentTaxes, cashRegisters, cashSessions, paymentMethods, sales, saleItems, saleItemTaxes, salePayments, cashMovements, saleReturns, saleReturnItems } from "./schema";
+import { users, session, environments, suppliers, people, companies, brands, categories, products, departments, branches, warehouses, inventory, inventoryMovements, transfers, transferItems, documentTypesPeople, customers, customerTypes, roles, userRoles, documentTypes, documentTypeFields, documentTypeHeaders, documentTypeFooters, documents, documentItems, taxes, productTaxes, auditLogs, accounts, fiscalPeriods, journalEntries, journalEntryLines, documentTaxes, cashRegisters, cashSessions, paymentMethods, sales, saleItems, saleItemTaxes, salePayments, cashMovements, saleReturns, saleReturnItems } from "./schema";
 
 export const sessionRelations = relations(session, ({one}) => ({
 	user: one(users, {
@@ -27,17 +27,30 @@ export const usersRelations = relations(users, ({one, many}) => ({
 	}),
 }));
 
+export const suppliersRelations = relations(suppliers, ({one, many}) => ({
+	environment: one(environments, {
+		fields: [suppliers.companyId],
+		references: [environments.id]
+	}),
+	person: one(people, {
+		fields: [suppliers.companyId],
+		references: [people.id]
+	}),
+	inventoryMovements: many(inventoryMovements),
+}));
+
 export const environmentsRelations = relations(environments, ({one, many}) => ({
+	suppliers: many(suppliers),
 	company: one(companies, {
 		fields: [environments.companyId],
 		references: [companies.id]
 	}),
 	brands: many(brands),
 	categories: many(categories),
-	departments: many(departments),
 	products: many(products),
-	branches: many(branches),
 	warehouses: many(warehouses),
+	departments: many(departments),
+	branches: many(branches),
 	inventories: many(inventory),
 	inventoryMovements: many(inventoryMovements),
 	transfers: many(transfers),
@@ -52,6 +65,22 @@ export const environmentsRelations = relations(environments, ({one, many}) => ({
 	cashRegisters: many(cashRegisters),
 	paymentMethods: many(paymentMethods),
 	sales: many(sales),
+}));
+
+export const peopleRelations = relations(people, ({one, many}) => ({
+	suppliers: many(suppliers),
+	environment: one(environments, {
+		fields: [people.companyId],
+		references: [environments.id]
+	}),
+	documentTypesPerson: one(documentTypesPeople, {
+		fields: [people.documentTypesPeopleId],
+		references: [documentTypesPeople.id]
+	}),
+	customers: many(customers),
+	users: many(users),
+	documents: many(documents),
+	journalEntryLines: many(journalEntryLines),
 }));
 
 export const companiesRelations = relations(companies, ({many}) => ({
@@ -82,14 +111,6 @@ export const categoriesRelations = relations(categories, ({one, many}) => ({
 	products: many(products),
 }));
 
-export const departmentsRelations = relations(departments, ({one, many}) => ({
-	environment: one(environments, {
-		fields: [departments.companyId],
-		references: [environments.id]
-	}),
-	products: many(products),
-}));
-
 export const productsRelations = relations(products, ({one, many}) => ({
 	brand: one(brands, {
 		fields: [products.companyId],
@@ -115,13 +136,12 @@ export const productsRelations = relations(products, ({one, many}) => ({
 	saleItems: many(saleItems),
 }));
 
-export const branchesRelations = relations(branches, ({one, many}) => ({
+export const departmentsRelations = relations(departments, ({one, many}) => ({
+	products: many(products),
 	environment: one(environments, {
-		fields: [branches.companyId],
+		fields: [departments.companyId],
 		references: [environments.id]
 	}),
-	warehouses: many(warehouses),
-	cashRegisters: many(cashRegisters),
 }));
 
 export const warehousesRelations = relations(warehouses, ({one, many}) => ({
@@ -140,6 +160,15 @@ export const warehousesRelations = relations(warehouses, ({one, many}) => ({
 	}),
 	cashRegisters: many(cashRegisters),
 	sales: many(sales),
+}));
+
+export const branchesRelations = relations(branches, ({one, many}) => ({
+	warehouses: many(warehouses),
+	environment: one(environments, {
+		fields: [branches.companyId],
+		references: [environments.id]
+	}),
+	cashRegisters: many(cashRegisters),
 }));
 
 export const inventoryRelations = relations(inventory, ({one}) => ({
@@ -170,6 +199,10 @@ export const inventoryMovementsRelations = relations(inventoryMovements, ({one})
 		fields: [inventoryMovements.companyId],
 		references: [warehouses.id]
 	}),
+	supplier: one(suppliers, {
+		fields: [inventoryMovements.companyId],
+		references: [suppliers.id]
+	}),
 	transfer: one(transfers, {
 		fields: [inventoryMovements.companyId],
 		references: [transfers.id]
@@ -199,21 +232,6 @@ export const transferItemsRelations = relations(transferItems, ({one}) => ({
 		fields: [transferItems.companyId],
 		references: [transfers.id]
 	}),
-}));
-
-export const peopleRelations = relations(people, ({one, many}) => ({
-	environment: one(environments, {
-		fields: [people.companyId],
-		references: [environments.id]
-	}),
-	documentTypesPerson: one(documentTypesPeople, {
-		fields: [people.documentTypesPeopleId],
-		references: [documentTypesPeople.id]
-	}),
-	customers: many(customers),
-	users: many(users),
-	documents: many(documents),
-	journalEntryLines: many(journalEntryLines),
 }));
 
 export const documentTypesPeopleRelations = relations(documentTypesPeople, ({many}) => ({
