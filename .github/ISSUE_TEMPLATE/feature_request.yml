@@ -1,0 +1,77 @@
+
+name: ✨ Feature request
+description: Suggest a new feature or improvement for LibreERP.
+title: "[FEATURE] "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an improvement to LibreERP!
+
+        Describe your idea clearly so we can understand the problem and evaluate the proposal.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or motivation
+      description: Is your feature request related to a problem? Explain the situation.
+      placeholder: I often find it difficult to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe the feature or improvement you would like to see.
+      placeholder: I would like LibreERP to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe any alternative solutions you have considered.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: Related module
+      description: Which part of LibreERP would this feature affect?
+      options:
+        - Authentication
+        - Company management
+        - Users and permissions
+        - Products
+        - Inventory
+        - Warehouses
+        - Point of Sale (POS)
+        - Reports
+        - Desktop application
+        - Marketplace / Extensions
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Add screenshots, mockups, examples or other relevant information.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues for similar feature requests.
+          required: true
+        - label: This feature would provide value to other LibreERP users.
+          required: false

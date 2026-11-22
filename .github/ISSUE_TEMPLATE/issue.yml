@@ -1,0 +1,127 @@
+
+name: 🐛 Bug report
+description: Report a bug or unexpected behavior in LibreERP.
+title: "[BUG] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping improve LibreERP!
+
+        Before submitting, please check whether this issue has already been reported.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug description
+      description: Describe the problem clearly and concisely.
+      placeholder: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Provide the steps required to reproduce this issue.
+      placeholder: |
+        1. Open...
+        2. Navigate to...
+        3. Click on...
+        4. Observe the error.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or recordings
+      description: Add screenshots or recordings if they help explain the issue.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      description: Where did you encounter this issue?
+      options:
+        - Windows
+        - Linux
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: os_version
+    attributes:
+      label: Operating system version
+      placeholder: e.g. Windows 11, Ubuntu 24.04
+    validations:
+      required: true
+
+  - type: input
+    id: libreerp_version
+    attributes:
+      label: LibreERP version
+      placeholder: e.g. 0.1.0 or development
+    validations:
+      required: true
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: Affected module
+      description: Which part of LibreERP is affected?
+      options:
+        - Authentication
+        - Company management
+        - Users and permissions
+        - Products
+        - Inventory
+        - Warehouses
+        - Point of Sale (POS)
+        - Reports
+        - Desktop application
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or error messages
+      description: Include relevant console output, stack traces or error messages.
+      render: text
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues and this bug has not been reported.
+          required: true
+        - label: I am using the latest available version or development build.
+          required: false
+        - label: I have provided enough information to reproduce the issue.
+          required: true
