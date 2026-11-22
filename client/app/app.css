@@ -6,12 +6,12 @@
   default: false;
   prefersdark: false;
   color-scheme: "light";
-  --color-base-100: oklch(100% 0 0);
-  --color-base-200: oklch(97% 0 0);
-  --color-base-300: oklch(94% 0 0);
-  --color-base-content: #1F2937;
-  --color-primary: #00CA80;
-  --color-primary-content: oklch(100% 0 0);
+  --color-base-100: #ffffff;
+  --color-base-200: #f5f7f6;
+  --color-base-300: #e7ece9;
+  --color-base-content: #172b25;
+  --color-primary: #087f5b;
+  --color-primary-content: #ffffff;
   --color-secondary: oklch(21.455% 0.001 17.278);
   --color-secondary-content: oklch(100% 0 0);
   --color-accent: oklch(26.861% 0 0);
@@ -26,9 +26,9 @@
   --color-warning-content: oklch(17.674% 0.027 79.94);
   --color-error: #ff3e3e;
   --color-error-content: #FFF;
-  --radius-selector: 2rem;
-  --radius-field: 0.25rem;
-  --radius-box: 0.5rem;
+  --radius-selector: 0.75rem;
+  --radius-field: 0.625rem;
+  --radius-box: 0.875rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
@@ -76,16 +76,16 @@
 
 @theme static {
   /* Primary */
-  --color-primary-50: #E6FFF5;
-  --color-primary-100: #C0FBE3;
-  --color-primary-200: #8EF5CC;
-  --color-primary-300: #55EAB0;
-  --color-primary-400: #24D996;
-  --color-primary-500: #00CA80;
-  --color-primary-600: #00A968;
-  --color-primary-700: #008653;
-  --color-primary-800: #006641;
-  --color-primary-900: #00452D;
+  --color-primary-50: #e7f5ef;
+  --color-primary-100: #c5e8d8;
+  --color-primary-200: #98d6bb;
+  --color-primary-300: #65bd98;
+  --color-primary-400: #349b74;
+  --color-primary-500: #087f5b;
+  --color-primary-600: #07694d;
+  --color-primary-700: #07543f;
+  --color-primary-800: #064434;
+  --color-primary-900: #043629;
 
   /* Secondary */
   --color-secondary-50: #F5F5F5;
@@ -103,12 +103,26 @@
 
 
 body {
+  min-width: 320px;
   font-family: 'Work Sans Variable', sans-serif;
   font-weight: 400;
   font-style: normal;
-
+  background: #f5f7f6;
+  color: #172b25;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
-input, textarea, select {
-  outline: none !important;
+button, a, input, textarea, select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid #087f5b;
+  outline-offset: 3px;
+}
+
+::selection {
+  color: #ffffff;
+  background: #087f5b;
 }

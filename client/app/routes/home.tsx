@@ -114,11 +114,13 @@ export default function Home() {
   }, [user])
 
   return (
-    <main className="min-h-screen bg-base-200 flex items-center justify-center p-3 sm:p-4">
-      <div className="card lg:card-side bg-base-100 shadow-2xl w-full max-w-5xl max-h-[calc(100dvh-2rem)] overflow-y-auto lg:overflow-hidden">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-base-200 p-4 sm:p-8">
+      <div className="pointer-events-none absolute -left-40 -top-48 size-[28rem] rounded-full bg-primary/5 blur-3xl" aria-hidden="true" />
+      <div className="pointer-events-none absolute -bottom-56 -right-40 size-[32rem] rounded-full bg-primary/5 blur-3xl" aria-hidden="true" />
+      <div className="card relative w-full max-w-5xl overflow-hidden rounded-3xl border border-base-300/80 bg-base-100 shadow-xl shadow-base-content/5 lg:card-side lg:max-h-[calc(100dvh-4rem)]">
 
         {/* Authentication panel */}
-        <section className="card-body w-full lg:w-1/2 p-6 sm:p-8 lg:p-9 flex flex-col">
+        <section className="card-body flex w-full flex-col p-7 sm:p-10 lg:w-1/2 lg:p-12">
 
           <div className="mb-5">
             <img
@@ -206,7 +208,7 @@ export default function Home() {
 
                 <div>
 
-                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+                  <h1 className="text-3xl font-semibold tracking-tight text-base-content sm:text-4xl">
                     {text('firstScreen.title')}
                   </h1>
 
@@ -215,14 +217,14 @@ export default function Home() {
                   </p>
                 </div>
 
-                <form onSubmit={handleLogin} className="space-y-3">
+                <form onSubmit={handleLogin} className="space-y-4">
 
                   <fieldset className="fieldset py-0">
                     <legend className="fieldset-legend text-xs">
                       {text('login.username')}
                     </legend>
 
-                    <label className="input input-bordered input-sm w-full flex items-center gap-2">
+                    <label className="input input-bordered h-12 w-full items-center gap-3 rounded-xl border-base-300 bg-base-100 px-3 focus-within:border-primary">
                       <UserRound size={16} className="text-base-content/40" />
 
                       <input
@@ -242,7 +244,7 @@ export default function Home() {
                       {text('login.password')}
                     </legend>
 
-                    <label className="input input-bordered input-sm w-full flex items-center gap-2">
+                    <label className="input input-bordered h-12 w-full items-center gap-3 rounded-xl border-base-300 bg-base-100 px-3 focus-within:border-primary">
                       <KeyRound size={16} className="text-base-content/40" />
 
                       <input
@@ -328,7 +330,7 @@ export default function Home() {
                   )}
 
                   <button
-                    className="btn btn-primary btn-sm w-full"
+                    className="btn btn-primary h-12 w-full rounded-xl text-sm font-semibold shadow-sm shadow-primary/20"
                     type="submit"
                     disabled={isSubmitting}
                   >

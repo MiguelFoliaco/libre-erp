@@ -100,67 +100,65 @@ export const StartPage = () => {
 
 
     return (
-        <main className="pt-4">
+        <main className="min-h-screen bg-base-200">
             <HeaderStart />
-            <div className='ml-20 mt-10 flex gap-2 items-center' >
-                <p className=' font-semibold' >Suite operativa</p>
-                <LayoutGrid className='animate-pulse hover:animate-none' size={20} />
-            </div>
-
-
-            <div className="px-20 grid grid-cols-7 gap-10 mt-10">
-                {
-                    MODULES.map(e => (
-                        <Link
-                            to={'/start/' + e.path}
-                            viewTransition
-                            onClick={(event) => {
-                                if (!ihaveAccess(e.request)) {
-                                    alert('No tienes permiso para acceder a este modulo')
-                                    event.preventDefault()
-                                    return
-                                };
-                            }} role="button" key={e.titleKeyPath} className={
-                                clsx(
-
-                                    " hover:scale-95 transition-all cursor-pointer active:scale-98 select-none w-40 bg-base-100 flex flex-col items-center py-5 justify-between h-45 shadow-md rounded-sm",
-                                    ihaveAccess(e.request) ? '' : 'opacity-40 pointer-events-none'
-                                )
-                            }>
-                            <div className={
-                                clsx(
-                                    "w-20 h-20 bg-linear-to-br flex items-center justify-center rounded-lg",
-                                    e.className
-                                )
-                            }>
-                                <e.icon className='text-white' size={50} />
-                            </div>
-                            <p className="font-semibold mt-4">{text(e.titleKeyPath)}</p>
-
-                            <p className="text-xs opacity-70 w-full flex items-center justify-center">Go to <ArrowRight size={15} /></p>
-                        </Link>
-                    ))
-                }
-
-                <div role="button" className={
-                    clsx(
-                        " hover:scale-95 transition-all cursor-pointer active:scale-98 select-none w-40 bg-base-100 flex flex-col items-center py-5 justify-between h-45 shadow-md rounded-sm",
-                        MODULES.length / 7 == 0 ? '' : 'col-start-7 col-end-8'
-                    )
-                }>
-                    <div className={
-                        clsx(
-                            "w-20 h-20 bg-linear-to-br flex items-center justify-center rounded-lg from-blue-600 to-purple-500",
-                        )
-                    }>
-                        <User2 className='text-white' size={50} />
+            <section className="mx-auto max-w-[1440px] px-5 pb-12 pt-10 sm:px-8 lg:px-12 lg:pt-14">
+                <div className="mb-8 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <p className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                            <span className="size-1.5 rounded-full bg-primary" /> LibreERP · Workspace
+                        </p>
+                        <h1 className="text-3xl font-semibold tracking-tight text-base-content sm:text-4xl">Suite operativa</h1>
+                        <p className="mt-2 max-w-xl text-sm leading-6 text-base-content/60">
+                            Accede a tus herramientas de gestión y mantén cada área de tu negocio conectada.
+                        </p>
                     </div>
-                    <p className="font-semibold mt-4">{text('modules.listAppliaction.i')}</p>
-
-                    <p className="text-xs opacity-70 w-full flex items-center justify-center">Go to <ArrowRight size={15} /></p>
+                    <div className="inline-flex w-fit items-center gap-2 rounded-lg border border-base-300/80 bg-base-100 px-3 py-2 text-xs font-medium text-base-content/60 shadow-sm">
+                        <LayoutGrid size={15} className="text-primary" aria-hidden="true" />
+                        {MODULES.filter((module) => ihaveAccess(module.request)).length} módulos disponibles
+                    </div>
                 </div>
 
-            </div>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                    {MODULES.map((module) => {
+                        const hasAccess = ihaveAccess(module.request);
+                        const Icon = module.icon;
+                        return (
+                            <Link
+                                to={'/start/' + module.path}
+                                viewTransition
+                                key={module.titleKeyPath}
+                                aria-disabled={!hasAccess}
+                                onClick={(event) => {
+                                    if (!hasAccess) event.preventDefault();
+                                }}
+                                className={clsx(
+                                    "group flex min-h-32 items-center gap-4 rounded-2xl border border-base-300/70 bg-base-100 p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-lg hover:shadow-base-content/5 focus-visible:outline-primary",
+                                    !hasAccess && "cursor-not-allowed opacity-45"
+                                )}
+                            >
+                                <div className={clsx("grid size-14 shrink-0 place-items-center rounded-xl bg-linear-to-br shadow-sm transition-transform group-hover:scale-105", module.className)}>
+                                    <Icon className="text-white" size={25} aria-hidden="true" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className="font-semibold tracking-tight text-base-content">{text(module.titleKeyPath)}</p>
+                                    <p className="mt-1 text-xs text-base-content/50">{hasAccess ? "Abrir módulo" : "Acceso restringido"}</p>
+                                </div>
+                                <ArrowRight size={17} className="shrink-0 text-base-content/30 transition-all group-hover:translate-x-1 group-hover:text-primary" aria-hidden="true" />
+                            </Link>
+                        );
+                    })}
+                    <div className="flex min-h-32 items-center gap-4 rounded-2xl border border-dashed border-base-300 bg-base-100/60 p-5">
+                        <div className="grid size-14 shrink-0 place-items-center rounded-xl bg-base-200 text-base-content/50">
+                            <User2 size={24} aria-hidden="true" />
+                        </div>
+                        <div>
+                            <p className="font-semibold text-base-content/70">{text('modules.listAppliaction.i')}</p>
+                            <p className="mt-1 text-xs text-base-content/50">Próximamente</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     )
 }
