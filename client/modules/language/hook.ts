@@ -12,7 +12,7 @@ type LanguageState = {
 const languages: Language[] = ['english', 'spanish'];
 
 export const useLanguage = create<LanguageState>((set, get) => ({
-    language: 'english',
+    language: 'spanish',
     languages,
     changeLanguage: language => set({ language }),
     toggleLanguage: () => {

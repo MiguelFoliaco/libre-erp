@@ -1,11 +1,11 @@
 import { Grid3X3, Languages, LogOutIcon } from 'lucide-react';
 import { text } from '@/modules/language';
 import { useSession } from '@/modules/auth/hook/store';
-import { useLanguage } from '@/modules/language/hook';
+// import { useLanguage } from '@/modules/language/hook'; // HASTA TERMINAR LA TRADUCCION TOTAL
 
 export const HeaderStart = () => {
 
-    const { toggleLanguage } = useLanguage()
+    // const { toggleLanguage } = useLanguage()
     const { logout, isLoading } = useSession()
 
     return (
@@ -16,20 +16,20 @@ export const HeaderStart = () => {
                 </div>
                 <img src="/light.png" className='h-7' alt="Logo" />
 
-                <button
+                {/* <button
                     className='btn btn-sm btn-ghost ml-auto'
                     onClick={toggleLanguage}
                 >
                     {text('firstScreen.text-change-language-1')}
                     <Languages className='w-4 h-4' />
-                </button>
+                </button> */}
                 <button
                     onClick={() => {
                         logout()
                             .then(() => window.location.reload())
                     }}
                     disabled={isLoading}
-                    className='btn btn-sm btn-outline ml-2'
+                    className='btn btn-sm btn-outline ml-auto'
                 >
                     {text('login.logout')}
                     <LogOutIcon className='w-4 h-4' /></button>
