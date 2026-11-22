@@ -1,7 +1,7 @@
 import React from 'react'
 import { LeftPanel, type LeftNavigation } from '../common/left-panel';
 import { text } from '../language';
-import { Building, Settings, Store } from 'lucide-react';
+import { Building, Settings, ShoppingCartPlus, Store } from 'lucide-react';
 import { Outlet } from 'react-router';
 
 const primaryColor = 'bg-linear-to-tr to-gray-500 to-120% from-black'
@@ -10,6 +10,7 @@ const navigation: LeftNavigation[] = [
     { label: text('modules.userAndRoles.navigation.home'), key: '', path: '/start/settings', icon: Settings },
     { label: text('modules.settings.navigation.company'), key: 'company', path: '/start/settings/company', icon: Building },
     { label: text('modules.settings.navigation.branches'), key: 'branches', path: '/start/settings/branches', icon: Store },
+    { label: text('modules.listAppliaction.pos'), key: 'pos', path: '/start/settings/pos', icon: ShoppingCartPlus }
 ];
 
 

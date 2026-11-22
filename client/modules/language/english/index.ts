@@ -53,6 +53,7 @@ export const english = {
         'confirm': 'Confirm',
         'next': 'Next',
         "langugage-change": "Change language",
+        "copy-text": "Copy text",
         toast: {
             close: "Close",
             closeNotification: "Close notification"

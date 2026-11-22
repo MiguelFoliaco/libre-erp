@@ -11,6 +11,7 @@ export default [
         index("routes/settings/settings-home.tsx"),
         route("company", "routes/settings/settings-company.tsx"),
         route("branches", "routes/settings/settings-branches.tsx"),
+        route("pos", "routes/settings/settings-pos.tsx"),
     ]),
     route("/start/crm", "routes/crm/index.tsx", [
         route("peoples", "routes/crm/crm-peoples.tsx"),

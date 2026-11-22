@@ -6,6 +6,9 @@ import {
     ChevronsLeft,
     ChevronsRight,
 } from 'lucide-react'
+import { clsx } from 'clsx';
+import { useToast } from '../toast';
+import { truncate } from '@/modules/common/utils/truncate';
 
 export type TableColumn<T> = {
     key: keyof T;
@@ -13,6 +16,8 @@ export type TableColumn<T> = {
     render?: (value: unknown, row: T, index: number) => React.ReactNode
     className?: string
     hidden?: boolean
+    kbdType?: boolean;
+    truncate?: number
 }
 
 export type TableAction<T> = {
@@ -48,6 +53,7 @@ export function Table<T>({
 }: TableProps<T>) {
     const [page, setPage] = useState(1)
     const [limit, setLimit] = useState(pageSize)
+    const { notify } = useToast()
 
     const visibleColumns = columns.filter(column => !column.hidden)
 
@@ -73,6 +79,11 @@ export function Table<T>({
         }, row)
     }
 
+    const copy = async (value: string) => {
+        await navigator.clipboard.writeText(value)
+        notify('info', value)
+    }
+
     return (
         <div className="w-full space-y-4 ">
             <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-primary/50 rounded-box border border-base-300">
@@ -86,7 +97,7 @@ export function Table<T>({
                             ))}
 
                             {actions.length > 0 && (
-                                <th className="text-right">Acciones</th>
+                                <th className="text-right ">Acciones</th>
                             )}
                         </tr>
                     </thead>
@@ -115,6 +126,25 @@ export function Table<T>({
                                 <tr key={startIndex + index}>
                                     {visibleColumns.map(column => {
                                         const value = getValue(row, String(column.key))
+                                        let truncateValue = value  as string;
+                                        if (typeof value === 'string' && column.truncate) {
+                                            truncateValue = truncate(value, column.truncate)
+                                        }
+                                        if (column.kbdType) {
+                                            return <td
+                                                onClick={() => copy(String(value))}
+                                                key={String(column.key)}
+                                                className={clsx(
+                                                    column.className
+                                                )}
+                                            >
+                                                <span className={'kbd kbd-xs '}>
+                                                    {column.render
+                                                        ? column.render(value, row, startIndex + index)
+                                                        : (column.truncate ? truncateValue : String(value ?? '—'))}
+                                                </span>
+                                            </td>
+                                        }
 
                                         return (
                                             <td

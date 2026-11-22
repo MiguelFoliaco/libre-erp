@@ -64,6 +64,10 @@ export const modules = {
             retry: "Reintentar",
             required: "Este campo es obligatorio.",
             operationFailed: "No se pudo completar la operación. Inténtalo nuevamente."
+        },
+        pos: {
+            title: 'POS',
+            description: 'Configure, create, enable, and disable all point-of-sale (POS) terminals at your retail locations'
         }
     },
     listAppliaction: {
@@ -627,9 +631,11 @@ export const modules = {
         description: "Gestionar el inventario de tus productos.",
         warehouses: {
             title: "Bodegas",
+            description: "Gestiona tus almacenes y sus ubicaciones."
         },
         movimients: {
-            title: "Movimientos"
+            title: "Movimientos",
+            description: "Gestiona los movimientos de tu inventario."
         }
     }
 }

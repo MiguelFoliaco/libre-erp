@@ -64,6 +64,10 @@ export const modules = {
             retry: "Retry",
             required: "This field is required.",
             operationFailed: "The operation could not be completed. Try again."
+        },
+        pos:{
+            title:'POS',
+            description:'Configure, create, enable, and disable all point-of-sale (POS) terminals at your retail locations'
         }
     },
     listAppliaction: {

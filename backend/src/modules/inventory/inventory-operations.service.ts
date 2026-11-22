@@ -98,7 +98,7 @@ export class InventoryOperationsService {
       'inventory',
       'READ',
     );
-    const values: unknown[] = [context.companyId, context.environmentId];
+    const values: string[] = [context.companyId, context.environmentId];
     const conditions = ['i.company_id = $1', 'i.environment_id = $2'];
     if (filters.warehouseId !== undefined && filters.warehouseId !== '') {
       values.push(readUuid(filters.warehouseId, 'warehouseId'));

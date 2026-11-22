@@ -1,5 +1,6 @@
 import type { PersonSearchResult } from './user-and-roles';
 import type { CustomerSearchResult } from './crm';
+import type { CashRegisters } from './settings';
 
 export const API_RESOURCES = [
   "companies",
@@ -157,13 +158,13 @@ export interface InventoryMovementRow {
   warehouse_id: string;
   warehouse_name: string;
   movement_type:
-    | "entry"
-    | "exit"
-    | "adjustment_in"
-    | "adjustment_out"
-    | "transfer_in"
-    | "transfer_out"
-    | "reversal";
+  | "entry"
+  | "exit"
+  | "adjustment_in"
+  | "adjustment_out"
+  | "transfer_in"
+  | "transfer_out"
+  | "reversal";
   quantity: string;
   reference_type: string | null;
   reference_id: string | null;
@@ -528,6 +529,19 @@ export class ApiClient {
     );
   }
 
+  searchPos(
+    query?: string,
+    limit?: number,
+    offset?: number,
+    signal?: AbortSignal
+  ): Promise<ListResult<CashRegisters>> {
+    const params = new URLSearchParams({ query: query ?? '', limit: String(limit ?? 50), offset: String(offset ?? 0) });
+    return this.request(
+      `api/pos/search?${params.toString()}`,
+      { signal },
+    );
+  }
+
   inventoryMovements(): Promise<ListResult<InventoryMovementRow>> {
     return this.request("api/inventory/operations");
   }
@@ -547,6 +561,7 @@ export class ApiClient {
       body: input,
     });
   }
+
 
   get<T>(resource: ApiResource, id: string): Promise<T> {
     return this.request(`api/${resource}/${encodeURIComponent(id)}`);

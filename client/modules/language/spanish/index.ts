@@ -54,6 +54,7 @@ export const spanish = {
         'confirm': 'Confirmar',
         'next': 'Siguiente',
         "langugage-change": "Cambiar idioma",
+        "copy-text": "Copy text",
         toast: {
             close: "Cerrar",
             closeNotification: "Cerrar notificación"
