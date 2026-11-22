@@ -101,5 +101,14 @@ descripción de funcionalidades ya disponibles.
 
 ## Cosas que se deben evitar a toda costa
 
-No se debe agregar tipo any bajo ningun concepto, cuando mucho el tipo unknown.
-No agregar las clases input-bordered, select-bordered o textarea-bordered cuando se construye componentes, esto no funciona en las versiones actuales de tailwindcss o daisyui.
+- No se debe agregar tipo any bajo ningun concepto, cuando mucho el tipo unknown.
+- No agregar las clases input-bordered, select-bordered o textarea-bordered cuando se construye componentes, esto no funciona en las versiones actuales de tailwindcss o daisyui.
+- Importa siempre desde `@/` a menos que la ruta se acceda facilmente desde `../` pero no desde la capa inicial, es decir mejor esto: `@/config.ts` que `../config.ts`.
+- Sigue la siguiente extrucutra de carpetas y creacion de paginas:
+    module
+      - page
+        - component-name
+          - index.tsx
+          - hook.ts
+   no crees todo en un solo archivo.
+

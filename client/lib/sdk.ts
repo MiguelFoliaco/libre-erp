@@ -209,6 +209,82 @@ export interface InventoryTransferInput {
   notes?: string;
 }
 
+export interface POSRegister {
+  id: string;
+  company_id: string;
+  environment_id: string;
+  branch_id: string | null;
+  warehouse_id: string;
+  name: string;
+  code: string;
+  is_active: boolean;
+  warehouse_name: string;
+  branch_name: string | null;
+  metadata: Record<string, unknown>;
+  active_session_id: string | null;
+  active_opened_by: string | null;
+  active_opened_at: string | null;
+}
+
+export interface POSSession {
+  id: string;
+  cash_register_id: string;
+  opened_by: string;
+  closed_by: string | null;
+  status: "open" | "closed";
+  currency_code: string;
+  opening_amount: string;
+  expected_amount: string | null;
+  closing_amount: string | null;
+  difference_amount: string | null;
+  opening_notes: string | null;
+  closing_notes: string | null;
+  opened_at: string;
+  closed_at: string | null;
+  cash_register_name?: string;
+  warehouse_id?: string;
+  warehouse_name?: string;
+}
+
+export interface POSProduct {
+  id: string;
+  name: string;
+  description: string | null;
+  sku: string | null;
+  barcode: string | null;
+  sale_price: string;
+  currency_code: string;
+  unit: string;
+  product_type: "physical" | "virtual" | "service";
+  quantity: string;
+  reserved_quantity: string;
+  available_quantity: string;
+  estimated_tax_rate: string;
+  cash_register_id: string;
+  warehouse_id: string;
+  warehouse_name: string;
+}
+
+export interface POSPaymentMethod {
+  id: string;
+  name: string;
+  code: string;
+  payment_type: "cash" | "card" | "bank_transfer" | "digital_wallet" | "credit" | "other";
+  requires_reference: boolean;
+}
+
+export interface POSCheckoutItem {
+  productId: string;
+  quantity: number;
+  discountAmount?: number;
+}
+
+export interface POSCheckoutPayment {
+  paymentMethodId: string;
+  amount: number;
+  reference?: string;
+}
+
 export interface ProductImportRow {
   row_number: number;
   company_id?: string;
@@ -540,6 +616,69 @@ export class ApiClient {
       `api/pos/search?${params.toString()}`,
       { signal },
     );
+  }
+
+  posStatus(): Promise<{
+    hasActiveSession: boolean;
+    activeSession: POSSession | null;
+    registers: POSRegister[];
+  }> {
+    return this.request("api/pos/status");
+  }
+
+  posRegisters(): Promise<ListResult<POSRegister>> {
+    return this.request("api/pos/registers");
+  }
+
+  posActiveSession(): Promise<POSSession | null> {
+    return this.request("api/pos/sessions/active");
+  }
+
+  openPOSSession(input: {
+    cashRegisterId: string;
+    openingAmount?: number;
+    currencyCode?: string;
+    openingNotes?: string;
+  }): Promise<POSSession> {
+    return this.request("api/pos/sessions/open", {
+      method: "POST",
+      body: input,
+    });
+  }
+
+  closePOSSession(
+    sessionId: string,
+    input: { closingAmount: number; closingNotes?: string },
+  ): Promise<POSSession> {
+    return this.request(`api/pos/sessions/${sessionId}/close`, {
+      method: "POST",
+      body: input,
+    });
+  }
+
+  searchPOSProducts(
+    cashRegisterId: string,
+    query: string,
+    signal?: AbortSignal,
+  ): Promise<ListResult<POSProduct>> {
+    const params = new URLSearchParams({ cashRegisterId, query });
+    return this.request(`api/pos/products/search?${params.toString()}`, { signal });
+  }
+
+  posPaymentMethods(): Promise<ListResult<POSPaymentMethod>> {
+    return this.request("api/pos/payment-methods");
+  }
+
+  posCheckout(input: {
+    cashSessionId: string;
+    items: POSCheckoutItem[];
+    payments: POSCheckoutPayment[];
+    notes?: string;
+  }): Promise<unknown> {
+    return this.request("api/pos/checkout", {
+      method: "POST",
+      body: input,
+    });
   }
 
   inventoryMovements(): Promise<ListResult<InventoryMovementRow>> {

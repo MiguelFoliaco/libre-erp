@@ -35,7 +35,7 @@ const MODULES: {
             titleKeyPath: 'modules.listAppliaction.pos',
             request: ['*', 'sale-*'],
             className: 'from-purple-500 to-120% to-pink-400',
-            path: '/pos'
+            path: 'pos'
         },
         {
             icon: PackageSearch,

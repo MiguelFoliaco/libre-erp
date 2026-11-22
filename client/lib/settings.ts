@@ -15,7 +15,7 @@ export type CashRegisters = {
     warehouse_name: string;
     branch_name: string;
     branch_address: AddressValues
-    metadata?: unknown;
+    metadata?: Record<string, unknown>;
     created_at: string;
     updated_at: string;
 }
