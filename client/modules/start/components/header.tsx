@@ -9,32 +9,25 @@ export const HeaderStart = () => {
     const { logout, isLoading } = useSession()
 
     return (
-        <div className='w-10/11 mx-auto! p-2 border border-neutral-500/20 rounded-sm bg-white '>
-            <div className='flex items-center gap-2 pr-5'>
-                <div className='w-10 h-10 flex items-center justify-center bg-linear-to-tr from-primary to-90% rounded-sm to-primary-400'>
-                    <Grid3X3 className='w-6 h-6 text-white' />
+        <header className="border-b border-base-300/70 bg-base-100/90 px-5 backdrop-blur sm:px-8">
+            <div className="mx-auto flex h-[68px] max-w-[1440px] items-center gap-3">
+                <div className="grid size-10 place-items-center rounded-xl bg-primary text-white shadow-sm shadow-primary/20">
+                    <Grid3X3 className="size-5" aria-hidden="true" />
                 </div>
-                <img src="/light.png" className='h-7' alt="Logo" />
-
-                {/* <button
-                    className='btn btn-sm btn-ghost ml-auto'
-                    onClick={toggleLanguage}
-                >
-                    {text('firstScreen.text-change-language-1')}
-                    <Languages className='w-4 h-4' />
-                </button> */}
+                <img src="/light.png" className="h-6" alt="LibreERP" />
+                <span className="ml-1 hidden rounded-md bg-base-200 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-base-content/50 sm:inline-flex">
+                    Workspace
+                </span>
                 <button
-                    onClick={() => {
-                        logout()
-                            .then(() => window.location.reload())
-                    }}
+                    type="button"
+                    onClick={() => logout().then(() => window.location.reload())}
                     disabled={isLoading}
-                    className='btn btn-sm btn-outline ml-auto'
+                    className="btn btn-ghost btn-sm ml-auto gap-2 rounded-lg text-base-content/60 hover:text-error"
                 >
                     {text('login.logout')}
-                    <LogOutIcon className='w-4 h-4' /></button>
+                    <LogOutIcon className="size-4" aria-hidden="true" />
+                </button>
             </div>
-
-        </div >
+        </header>
     )
 }
