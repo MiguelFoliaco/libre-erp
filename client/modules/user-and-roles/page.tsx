@@ -4,7 +4,8 @@ import { LayoutDashboard, Settings, UserRoundShield, UsersRound } from "lucide-r
 import { text } from "../language";
 
 const primaryColor = 'bg-linear-to-tr from-red-500 to-120% to-orange-600'
-
+const primaryColor10 = 'bg-linear-to-tr from-red-500/10 to-120% to-orange-600/10';
+const textPrimary = "text-red-500"
 
 export function UserAndRolesPage() {
   const navigation: LeftNavigation[] = [
@@ -18,6 +19,8 @@ export function UserAndRolesPage() {
 
       {/* Sidebar */}
       <LeftPanel
+        primaryColor10={primaryColor10}
+        textPrimary={textPrimary}
         navigation={navigation}
         primaryColor={primaryColor}
         nameModule={text('modules.listAppliaction.userAndRoles')}

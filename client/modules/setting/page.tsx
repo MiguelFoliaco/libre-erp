@@ -5,6 +5,8 @@ import { Building, Settings, ShoppingCartPlus, Store } from 'lucide-react';
 import { Outlet } from 'react-router';
 
 const primaryColor = 'bg-linear-to-tr to-gray-500 to-120% from-black'
+const primaryColor10 = 'bg-linear-to-tr  to-gray-500/10 to-120% from-black/10';
+const textPrimary = "text-black0"
 
 const navigation: LeftNavigation[] = [
     { label: text('modules.userAndRoles.navigation.home'), key: '', path: '/start/settings', icon: Settings },
@@ -20,6 +22,8 @@ export const SettingPage = () => {
 
             {/* Sidebar */}
             <LeftPanel
+                primaryColor10={primaryColor10}
+                textPrimary={textPrimary}
                 navigation={navigation}
                 primaryColor={primaryColor}
                 nameModule={text('modules.listAppliaction.settings')}

@@ -6,6 +6,8 @@ import { Coins, FileText, Home, UserGroup, Users } from 'lucide-react';
 
 
 const primaryColor = 'bg-linear-to-tr from-emerald-500 via-green-500 to-120% to-yellow-400'
+const primaryColor10 = 'bg-linear-to-tr from-emerald-500/10 via-green-500/10 to-120% to-yellow-400/10';
+const textPrimary = "text-green-700"
 
 const navigation: LeftNavigation[] = [
     { label: text('modules.crm.navigation.home'), key: '', path: '/start/crm', icon: Home },
@@ -22,6 +24,8 @@ export const CRMPage = () => {
 
             {/* Sidebar */}
             <LeftPanel
+                primaryColor10={primaryColor10}
+                textPrimary={textPrimary}
                 navigation={navigation}
                 primaryColor={primaryColor}
                 nameModule={text('modules.listAppliaction.crm')}

@@ -23,6 +23,8 @@ export type LeftNavigation = {
 type LeftPanelProps = {
     navigation: LeftNavigation[]
     primaryColor: string
+    primaryColor10: string;
+    textPrimary:string;
     nameModule: string;
     IconModule: typeof LayoutDashboard
 }
@@ -31,7 +33,9 @@ export const LeftPanel = (
     {
         navigation,
         primaryColor,
+        primaryColor10,
         nameModule,
+        textPrimary,
         IconModule
     }: LeftPanelProps
 ) => {
@@ -68,13 +72,18 @@ export const LeftPanel = (
                                 className={clsx(
                                     "flex min-h-10 items-center gap-3 rounded-lg px-3 text-[13px] transition-colors",
                                     isActive
-                                        ? "bg-primary/10 font-semibold text-primary"
+                                        ? primaryColor10 + " font-semibold " + textPrimary
                                         : "text-base-content/65 hover:bg-base-200 hover:text-base-content"
                                 )}
                             >
                                 <Icon size={17} aria-hidden="true" />
                                 <span>{label}</span>
-                                {isActive && <span className="ml-auto size-1.5 rounded-full bg-primary" aria-hidden="true" />}
+                                {isActive && <span className={
+                                    clsx(
+                                        "ml-auto size-1.5 rounded-full",
+                                        primaryColor
+                                    )
+                                } aria-hidden="true" />}
                             </Link>
                         );
                     })}
