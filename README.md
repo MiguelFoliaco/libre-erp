@@ -1,485 +1,378 @@
 # LibreERP
 
-**Open Source · Modular · Extensible · Desktop ERP**
-
-LibreERP es un proyecto de software ERP de código abierto, diseñado para ofrecer una alternativa moderna, modular y extensible a los sistemas tradicionales de planificación de recursos empresariales.
-
-Construido sobre el ecosistema de **Node.js y TypeScript**, LibreERP busca proporcionar una plataforma instalable en sistemas operativos como Windows y Linux, con capacidad para funcionar localmente o mediante una arquitectura cliente-servidor.
-
-El proyecto busca crear un ecosistema donde empresas y desarrolladores puedan utilizar, personalizar y extender las funcionalidades del ERP mediante módulos y plugins.
-
-## Visión del proyecto
-
-El objetivo de LibreERP es construir un ERP de código abierto que permita:
-
-- Instalar y ejecutar el sistema sin depender de una plataforma web externa.
-- Administrar empresas, usuarios, permisos y operaciones comerciales.
-- Incorporar funcionalidades mediante módulos independientes.
-- Extender el sistema mediante plugins desarrollados por terceros.
-- Permitir la distribución de extensiones gratuitas y comerciales.
-- Facilitar la integración con servicios y plataformas externas.
-- Ofrecer soporte técnico, implementación y mantenimiento empresarial.
-
-## Arquitectura general
-
-LibreERP estará construido bajo una arquitectura **Modular Monolith**, utilizando NestJS como motor principal del ERP.
-
-La aplicación de escritorio se comunicará con el servidor mediante una API, permitiendo utilizar la misma arquitectura tanto en instalaciones locales como en instalaciones centralizadas.
-
-### Diagrama de arquitectura
-
-```mermaid
-flowchart TB
-    subgraph Desktop["LibreERP Desktop"]
-        Electron["Electron"]
-        React["React + TypeScript"]
-        Electron --- React
-    end
-
-    subgraph Core["LibreERP Core - NestJS"]
-        API["REST API / WebSockets"]
-        Auth["Authentication & Permissions"]
-        Modules["ERP Modules"]
-        Events["Event System"]
-        Plugins["Plugin Manager"]
-
-        API --> Auth
-        API --> Modules
-        Modules <--> Events
-        Plugins --> Events
-        Plugins --> Modules
-    end
-
-    subgraph Database["Persistence Layer"]
-        PostgreSQL[("PostgreSQL")]
-        Storage[("File Storage")]
-    end
-
-    subgraph Marketplace["LibreERP Marketplace"]
-        Next["Next.js"]
-        License["License Management"]
-        Extensions["Extension Registry"]
-        MarketplaceStorage[("Object Storage")]
-    end
-
-    React --> API
-    Auth --> PostgreSQL
-    Modules --> PostgreSQL
-    Modules --> Storage
-
-    Plugins <--> License
-    Next --> License
-    Next --> Extensions
-    Extensions --> MarketplaceStorage
-```
-
-## Tecnologías principales
-
-| Componente | Tecnología | Responsabilidad |
-|---|---|---|
-| Desktop | Electron | Aplicación multiplataforma |
-| Frontend | React + TypeScript | Interfaz de usuario |
-| Backend | NestJS | Motor principal del ERP |
-| Database | PostgreSQL | Persistencia de información |
-| ORM | Por definir | Acceso y gestión de datos |
-| Communication | REST API | Comunicación entre cliente y servidor |
-| Real-time | WebSockets | Actualizaciones en tiempo real |
-| Events | EventEmitter2 | Comunicación entre módulos |
-| Marketplace | Next.js | Plataforma de extensiones |
-| Authentication | Supabase Auth | Autenticación del Marketplace |
-| Storage | Supabase Storage | Distribución de extensiones |
-
-## Estructura del proyecto 
-!!ACTUALIZAR
-LibreERP utilizará un monorepo administrado mediante pnpm Workspaces.
-
-```text
-libreerp/
-│
-├── apps/
-│   ├── desktop/
-│   │   ├── electron/
-│   │   ├── src/
-│   │   └── package.json
-│   │
-│   ├── server/
-│   │   ├── src/
-│   │   └── package.json
-│   │
-│   └── marketplace/
-│       ├── src/
-│       └── package.json
-│
-├── packages/
-│   ├── core/
-│   ├── database/
-│   ├── sdk/
-│   ├── plugin-api/
-│   ├── plugin-runtime/
-│   ├── plugin-manager/
-│   ├── licensing/
-│   ├── types/
-│   ├── ui/
-│   └── i18n/
-│
-├── modules/
-│   ├── authentication/
-│   ├── companies/
-│   ├── users/
-│   ├── inventory/
-│   ├── sales/
-│   ├── purchases/
-│   └── accounting/
-│
-├── extensions/
-│   └── example-extension/
-│
-├── infrastructure/
-│   ├── docker/
-│   ├── database/
-│   └── scripts/
-├── licence.md
-└── README.md
-```
-
-*La estructura representa la organización objetivo del proyecto y podrá evolucionar durante su desarrollo.*
-
-## Componentes principales
-
-### 1. LibreERP Desktop
-
-Aplicación instalable para Windows y Linux, construida con Electron y React.
-
-Responsabilidades:
-
-- Interfaz gráfica del ERP.
-- Administración de sesiones.
-- Comunicación con el servidor local o remoto.
-- Instalación y administración de extensiones.
-- Notificaciones y actualizaciones.
-- Integración con periféricos y recursos del sistema operativo.
-
-El frontend será independiente del backend, permitiendo reutilizar la interfaz en diferentes modalidades de instalación.
-
-### 2. LibreERP Core
-
-Motor principal del sistema, desarrollado con NestJS.
-
-Se encargará de administrar las operaciones, reglas de negocio y servicios compartidos del ERP.
-
-Responsabilidades:
-
-- Autenticación y autorización.
-- Administración de empresas y usuarios.
-- Gestión de roles y permisos.
-- Administración de módulos.
-- Acceso a PostgreSQL.
-- Auditoría de operaciones.
-- Comunicación mediante eventos.
-- Exposición de APIs.
-- Gestión del ciclo de vida de extensiones.
-
-El Core utilizará una arquitectura modular para facilitar el mantenimiento y la incorporación de nuevas funcionalidades.
-
-### 3. Database Layer
-
-PostgreSQL será el sistema principal de almacenamiento.
-
-Prisma será utilizado como herramienta de acceso y gestión de datos.
-
-Cada módulo deberá definir sus propias responsabilidades de persistencia y migraciones, evitando dependencias innecesarias entre funcionalidades.
-
-La base de datos no será accesible directamente desde el cliente de escritorio. Todas las operaciones deberán pasar por el backend.
-
-### 4. Plugin System
-
-LibreERP contará con un sistema de extensiones que permitirá incorporar nuevas funcionalidades sin modificar directamente el código fuente del Core.
-
-Una extensión podrá proporcionar:
-
-- Nuevas interfaces y componentes React.
-- Nuevos endpoints.
-- Servicios y reglas de negocio.
-- Migraciones de base de datos.
-- Integraciones externas.
-- Eventos y procesos automatizados.
-- Nuevos permisos y configuraciones.
-
-#### Estructura de una extensión
-POR DEFINIR
-```text
-example-extension/
-│
-├── manifest.json
-│
-├── backend/
-│   └── src/
-│       └── index.ts
-│
-├── frontend/
-│   └── src/
-│       └── extension.tsx
-│
-├── migrations/
-│
-├── assets/
-│
-└── package.json
-```
-
-#### Ciclo de vida de una extensión
-
-1. Discovery: identificación de extensiones instaladas.
-2. Validation: validación del manifiesto y compatibilidad.
-3. Installation: instalación de archivos y dependencias.
-4. Registration: registro de servicios y funcionalidades.
-5. Activation: habilitación de la extensión.
-6. Deactivation: desactivación controlada.
-7. Uninstallation: eliminación de la extensión.
-
-Las extensiones backend de terceros deberán ejecutarse mediante un entorno aislado, con permisos controlados y sin acceso irrestricto al proceso principal.
-
-### 5. Event System
-
-El sistema de eventos permitirá la comunicación entre módulos y extensiones sin crear dependencias directas entre ellos.
-
-Ejemplos de eventos:
-
-```ts
-sales.order.created
-sales.order.updated
-sales.invoice.created
-inventory.stock.changed
-purchase.order.created
-accounting.payment.received
-users.created
-```
-
-Ejemplo conceptual:
-
-```ts
-erp.events.on('sales.order.created', async (event) => {
-    // Process order creation.
-});
-```
-
-El sistema de eventos permitirá desarrollar integraciones y automatizaciones independientes de las funcionalidades internas del ERP.
-
-## Modos de instalación
-
-LibreERP estará diseñado para funcionar en dos modalidades principales.
-
-### Local Mode
-
-Instalación independiente en un equipo.
-
-```text
-┌─────────────────────────┐
-│      LibreERP Desktop   │
-│       Electron + React  │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│      NestJS Core        │
-│      Local Service      │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│       PostgreSQL        │
-│       Local Database    │
-└─────────────────────────┘
-```
-
-Características:
-
-- No requiere un servidor externo.
-- Permite trabajar sin conexión a Internet.
-- Almacena la información localmente.
-- Puede utilizar extensiones instaladas.
-- Internet será necesario únicamente para servicios que lo requieran, como licencias comerciales y descargas.
-
-### Server Mode
-
-Instalación centralizada para empresas con múltiples usuarios.
-
-```text
-Desktop Client 1 ──┐
-                   │
-Desktop Client 2 ──┼── NestJS Server ── PostgreSQL
-                   │
-Desktop Client 3 ──┘
-```
-
-Características:
-
-- Múltiples usuarios conectados.
-- Información centralizada.
-- Gestión de permisos.
-- Comunicación en tiempo real.
-- Administración centralizada de extensiones.
-- Posibilidad de implementar backups y mantenimiento remoto.
-
-## LibreERP Marketplace
-
-El Marketplace será una plataforma independiente que permitirá descubrir, publicar, distribuir y comercializar extensiones.
-
-### Tecnologías
-
-- Next.js.
-- NestJS.
-- PostgreSQL.
-- Supabase Auth.
-- Supabase Storage.
+**Open Source · Modular · ERP operativo para escritorio y web**
+
+LibreERP es un ERP de código abierto construido con React, React Router,
+NestJS, PostgreSQL y TypeScript. El proyecto utiliza una arquitectura cliente-
+servidor: el cliente no accede directamente a la base de datos y todas las
+operaciones pasan por una API autenticada.
+
+El repositorio contiene actualmente dos aplicaciones principales:
+
+- `client/`: interfaz web React con React Router, Tailwind CSS y DaisyUI.
+- `backend/`: API NestJS con autenticación, permisos, PostgreSQL y módulos por dominio.
+
+La instalación como aplicación de escritorio mediante Electron continúa en
+planificación; el estado actual es una aplicación web cliente-servidor.
+
+## Estado actual
+
+LibreERP se encuentra en desarrollo activo. Los módulos base ya permiten
+configurar el workspace, administrar usuarios y permisos, trabajar con personas
+y clientes, mantener el catálogo e inventario, operar el POS y consultar
+información operativa.
+
+### Funcionalidades implementadas
+
+- Inicio de sesión con JWT de 15 minutos y refresh token rotativo.
+- Sesiones por empresa y entorno.
+- Usuarios, roles, permisos y asignación de roles.
+- Empresas, sucursales, bodegas y ambientes de trabajo.
+- Personas, clientes y tipos de clientes.
+- Marcas, categorías, departamentos y productos.
+- Importación de productos por CSV.
+- Existencias por bodega, entradas, salidas, ajustes y traslados.
+- Cajas registradoras configurables por sucursal y bodega.
+- Sesiones de caja vinculadas al usuario que las abre.
+- Punto de venta con búsqueda por nombre, descripción, SKU y código de barras.
+- Búsqueda de productos limitada al stock disponible de la bodega de la caja.
+- Carrito, descuentos, impuestos, cobro dividido y métodos de pago.
+- Actualización transaccional de stock e historial de movimientos al vender.
+- Consultas iniciales de inventario y ventas.
+- Navegación por teclado, atajos de función y modo pantalla completa en el POS.
 
 ### Funcionalidades previstas
 
-- Registro de desarrolladores.
-- Publicación de extensiones.
-- Catálogo y búsqueda.
-- Gestión de versiones.
-- Administración de compras.
-- Suscripciones.
-- Licencias comerciales.
-- Distribución de paquetes.
-- Valoraciones y reseñas.
+- Completar el módulo **Ventas**:
+  - consultar y analizar ventas;
+  - revisar resúmenes por periodo, sucursal y vendedor;
+  - consultar ventas en efectivo y a crédito;
+  - analizar cuentas por cobrar, pagos parciales y saldos pendientes;
+  - revisar estados, devoluciones y documentos asociados.
+- Completar el módulo **Reportes**:
+  - convertirlo en un generador de documentos PDF dinámicos;
+  - permitir seleccionar datos, filtros, columnas y formato del documento;
+  - crear reportes reutilizables según las necesidades de cada operación;
+  - generar documentos de ventas, inventario, caja, clientes y otros dominios;
+  - definir encabezados, totales, agrupaciones y presentaciones personalizadas.
+- Contabilidad, compras, devoluciones completas y sincronización con marketplaces.
+- Electron y distribución como aplicación de escritorio.
+- Sistema de plugins y marketplace de extensiones.
 
-### Modelo de licenciamiento
+Las funcionalidades previstas no deben considerarse disponibles solo porque
+aparezcan en esta documentación o en el roadmap.
 
-El Marketplace permitirá diferentes modalidades comerciales:
+## Arquitectura
 
-| Modalidad | Descripción |
+```mermaid
+flowchart TB
+    subgraph Cliente["Cliente web"]
+        React["React + TypeScript"]
+        Router["React Router"]
+        SDK["SDK compartido"]
+        React --> Router
+        Router --> SDK
+    end
+
+    subgraph Backend["Backend NestJS"]
+        API["REST API"]
+        Auth["Autenticación y permisos"]
+        Modules["Módulos por dominio"]
+        API --> Auth
+        API --> Modules
+    end
+
+    subgraph Datos["Persistencia"]
+        PostgreSQL[("PostgreSQL")]
+        Redis[("Redis")]
+    end
+
+    SDK --> API
+    Auth --> PostgreSQL
+    Modules --> PostgreSQL
+    Backend --> Redis
+```
+
+## Tecnologías
+
+| Componente | Tecnología |
 |---|---|
-| Free | Extensiones gratuitas |
-| One-time | Pago único |
-| Subscription | Suscripción mensual o anual |
+| Frontend | React 19, TypeScript, React Router |
+| UI | Tailwind CSS, DaisyUI |
+| Estado | Zustand |
+| Cliente HTTP | SDK compartido sobre Fetch |
+| Backend | NestJS 12, TypeScript |
+| Base de datos | PostgreSQL |
+| ORM/migraciones | Drizzle |
+| Caché | Redis |
+| Pruebas backend | Vitest |
+| Gestor de paquetes | pnpm |
 
-Las licencias comerciales utilizarán firmas digitales basadas en Ed25519.
+## Estructura del repositorio
 
-El Marketplace firmará las licencias mediante una clave privada y LibreERP utilizará una clave pública para validar su autenticidad localmente.
+```text
+libre-erp/
+├── backend/
+│   ├── src/
+│   │   ├── auth/
+│   │   ├── common/
+│   │   │   ├── authorization/
+│   │   │   └── crud/
+│   │   ├── database/
+│   │   │   ├── migrations/
+│   │   │   └── seed/
+│   │   └── modules/
+│   │       ├── accounting/
+│   │       ├── api/
+│   │       ├── catalog/
+│   │       ├── documents/
+│   │       ├── inventory/
+│   │       ├── organization/
+│   │       ├── people/
+│   │       ├── pos/
+│   │       ├── reports/
+│   │       ├── roles/
+│   │       ├── taxes/
+│   │       └── users/
+│   └── docker/
+├── client/
+│   ├── app/
+│   │   └── routes/
+│   ├── lib/
+│   └── modules/
+│       ├── auth/
+│       ├── common/
+│       ├── crm/
+│       ├── inventory/
+│       ├── language/
+│       ├── pos/
+│       ├── products/
+│       ├── setting/
+│       └── start/
+├── ROADMAP-MVP.md
+└── README.md
+```
 
-La validación periódica permitirá comprobar el estado de las suscripciones, contemplando períodos de gracia para instalaciones sin conexión.
+## Módulos principales
 
-## Modelo de negocio
+### Organización
 
-LibreERP será open source, pero contará con servicios y productos comerciales.
+Administra la compañía, sucursales y ambientes de trabajo que forman el alcance
+de los datos.
 
-### LibreERP Community
+### Usuarios y roles
 
-- Software de código abierto.
-- Instalación local.
-- Funcionalidades principales del ERP.
-- Sistema de módulos.
-- Soporte para extensiones.
-- Marketplace de extensiones gratuitas.
+Permite crear cuentas, asignar roles y controlar acciones por módulo dentro de
+cada empresa y entorno.
 
-### LibreERP Support
+### Productos y catálogo
 
-Servicios profesionales:
+Gestiona productos, marcas, categorías, departamentos, precios, unidades,
+códigos SKU, códigos de barras e impuestos.
 
-- Instalación y configuración.
-- Migración de datos.
-- Personalización.
-- Capacitación.
-- Mantenimiento.
-- Soporte técnico.
-- Integraciones empresariales.
+### Inventario
 
-### LibreERP Marketplace
+Consulta existencias por bodega y registra entradas, salidas, ajustes y
+traslados. Los movimientos conservan trazabilidad de cantidad, usuario, fecha,
+motivo y referencia.
 
-Ecosistema comercial:
+### CRM
 
-- Extensiones premium.
-- Licencias permanentes.
-- Suscripciones.
-- Distribución de extensiones de terceros.
-- Comisiones por transacción.
+Administra personas, clientes, tipos de clientes y datos utilizados por ventas
+y documentos.
 
-### LibreERP Enterprise
+### POS
 
-Servicios orientados a empresas:
+Permite seleccionar una caja, abrir una sesión como usuario autenticado,
+buscar productos disponibles en la bodega asignada, crear el carrito y cobrar.
 
-- Despliegues centralizados.
-- Administración multiempresa.
-- Backups administrados.
-- Actualizaciones gestionadas.
-- Integraciones avanzadas.
-- Soporte especializado.
+Una caja abierta pertenece al usuario que inició la sesión. Solo ese usuario
+puede cobrar o cerrarla, y recargar el navegador conserva la sesión activa.
+
+### Ventas
+
+El módulo de Ventas es el espacio destinado a revisar y analizar las operaciones
+comerciales.
+
+Debido a su alcance debe permitir:
+
+- ver un resumen general de ventas;
+- consultar ventas por fecha, sucursal, vendedor, estado y método de pago;
+- analizar totales, descuentos, impuestos y tendencias;
+- revisar ventas completadas, canceladas o parcialmente devueltas;
+- identificar ventas a crédito;
+- consultar pagos parciales, pagos pendientes y saldos de deuda;
+- relacionar clientes, documentos y movimientos de efectivo;
+- exportar o imprimir los resultados según el alcance disponible.
+
+La interfaz inicial de resumen puede crecer hasta convertirse en el centro de
+consulta y análisis de ventas y cuentas por cobrar.
+
+### Reportes
+
+El módulo de Reportes funcionará como un **generador de documentos PDF
+dinámicos**.
+
+Permitirá crear, configurar y ejecutar documentos dependiendo de la necesidad
+del usuario, por ejemplo:
+
+- reportes de ventas;
+- documentos de cierre de caja;
+- reportes de inventario;
+- estados de cuenta de clientes;
+- reportes de pagos y cuentas por cobrar;
+- movimientos de efectivo;
+- documentos fiscales o operativos definidos por el usuario.
+
+El generador podrá combinar filtros, rangos de fechas, sucursales, columnas,
+agrupaciones, totales y presentaciones antes de producir un PDF. Los datos
+base deben conciliarse siempre con las operaciones registradas en el ERP.
+
+Los endpoints actuales de reportes son una consulta inicial de ventas e
+inventario; el generador dinámico de PDF todavía no está implementado.
+
+### Documentos
+
+Administra tipos de documentos y elementos utilizados para representar
+operaciones comerciales. La representación imprimible completa continúa en
+desarrollo.
+
+### Contabilidad
+
+Contiene recursos base y consultas previstas para operaciones contables. No
+debe presentar resultados como estados financieros oficiales hasta definir el
+plan de cuentas y las reglas contables aplicables.
+
+## Backend
+
+### Inicio rápido
+
+Desde `backend/`:
+
+```powershell
+pnpm install
+pnpm db:migrate
+pnpm db:seed
+pnpm start:dev
+```
+
+La API escucha en `PORT`, con `3000` como valor predeterminado. Configura:
+
+```env
+DATABASE_URL=postgresql://usuario:password@localhost:5432/libreerp
+REDIS_URL=redis://localhost:6379
+ACCESS_TOKEN_SECRET=una_clave_segura_de_al_menos_32_bytes
+CLIENT_ORIGIN=http://localhost:5173
+SEED_ADMIN_PASSWORD=una_contraseña_segura_de_al_menos_12_caracteres
+```
+
+### Rutas principales
+
+- `POST /auth/login`
+- `POST /auth/refresh`
+- `POST /auth/logout`
+- `GET /auth/me`
+- `GET|POST|PATCH|DELETE /api/:resource`
+- `GET /api/inventory/stock`
+- `POST /api/inventory/operations`
+- `POST /api/inventory/transfers`
+- `GET /api/pos/status`
+- `GET /api/pos/registers`
+- `GET /api/pos/sessions/active`
+- `POST /api/pos/sessions/open`
+- `POST /api/pos/sessions/:id/close`
+- `GET /api/pos/products/search`
+- `GET /api/pos/payment-methods`
+- `POST /api/pos/checkout`
+- `GET /api/reports/inventory`
+- `GET /api/reports/sales`
+
+Las operaciones protegidas requieren autenticación y permisos asociados al
+módulo. Las operaciones CRUD y específicas limitan los datos a la empresa y al
+entorno activos del usuario.
+
+## Frontend
+
+Desde `client/`:
+
+```powershell
+pnpm install
+pnpm dev
+```
+
+El cliente estará disponible normalmente en `http://localhost:5173`.
+
+Para apuntar a otro backend:
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+Comandos de validación:
+
+```powershell
+pnpm typecheck
+pnpm build
+```
+
+## Base de datos
+
+PostgreSQL almacena la información empresarial. Las migraciones y el esquema
+Drizzle se encuentran en `backend/src/database/migrations/`. Las operaciones
+transaccionales usan SQL parametrizado y bloqueos de filas cuando el stock, la
+sesión de caja o el cobro requieren evitar condiciones de carrera.
+
+La base de datos incluye tablas para cajas, sesiones de caja, métodos de pago,
+ventas, líneas de venta, impuestos, pagos, movimientos de caja y devoluciones.
+
+## Scripts útiles
+
+Desde `backend/`:
+
+```powershell
+pnpm build
+pnpm lint
+pnpm test
+pnpm test:e2e
+pnpm db:generate
+pnpm db:migrate
+pnpm db:seed
+```
+
+Desde `client/`:
+
+```powershell
+pnpm dev
+pnpm typecheck
+pnpm build
+pnpm start
+```
+
+## Seguridad y permisos
+
+- Los access tokens duran 15 minutos.
+- Los refresh tokens se almacenan como hash y se envían mediante cookie HttpOnly.
+- Las rutas requieren permisos explícitos salvo autenticación pública.
+- Las consultas limitan empresa y entorno desde la sesión.
+- Las IDs de empresa o entorno enviadas por el cliente no deben controlar el
+  alcance de una operación.
+- Las escrituras críticas deben validar stock, permisos y estado de la sesión.
 
 ## Roadmap
 
-### Phase 1 — Core Foundation
+La planificación detallada del MVP está disponible en
+[ROADMAP-MVP.md](./ROADMAP-MVP.md).
 
-- [ ] Configuración del monorepo.
-- [ ] Aplicación Electron + React.
-- [ ] Backend NestJS.
-- [ ] Integración con PostgreSQL.
-- [ ] Sistema de migraciones.
-- [ ] Autenticación.
-- [ ] Administración de empresas.
-- [ ] Gestión de usuarios y permisos.
-- [ ] Instalación local.
+Las prioridades actuales incluyen:
 
-### Phase 2 — Modular Architecture
+1. Completar el análisis de ventas y cuentas por cobrar.
+2. Completar cierres de caja y devoluciones.
+3. Vincular comprobantes a ventas y documentos.
+4. Crear el generador dinámico de reportes PDF.
+5. Ampliar compras y contabilidad.
+6. Incorporar integraciones externas y plugins.
+7. Añadir distribución Electron y modos de instalación local/servidor.
 
-- [ ] Arquitectura modular.
-- [ ] Registro de módulos.
-- [ ] Sistema de eventos.
-- [ ] Dependencias entre módulos.
-- [ ] API pública.
-- [ ] SDK de desarrollo.
+## Licencia
 
-### Phase 3 — Plugin System
-
-- [ ] Plugin Manager.
-- [ ] Manifiestos.
-- [ ] Instalación de extensiones.
-- [ ] Desinstalación.
-- [ ] Gestión de versiones.
-- [ ] Migraciones de extensiones.
-- [ ] Sistema de permisos.
-- [ ] Aislamiento de procesos.
-- [ ] Validación de firmas.
-
-### Phase 4 — Marketplace
-
-- [ ] Registro de desarrolladores.
-- [ ] Catálogo de extensiones.
-- [ ] Publicación de paquetes.
-- [ ] Versionamiento.
-- [ ] Sistema de compras.
-- [ ] Gestión de licencias.
-- [ ] Suscripciones.
-- [ ] Integración de pagos.
-
-### Phase 5 — Enterprise
-
-- [ ] Server Mode.
-- [ ] Instaladores para Windows y Linux.
-- [ ] Actualizaciones automáticas.
-- [ ] Backups.
-- [ ] Administración multiusuario.
-- [ ] Herramientas de soporte remoto.
-- [ ] Documentación para desarrolladores.
-
-## Principios de desarrollo
-
-1. **Open Source First:** el Core debe permanecer accesible y desarrollado bajo una licencia open source.
-2. **Modular Architecture:** cada funcionalidad debe mantener responsabilidades independientes.
-3. **Developer Friendly:** proporcionar SDK, documentación y herramientas para terceros.
-4. **Security First:** aplicar permisos mínimos, validación de extensiones y aislamiento de procesos.
-5. **Offline First:** las funcionalidades fundamentales no deben depender de servicios externos.
-6. **Cross Platform:** mantener compatibilidad con Windows y Linux.
-7. **Backward Compatibility:** mantener contratos estables para módulos y extensiones.
-8. **Extensibility:** permitir ampliar funcionalidades sin modificar el Core.
-
-## Estado del proyecto
-
-**Status:** Initial Architecture / Planning
-
-LibreERP se encuentra en su etapa inicial de definición arquitectónica. Las tecnologías, componentes y funcionalidades descritos representan la dirección técnica propuesta y no necesariamente funcionalidades implementadas.
-
----
-
-**LibreERP — An open source ERP built for the Node.js ecosystem.**
+Consulta [licence.md](./licence.md) para conocer los términos del proyecto.
