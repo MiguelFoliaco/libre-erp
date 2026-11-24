@@ -1,9 +1,10 @@
-import { pgTable, index, foreignKey, unique, uuid, text, timestamp, boolean, bigint, varchar, check, jsonb, char, uniqueIndex, numeric, date, integer, inet, pgEnum, doublePrecision } from "drizzle-orm/pg-core"
+import { pgTable, index, foreignKey, unique, uuid, text, timestamp, boolean, bigint, varchar, check, jsonb, doublePrecision, char, uniqueIndex, numeric, date, integer, inet, pgEnum } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 export const environmentType = pgEnum("environment_type", ['development', 'production', 'test'])
 export const movementType = pgEnum("movement_type", ['entry', 'exit', 'adjustment_in', 'adjustment_out', 'transfer_in', 'transfer_out', 'reversal'])
 export const productType = pgEnum("product_type", ['physical', 'virtual', 'service'])
+export const typeQuantityInventory = pgEnum("type_quantity_inventory", ['quantity', 'reserved_quantity'])
 
 
 export const session = pgTable("session", {
@@ -84,6 +85,31 @@ export const salesFlows = pgTable("sales_flows", {
 	unique("sales_flows_company_id_environment_id_code_key").on(table.code, table.companyId, table.environmentId),
 ]);
 
+export const salesFlowTransitions = pgTable("sales_flow_transitions", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	companyId: uuid("company_id").notNull(),
+	environmentId: uuid("environment_id").notNull(),
+	flowId: uuid("flow_id").notNull(),
+	fromStepId: uuid("from_step_id").notNull(),
+	toStepId: uuid("to_step_id").notNull(),
+	actionName: varchar("action_name", { length: 150 }).notNull(),
+	conditionRules: jsonb("condition_rules").default({}).notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.companyId, table.environmentId, table.flowId, table.fromStepId],
+			foreignColumns: [salesFlowSteps.id, salesFlowSteps.companyId, salesFlowSteps.environmentId, salesFlowSteps.flowId],
+			name: "sales_flow_transitions_company_id_environment_id_flow_id_f_fkey"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.companyId, table.environmentId, table.flowId, table.toStepId],
+			foreignColumns: [salesFlowSteps.id, salesFlowSteps.companyId, salesFlowSteps.environmentId, salesFlowSteps.flowId],
+			name: "sales_flow_transitions_company_id_environment_id_flow_id_t_fkey"
+		}).onDelete("cascade"),
+	unique("sales_flow_transitions_flow_id_from_step_id_to_step_id_acti_key").on(table.actionName, table.flowId, table.fromStepId, table.toStepId),
+	check("sales_flow_transitions_check", sql`from_step_id <> to_step_id`),
+	check("sales_flow_transitions_condition_rules_check", sql`jsonb_typeof(condition_rules) = 'object'::text`),
+]);
+
 export const salesFlowSteps = pgTable("sales_flow_steps", {
 	id: uuid().defaultRandom().primaryKey().notNull(),
 	companyId: uuid("company_id").notNull(),
@@ -112,31 +138,6 @@ export const salesFlowSteps = pgTable("sales_flow_steps", {
 		}).onDelete("cascade"),
 	unique("sales_flow_steps_company_id_environment_id_flow_id_id_key").on(table.companyId, table.environmentId, table.flowId, table.id),
 	unique("sales_flow_steps_company_id_environment_id_flow_id_code_key").on(table.code, table.companyId, table.environmentId, table.flowId),
-]);
-
-export const salesFlowTransitions = pgTable("sales_flow_transitions", {
-	id: uuid().defaultRandom().primaryKey().notNull(),
-	companyId: uuid("company_id").notNull(),
-	environmentId: uuid("environment_id").notNull(),
-	flowId: uuid("flow_id").notNull(),
-	fromStepId: uuid("from_step_id").notNull(),
-	toStepId: uuid("to_step_id").notNull(),
-	actionName: varchar("action_name", { length: 150 }).notNull(),
-	conditionRules: jsonb("condition_rules").default({}).notNull(),
-}, (table) => [
-	foreignKey({
-			columns: [table.companyId, table.environmentId, table.flowId, table.fromStepId],
-			foreignColumns: [salesFlowSteps.id, salesFlowSteps.companyId, salesFlowSteps.environmentId, salesFlowSteps.flowId],
-			name: "sales_flow_transitions_company_id_environment_id_flow_id_f_fkey"
-		}).onDelete("cascade"),
-	foreignKey({
-			columns: [table.companyId, table.environmentId, table.flowId, table.toStepId],
-			foreignColumns: [salesFlowSteps.id, salesFlowSteps.companyId, salesFlowSteps.environmentId, salesFlowSteps.flowId],
-			name: "sales_flow_transitions_company_id_environment_id_flow_id_t_fkey"
-		}).onDelete("cascade"),
-	unique("sales_flow_transitions_flow_id_from_step_id_to_step_id_acti_key").on(table.actionName, table.flowId, table.fromStepId, table.toStepId),
-	check("sales_flow_transitions_check", sql`from_step_id <> to_step_id`),
-	check("sales_flow_transitions_condition_rules_check", sql`jsonb_typeof(condition_rules) = 'object'::text`),
 ]);
 
 export const companies = pgTable("companies", {
@@ -604,35 +605,6 @@ export const customers = pgTable("customers", {
 	check("customers_payment_terms_days_check", sql`payment_terms_days >= 0`),
 ]);
 
-export const documentTypes = pgTable("document_types", {
-	id: uuid().defaultRandom().primaryKey().notNull(),
-	companyId: uuid("company_id").notNull(),
-	environmentId: uuid("environment_id").notNull(),
-	name: varchar({ length: 150 }).notNull(),
-	code: varchar({ length: 100 }).notNull(),
-	description: text(),
-	category: varchar({ length: 50 }),
-	numberingPrefix: varchar("numbering_prefix", { length: 30 }),
-	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
-	nextNumber: bigint("next_number", { mode: "number" }).default(1).notNull(),
-	metadata: jsonb().default({}).notNull(),
-	isActive: boolean("is_active").default(true).notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
-	endNumber: bigint("end_number", { mode: "number" }).notNull(),
-}, (table) => [
-	foreignKey({
-			columns: [table.companyId, table.environmentId],
-			foreignColumns: [environments.id, environments.companyId],
-			name: "document_types_company_id_environment_id_fkey"
-		}),
-	unique("document_types_company_id_environment_id_id_key").on(table.companyId, table.environmentId, table.id),
-	unique("document_types_company_id_environment_id_code_key").on(table.code, table.companyId, table.environmentId),
-	check("document_types_metadata_check", sql`jsonb_typeof(metadata) = 'object'::text`),
-	check("document_types_next_number_check", sql`next_number > 0`),
-]);
-
 export const users = pgTable("users", {
 	id: uuid().defaultRandom().primaryKey().notNull(),
 	companyId: uuid("company_id").notNull(),
@@ -702,6 +674,38 @@ export const userRoles = pgTable("user_roles", {
 			name: "user_roles_company_id_environment_id_user_id_fkey"
 		}),
 	unique("user_roles_company_id_environment_id_user_id_role_id_key").on(table.companyId, table.environmentId, table.roleId, table.userId),
+]);
+
+export const documentTypes = pgTable("document_types", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	companyId: uuid("company_id").notNull(),
+	environmentId: uuid("environment_id").notNull(),
+	name: varchar({ length: 150 }).notNull(),
+	code: varchar({ length: 100 }).notNull(),
+	description: text(),
+	category: varchar({ length: 50 }),
+	numberingPrefix: varchar("numbering_prefix", { length: 30 }),
+	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
+	nextNumber: bigint("next_number", { mode: "number" }).default(1).notNull(),
+	metadata: jsonb().default({}).notNull(),
+	isActive: boolean("is_active").default(true).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
+	endNumber: bigint("end_number", { mode: "number" }).notNull(),
+	modifyInventory: boolean("modify_inventory").default(false).notNull(),
+	typeModifyInventory: movementType("type_modify_inventory"),
+	typeQuantity: typeQuantityInventory("type_quantity"),
+}, (table) => [
+	foreignKey({
+			columns: [table.companyId, table.environmentId],
+			foreignColumns: [environments.id, environments.companyId],
+			name: "document_types_company_id_environment_id_fkey"
+		}),
+	unique("document_types_company_id_environment_id_id_key").on(table.companyId, table.environmentId, table.id),
+	unique("document_types_company_id_environment_id_code_key").on(table.code, table.companyId, table.environmentId),
+	check("document_types_metadata_check", sql`jsonb_typeof(metadata) = 'object'::text`),
+	check("document_types_next_number_check", sql`next_number > 0`),
 ]);
 
 export const documentTypeFields = pgTable("document_type_fields", {

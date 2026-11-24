@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import {
     Check,
     Code,
+    Eye,
     FileTypeCorner,
     Pencil,
     PlusCircle,
@@ -18,6 +19,7 @@ import type { DocumentTypes } from "@/lib/document";
 import { useDocumentsTypesHooks } from "./hook";
 import { AnimatePresence, motion } from "motion/react";
 import { format } from "@formkit/tempo";
+import { FieldEditor } from './field-editor/index';
 
 const primaryColor = "bg-linear-to-tr to-gray-500 to-120% from-black";
 
@@ -25,6 +27,16 @@ const transition = {
     duration: 0.25,
     ease: [0.22, 1, 0.36, 1] as const,
 };
+
+const typeMovements = [
+    { value: 'entry', label: 'Entrada' },
+    { value: 'exit', label: 'Salida' },
+    { value: 'adjustment_in', label: 'Ajuste de entrada' },
+    { value: 'adjustment_out', label: 'Ajuste de salida' },
+    { value: 'transfer_in', label: 'Transferencia de entrada' },
+    { value: 'transfer_out', label: 'Transferencia de salida' },
+    // { value: 'reversal', label: 'Reversal' }
+]
 
 export const DocumentsTypes = () => {
     const {
@@ -47,6 +59,8 @@ export const DocumentsTypes = () => {
         generatePrefix,
         submit,
         toggleActive,
+        onSelectDocument,
+        documentSelected
     } = useDocumentsTypesHooks();
 
     const actions = useMemo<TableAction<DocumentTypes>[]>(() => [
@@ -54,6 +68,11 @@ export const DocumentsTypes = () => {
             label: "Editar",
             icon: <Pencil size={15} />,
             onClick: startEdit,
+        },
+        {
+            label: 'Ver',
+            icon: <Eye size={15} />,
+            onClick: onSelectDocument
         },
         {
             label: "Desactivar",
@@ -69,10 +88,10 @@ export const DocumentsTypes = () => {
             hidden: (document) => document.is_active,
             onClick: (document) => void toggleActive(document),
         },
-    ], [startEdit, toggleActive]);
+    ], [onSelectDocument, startEdit, toggleActive]);
 
     return (
-        <div className="w-full bg-base-100 h-screen overflow-y-auto">
+        <div className="w-full relative bg-base-100 h-screen overflow-y-auto">
             <header className="flex h-19 items-center gap-3 border-b border-base-300 bg-base-100 px-6 py-4">
                 <FileTypeCorner size={20} className="text-neutral" />
                 <div>
@@ -291,6 +310,62 @@ export const DocumentsTypes = () => {
                                         required
                                     />
                                 </label>
+                                <label className="flex flex-row items-center justify-between pt-4">
+                                    <span className="text-sm">
+                                        ¿Modifica inventario?
+                                    </span>
+                                    <input
+                                        className="checkbox checkbox-sm checkbox-neutral"
+                                        type="checkbox"
+                                        checked={form.modify_inventory}
+                                        onChange={(event) =>
+                                            updateField("modify_inventory", event.target.checked)
+                                        }
+                                        required
+                                    />
+                                </label>
+                                {
+                                    form.modify_inventory &&
+                                    <>
+                                        <label className="flex flex-col gap-1">
+                                            <span className="text-sm">
+                                                Tipo de modificación de inventario
+                                            </span>
+                                            <select
+                                                className="select select-sm"
+                                                value={form.type_modify_inventory}
+                                                onChange={(event) =>
+                                                    updateField("type_modify_inventory", event.target.value as typeof form.type_modify_inventory)
+                                                }
+                                            >
+                                                <option>No Aplica</option>
+                                                {
+                                                    typeMovements.map((movement) => (
+                                                        <option key={movement.value} value={movement.value}>
+                                                            {movement.label}
+                                                        </option>
+                                                    ))
+                                                }
+                                            </select>
+                                        </label>
+                                        <label className="flex flex-col gap-1">
+                                            <span className="text-sm">
+                                                Como se maneja las cantidades
+                                            </span>
+                                            <select
+                                                className="select select-sm"
+                                                value={form.type_quantity}
+                                                onChange={(event) =>
+                                                    updateField("type_quantity", event.target.value as typeof form.type_quantity)
+                                                }
+                                            >
+                                                <option>No Aplica</option>
+                                                <option value={'quantity'} > Por cantidad existente</option>
+                                                <option value={'reserved_quantity'} > Por cantidad reservada</option>
+                                            </select>
+                                        </label>
+                                    </>
+                                }
                             </div>
 
                             <AnimatePresence initial={false}>
@@ -325,7 +400,7 @@ export const DocumentsTypes = () => {
                                 <motion.button
                                     type="submit"
                                     className={clsx(
-                                        "btn btn-neutral btn-sm",
+                                        "btn text-white btn-sm",
                                         primaryColor
                                     )}
                                     disabled={saving}
@@ -404,6 +479,19 @@ export const DocumentsTypes = () => {
                     </button>
                 </div>
             </motion.main>
+
+
+            {
+                documentSelected && (
+                    <div onClick={() => onSelectDocument(null)} className="fixed top-0 left-0 rounded-md w-screen h-screen bg-base-300/20 backdrop-blur-md">
+
+                        <FieldEditor
+                            documentSelected={documentSelected}
+                            onClose={() => onSelectDocument(null)}
+                        />
+                    </div>
+                )
+            }
         </div>
     );
 };

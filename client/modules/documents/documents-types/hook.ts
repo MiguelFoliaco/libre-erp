@@ -14,6 +14,17 @@ export interface DocumentTypeFormValues {
     numbering_prefix: string;
     next_number: string;
     end_number: string;
+    modify_inventory?: boolean;
+    type_quantity?: 'quantity' | 'reserved_quantity';
+    type_modify_inventory?:   
+    | 'entry'
+    |'exit'
+    |'adjustment_in'
+    |'adjustment_out'
+    |'transfer_in'
+    |'transfer_out'
+    |'reversal'
+
 }
 
 const EMPTY_FORM: DocumentTypeFormValues = {
@@ -56,6 +67,7 @@ export const useDocumentsTypesHooks = () => {
     const [formVisible, setFormVisible] = useState(false);
     const [editingDocument, setEditingDocument] = useState<DocumentTypes | null>(null);
     const [form, setForm] = useState<DocumentTypeFormValues>(EMPTY_FORM);
+    const [documentSelected, setDocumentSelected] = useState<DocumentTypes | null>(null);
     const [error, setError] = useState("");
 
     const { notify } = useToast();
@@ -210,6 +222,13 @@ export const useDocumentsTypesHooks = () => {
         }
     }, [notify]);
 
+    const onSelectDocument = useCallback((item: DocumentTypes | null) => {
+        if (item === null) {
+            return setDocumentSelected(null);
+        }
+        setDocumentSelected((current) => current?.id === item.id ? null : item);
+    }, []);
+
     return {
         documents,
         pagination,
@@ -232,5 +251,7 @@ export const useDocumentsTypesHooks = () => {
         generatePrefix,
         submit,
         toggleActive,
+        onSelectDocument,
+        documentSelected,
     };
 };

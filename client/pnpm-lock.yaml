@@ -11,6 +11,9 @@ importers:
       '@fontsource-variable/work-sans':
         specifier: ^5.3.0
         version: 5.3.0
+      '@formkit/drag-and-drop':
+        specifier: ^0.8.0
+        version: 0.8.0
       '@formkit/tempo':
         specifier: ^1.1.1
         version: 1.1.1
@@ -165,6 +168,14 @@ packages:
 
   '@fontsource-variable/work-sans@5.3.0':
     resolution: {integrity: sha512-le8h/OIIuhm5Z7TdvuMw0yKg2gaCZUiMec8zaumsVVjzeJRBPEF0bQI/MkaZDHCVzZDvZoP/O2LiGOSfDLSbaw==}
+
+  '@formkit/drag-and-drop@0.8.0':
+    resolution: {integrity: sha512-up7c/QajtwlOCDmmCA112TY4imKjdJ8Gepv758eQUJq82sRMv+SoIF78juTSYVXFev3wXaSCnZyV/CKLIipRQw==}
+    peerDependencies:
+      '@marko/runtime-tags': '>=6.0.166'
+    peerDependenciesMeta:
+      '@marko/runtime-tags':
+        optional: true
 
   '@formkit/tempo@1.1.1':
     resolution: {integrity: sha512-ONW1H43AfTbIgDALg89xzG0PAQZvMMM1l3z4Oq7ZXJ+GlTK486ni0MqDHiqa8oExWcGkqE8en9Mo8YXu4AGULQ==}
@@ -1404,6 +1415,8 @@ snapshots:
     optional: true
 
   '@fontsource-variable/work-sans@5.3.0': {}
+
+  '@formkit/drag-and-drop@0.8.0': {}
 
   '@formkit/tempo@1.1.1': {}
 

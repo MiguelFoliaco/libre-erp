@@ -50,6 +50,20 @@
       "when": 1795482623396,
       "tag": "0006_ambitious_photon",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1795536575375,
+      "tag": "0007_exotic_scarlet_spider",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1795537625853,
+      "tag": "0008_yummy_madelyne_pryor",
+      "breakpoints": true
     }
   ]
 }
