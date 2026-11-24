@@ -100,7 +100,7 @@ export const DocumentsTypes = () => {
                         disabled={loading}
                         whileTap={{ scale: 0.96 }}
                         transition={{ duration: 0.1 }}
-                        className="btn btn-neutral btn-sm ml-auto"
+                        className="btn btn-neutral btn-sm ml-auto shadow-none!"
                     >
                         Actualizar
                         <RefreshCcw
@@ -115,7 +115,7 @@ export const DocumentsTypes = () => {
                         whileTap={{ scale: 0.96 }}
                         transition={{ duration: 0.1 }}
                         className={clsx(
-                            "btn btn-sm btn-neutral ml-2",
+                            "btn btn-sm btn-neutral ml-2 shadow-none! text-white border-black",
                             primaryColor
                         )}
                     >

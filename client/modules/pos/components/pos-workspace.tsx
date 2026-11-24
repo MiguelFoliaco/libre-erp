@@ -68,7 +68,7 @@ export function POSWorkspace() {
 
     if (!activeSession) {
         return (
-            <main className="grid min-h-screen place-items-center bg-base-200 p-6">
+            <main className="grid text-base-content min-h-screen place-items-center bg-base-200 p-6">
                 <section className="card w-full max-w-100 border border-base-300 bg-base-100 shadow-xl" aria-labelledby="open-register-title">
                     <div className="card-body gap-4">
                         <h1 id="open-register-title" className="card-title">{text('modules.settings.pos.openRegister')}</h1>

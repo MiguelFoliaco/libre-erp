@@ -103,7 +103,7 @@ export const StartPage = () => {
         <main className="min-h-screen bg-base-200">
             <HeaderStart />
             <section className="mx-auto max-w-360 px-5 pb-12 pt-10 sm:px-8 lg:px-12 lg:pt-14">
-                <div className="mb-8 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
+                <div className="mb-8 flex flex-col gap-3 sm:mb-5 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <p className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
                             <span className="size-1.5 rounded-full bg-primary" /> LibreERP · Workspace

@@ -54,7 +54,7 @@
   --color-accent: oklch(55% 0.288 302.321);
   --color-accent-content: oklch(97% 0.014 308.299);
   --color-neutral: #FFF;
-  --color-neutral-content: oklch(98% 0 0);
+  --color-neutral-content: #000;
   --color-info: oklch(54% 0.245 262.881);
   --color-info-content: oklch(97% 0.014 254.604);
   --color-success: oklch(60% 0.118 184.704);
@@ -128,4 +128,8 @@ select {
 ::selection {
   color: #ffffff;
   background: #087f5b;
+}
+
+.btn {
+  box-shadow: none !important;
 }
