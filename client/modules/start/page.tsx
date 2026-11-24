@@ -102,7 +102,7 @@ export const StartPage = () => {
     return (
         <main className="min-h-screen bg-base-200">
             <HeaderStart />
-            <section className="mx-auto max-w-[1440px] px-5 pb-12 pt-10 sm:px-8 lg:px-12 lg:pt-14">
+            <section className="mx-auto max-w-360 px-5 pb-12 pt-10 sm:px-8 lg:px-12 lg:pt-14">
                 <div className="mb-8 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <p className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
@@ -133,7 +133,7 @@ export const StartPage = () => {
                                     if (!hasAccess) event.preventDefault();
                                 }}
                                 className={clsx(
-                                    "group flex min-h-32 items-center gap-4 rounded-2xl border border-base-300/70 bg-base-100 p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-lg hover:shadow-base-content/5 focus-visible:outline-primary",
+                                    "group flex min-h-32 items-center gap-4 rounded-sm border border-base-300/70 bg-base-100 p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-lg hover:shadow-base-content/5 focus-visible:outline-primary",
                                     !hasAccess && "cursor-not-allowed opacity-45"
                                 )}
                             >

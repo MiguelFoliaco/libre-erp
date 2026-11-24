@@ -22,6 +22,7 @@ import {
 import { text } from "@/modules/language";
 import { useLanguage } from "@/modules/language/hook";
 import { useSession } from "@/modules/auth/hook/store";
+import { useTheme } from "@/modules/theme";
 import { useNavigate } from "react-router";
 
 export function meta({ }: Route.MetaArgs) {
@@ -36,6 +37,7 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { toggleLanguage } = useLanguage()
+  const { theme } = useTheme()
   const navigate = useNavigate()
 
 
@@ -124,7 +126,7 @@ export default function Home() {
 
           <div className="mb-5">
             <img
-              src="/light.png"
+              src={theme === "lofi-2" ? "/dark.png" : "/light.png"}
               alt="LibreERP"
               className="w-44 object-contain"
             />

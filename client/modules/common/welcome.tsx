@@ -47,7 +47,7 @@ export const WelcomeBase = ({
         <main className="h-screen bg-base-100">
 
             {/* Page header */}
-            <header className="flex h-16 items-center gap-3 border-b border-base-300 px-6 py-4 lg:px-10">
+            <header className="flex h-19 items-center gap-3 border-b border-base-300 px-6 py-4 lg:px-10">
                 <FileText size={21} className="text-base-content/60" />
 
                 <span className="text-sm font-medium text-base-content/70">

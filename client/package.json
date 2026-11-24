@@ -13,6 +13,7 @@
     "@formkit/tempo": "^1.1.1",
     "@react-router/node": "^8.5.1",
     "@react-router/serve": "^8.5.1",
+    "@xyflow/react": "^13.0.2",
     "client": "link:",
     "clsx": "^2.1.1",
     "isbot": "^5.1.36",

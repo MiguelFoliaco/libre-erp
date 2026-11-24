@@ -109,7 +109,7 @@ export const modules = {
         inventory: "Inventario",
         accounting: "Contabilidad",
         reports: "Reportes",
-        documents: "Documentos",
+        documents: "Documentos y flujos",
         marketplace: "Tienda de plugins",
         buy: "Compras",
         product: "Productos",

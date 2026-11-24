@@ -9,6 +9,7 @@ import {
 import { clsx } from 'clsx';
 import { useToast } from '../toast';
 import { truncate } from '@/modules/common/utils/truncate';
+import { text } from '@/modules/language';
 
 export type TableColumn<T> = {
     key: keyof T;
@@ -81,13 +82,13 @@ export function Table<T>({
 
     const copy = async (value: string) => {
         await navigator.clipboard.writeText(value)
-        notify('info', value)
+        notify('info', text('common.copy-text'))
     }
 
     return (
         <div className="w-full space-y-4 ">
-            <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-primary/50 rounded-box border border-base-300">
-                <table className="table table-xs table-zebra">
+            <div className="overflow-x-auto rounded-sm! scrollbar-thin scrollbar-thumb-primary/50 rounded-box border border-base-300">
+                <table className="table table-xs  table-zebra">
                     <thead>
                         <tr>
                             {visibleColumns.map(column => (
@@ -126,7 +127,7 @@ export function Table<T>({
                                 <tr key={startIndex + index}>
                                     {visibleColumns.map(column => {
                                         const value = getValue(row, String(column.key))
-                                        let truncateValue = value  as string;
+                                        let truncateValue = value as string;
                                         if (typeof value === 'string' && column.truncate) {
                                             truncateValue = truncate(value, column.truncate)
                                         }
@@ -153,7 +154,7 @@ export function Table<T>({
                                             >
                                                 {column.render
                                                     ? column.render(value, row, startIndex + index)
-                                                    : String(value ?? '—')}
+                                                    : column.truncate ? truncate(String(value ?? '—'), column.truncate) : String(value ?? '-')}
                                             </td>
                                         )
                                     })}

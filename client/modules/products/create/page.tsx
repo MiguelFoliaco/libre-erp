@@ -116,7 +116,7 @@ export function ProductCreatePage() {
 
   return (
     <div className="min-h-full bg-base-200/50 pb-8">
-      <header className="flex h-16 items-center gap-3 border-b border-base-300 bg-base-100 px-6 py-4 lg:px-10">
+      <header className="flex h-19 items-center gap-3 border-b border-base-300 bg-base-100 px-6 py-4 lg:px-10">
         <span className="flex size-9 items-center justify-center rounded-sm bg-blue-500/10 text-blue-700">
           <Plus size={19} />
         </span>

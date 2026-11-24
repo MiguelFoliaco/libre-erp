@@ -8,9 +8,11 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
+import { Moon, Sun } from "lucide-react";
 import '@fontsource-variable/work-sans';
 import { AuthProvider } from "./auth-provider";
 import { ToastProvider } from '../modules/common/toast'
+import { ThemeProvider, useTheme } from "../modules/theme";
 import "./app.css";
 
 
@@ -38,15 +40,35 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="bg-base-200 w-full  h-screen">
-        <ToastProvider>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        </ToastProvider>
+        <ThemeProvider>
+          <ToastProvider>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </ToastProvider>
+          <ThemeToggle />
+        </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
     </html>
+  );
+}
+
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "lofi-2";
+
+  return (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      className="btn btn-circle btn-ghost fixed bottom-2 right-2 z-50"
+      aria-label={isDark ? "Cambiar al tema claro" : "Cambiar al tema oscuro"}
+      title={isDark ? "Tema claro" : "Tema oscuro"}
+    >
+      {isDark ? <Sun className="size-6" /> : <Moon className="size-6" />}
+    </button>
   );
 }
 

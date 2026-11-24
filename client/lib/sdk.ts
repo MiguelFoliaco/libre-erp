@@ -28,6 +28,9 @@ export const API_RESOURCES = [
   "document-type-fields",
   "document-type-headers",
   "document-type-footers",
+  "sales-flows",
+  "sales-flow-steps",
+  "sales-flow-transitions",
   "documents",
   "document-items",
   "document-taxes",
@@ -85,6 +88,62 @@ export interface ListResult<T> {
   limit: number;
   offset: number;
 }
+
+export interface SalesFlowRecord {
+  id: string;
+  company_id: string;
+  environment_id: string;
+  code: string;
+  name: string;
+  description: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export type SalesFlowInput = Pick<SalesFlowRecord, "code" | "name"> &
+  Partial<Pick<SalesFlowRecord, "description" | "is_active">>;
+export type SalesFlowUpdate = Partial<SalesFlowInput>;
+
+export interface SalesFlowStepRecord {
+  id: string;
+  company_id: string;
+  environment_id: string;
+  flow_id: string;
+  document_type_id: string;
+  code: string;
+  name: string;
+  description: string | null;
+  is_initial: boolean;
+  is_final: boolean;
+  position_x: number;
+  position_y: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export type SalesFlowStepInput = Pick<
+  SalesFlowStepRecord,
+  "flow_id" | "document_type_id" | "code" | "name" | "position_x" | "position_y"
+> & Partial<Pick<SalesFlowStepRecord, "description" | "is_initial" | "is_final">>;
+export type SalesFlowStepUpdate = Partial<SalesFlowStepInput>;
+
+export interface SalesFlowTransitionRecord {
+  id: string;
+  company_id: string;
+  environment_id: string;
+  flow_id: string;
+  from_step_id: string;
+  to_step_id: string;
+  action_name: string;
+  condition_rules: Record<string, unknown>;
+}
+
+export type SalesFlowTransitionInput = Pick<
+  SalesFlowTransitionRecord,
+  "flow_id" | "from_step_id" | "to_step_id" | "action_name"
+> & Partial<Pick<SalesFlowTransitionRecord, "condition_rules">>;
+export type SalesFlowTransitionUpdate = Partial<SalesFlowTransitionInput>;
 
 export interface CatalogOption {
   id: string;

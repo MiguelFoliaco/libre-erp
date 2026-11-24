@@ -77,7 +77,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             key={toast.id}
             className={
               clsx(
-                `alert w-fit min-w-50 shadow-lg`,
+                `alert w-fit border-none! rounded-sm min-w-50 shadow-lg`,
                 classBgByKind[toast.kind].bg
               )
             }

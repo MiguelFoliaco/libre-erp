@@ -36,6 +36,20 @@
       "when": 1795139079647,
       "tag": "0004_public_red_skull",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1795324644464,
+      "tag": "0005_first_tusk",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1795482623396,
+      "tag": "0006_ambitious_photon",
+      "breakpoints": true
     }
   ]
 }

@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { users, session, environments, suppliers, people, companies, brands, categories, products, departments, branches, warehouses, inventory, inventoryMovements, transfers, transferItems, documentTypesPeople, customers, customerTypes, roles, userRoles, documentTypes, documentTypeFields, documentTypeHeaders, documentTypeFooters, documents, documentItems, taxes, productTaxes, auditLogs, accounts, fiscalPeriods, journalEntries, journalEntryLines, documentTaxes, cashRegisters, cashSessions, paymentMethods, sales, saleItems, saleItemTaxes, salePayments, cashMovements, saleReturns, saleReturnItems } from "./schema";
+import { users, session, environments, suppliers, people, salesFlows, documentTypes, salesFlowSteps, salesFlowTransitions, companies, brands, categories, products, departments, branches, warehouses, inventory, inventoryMovements, transfers, transferItems, documentTypesPeople, customers, customerTypes, roles, userRoles, documentTypeFields, documentTypeHeaders, documentTypeFooters, documents, documentItems, taxes, productTaxes, auditLogs, accounts, fiscalPeriods, journalEntries, journalEntryLines, documentTaxes, cashRegisters, cashSessions, paymentMethods, sales, saleItems, saleItemTaxes, salePayments, cashMovements, saleReturns, saleReturnItems } from "./schema";
 
 export const sessionRelations = relations(session, ({one}) => ({
 	user: one(users, {
@@ -41,6 +41,7 @@ export const suppliersRelations = relations(suppliers, ({one, many}) => ({
 
 export const environmentsRelations = relations(environments, ({one, many}) => ({
 	suppliers: many(suppliers),
+	salesFlows: many(salesFlows),
 	company: one(companies, {
 		fields: [environments.companyId],
 		references: [companies.id]
@@ -55,8 +56,8 @@ export const environmentsRelations = relations(environments, ({one, many}) => ({
 	inventoryMovements: many(inventoryMovements),
 	transfers: many(transfers),
 	people: many(people),
-	roles: many(roles),
 	documentTypes: many(documentTypes),
+	roles: many(roles),
 	taxes: many(taxes),
 	auditLogs: many(auditLogs),
 	accounts: many(accounts),
@@ -81,6 +82,48 @@ export const peopleRelations = relations(people, ({one, many}) => ({
 	users: many(users),
 	documents: many(documents),
 	journalEntryLines: many(journalEntryLines),
+}));
+
+export const salesFlowsRelations = relations(salesFlows, ({one, many}) => ({
+	environment: one(environments, {
+		fields: [salesFlows.companyId],
+		references: [environments.id]
+	}),
+	salesFlowSteps: many(salesFlowSteps),
+}));
+
+export const salesFlowStepsRelations = relations(salesFlowSteps, ({one, many}) => ({
+	documentType: one(documentTypes, {
+		fields: [salesFlowSteps.companyId],
+		references: [documentTypes.id]
+	}),
+	salesFlow: one(salesFlows, {
+		fields: [salesFlowSteps.companyId],
+		references: [salesFlows.id]
+	}),
+	salesFlowTransitions_companyId: many(salesFlowTransitions, {
+		relationName: "salesFlowTransitions_companyId_salesFlowSteps_id"
+	}),
+}));
+
+export const documentTypesRelations = relations(documentTypes, ({one, many}) => ({
+	salesFlowSteps: many(salesFlowSteps),
+	environment: one(environments, {
+		fields: [documentTypes.companyId],
+		references: [environments.id]
+	}),
+	documentTypeFields: many(documentTypeFields),
+	documentTypeHeaders: many(documentTypeHeaders),
+	documentTypeFooters: many(documentTypeFooters),
+	documents: many(documents),
+}));
+
+export const salesFlowTransitionsRelations = relations(salesFlowTransitions, ({one}) => ({
+	salesFlowStep_companyId: one(salesFlowSteps, {
+		fields: [salesFlowTransitions.companyId],
+		references: [salesFlowSteps.id],
+		relationName: "salesFlowTransitions_companyId_salesFlowSteps_id"
+	}),
 }));
 
 export const companiesRelations = relations(companies, ({many}) => ({
@@ -272,17 +315,6 @@ export const userRolesRelations = relations(userRoles, ({one}) => ({
 		fields: [userRoles.companyId],
 		references: [users.id]
 	}),
-}));
-
-export const documentTypesRelations = relations(documentTypes, ({one, many}) => ({
-	environment: one(environments, {
-		fields: [documentTypes.companyId],
-		references: [environments.id]
-	}),
-	documentTypeFields: many(documentTypeFields),
-	documentTypeHeaders: many(documentTypeHeaders),
-	documentTypeFooters: many(documentTypeFooters),
-	documents: many(documents),
 }));
 
 export const documentTypeFieldsRelations = relations(documentTypeFields, ({one}) => ({

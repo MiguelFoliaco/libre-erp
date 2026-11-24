@@ -27,7 +27,7 @@
   --color-error: #ff3e3e;
   --color-error-content: #FFF;
   --radius-selector: 0.75rem;
-  --radius-field: 0.625rem;
+  --radius-field: 0.25rem;
   --radius-box: 0.875rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
@@ -53,7 +53,7 @@
   --color-secondary-content: oklch(100% 0 0);
   --color-accent: oklch(55% 0.288 302.321);
   --color-accent-content: oklch(97% 0.014 308.299);
-  --color-neutral: oklch(20% 0 0);
+  --color-neutral: #FFF;
   --color-neutral-content: oklch(98% 0 0);
   --color-info: oklch(54% 0.245 262.881);
   --color-info-content: oklch(97% 0.014 254.604);
@@ -113,13 +113,16 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-button, a, input, textarea, select {
+button,
+a,
+input,
+textarea,
+select {
   -webkit-tap-highlight-color: transparent;
 }
 
 :focus-visible {
-  outline: 2px solid #087f5b;
-  outline-offset: 3px;
+  outline: none !important;
 }
 
 ::selection {

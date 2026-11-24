@@ -12,6 +12,18 @@ export const DOCUMENT_RESOURCES = {
     table: 'document_type_footers',
     module: 'Document Type',
   },
+  'sales-flows': {
+    table: 'sales_flows',
+    module: 'Document Type',
+  },
+  'sales-flow-steps': {
+    table: 'sales_flow_steps',
+    module: 'Document Type',
+  },
+  'sales-flow-transitions': {
+    table: 'sales_flow_transitions',
+    module: 'Document Type',
+  },
   documents: { table: 'documents', module: 'Document' },
   'document-items': { table: 'document_items', module: 'Document' },
   'document-taxes': { table: 'document_taxes', module: 'Document' },

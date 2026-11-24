@@ -5,6 +5,7 @@ import { AuthGuard } from '../../auth/auth.guard';
 import { CrudService } from './crud.service';
 import { createResourceControllers } from './resource-crud.controller';
 import { CATALOG_RESOURCES } from '../../modules/catalog/resources';
+import { DOCUMENT_RESOURCES } from '../../modules/documents/resources';
 
 describe('resource CRUD controllers', () => {
   let app: INestApplication;
@@ -20,6 +21,9 @@ describe('resource CRUD controllers', () => {
     const builder = Test.createTestingModule({
       controllers: createResourceControllers({
         products: CATALOG_RESOURCES.products,
+        'sales-flows': DOCUMENT_RESOURCES['sales-flows'],
+        'sales-flow-steps': DOCUMENT_RESOURCES['sales-flow-steps'],
+        'sales-flow-transitions': DOCUMENT_RESOURCES['sales-flow-transitions'],
       }),
       providers: [{ provide: CrudService, useValue: crudService }],
     });
@@ -85,5 +89,23 @@ describe('resource CRUD controllers', () => {
       'products',
       'record-id',
     );
+  });
+
+  it('registers the CRUD endpoints for sales flow resources', async () => {
+    for (const resource of [
+      'sales-flows',
+      'sales-flow-steps',
+      'sales-flow-transitions',
+    ]) {
+      await request(app.getHttpServer())
+        .get(`/api/${resource}`)
+        .expect(200);
+      expect(crudService.list).toHaveBeenCalledWith(
+        'user-id',
+        resource,
+        undefined,
+        undefined,
+      );
+    }
   });
 });

@@ -54,7 +54,7 @@ export function InventoryWarehousesPage() {
   return (
     <>
       {/* Page header */}
-      <header className="flex h-16 items-center gap-3 border-b border-base-300 bg-base-100 px-6 py-4 lg:px-10">
+      <header className="flex h-19 items-center gap-3 border-b border-base-300 bg-base-100 px-6 py-4 lg:px-10">
         <span className={
           clsx(
             "flex size-9 items-center justify-center rounded-sm  ",

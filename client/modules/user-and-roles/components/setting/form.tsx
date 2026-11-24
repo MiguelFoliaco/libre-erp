@@ -27,7 +27,7 @@ function SettingsFormContent() {
 
   return (
     <div className="min-h-full bg-base-200">
-      <header className="flex h-16 items-center gap-3 border-b border-base-300 bg-base-100 px-6">
+      <header className="flex h-19 items-center gap-3 border-b border-base-300 bg-base-100 px-6">
         <ShieldCheck size={20} className="text-error" />
         <div>
           <h1 className="font-bold">{text('modules.userAndRoles.settings.title')}</h1>

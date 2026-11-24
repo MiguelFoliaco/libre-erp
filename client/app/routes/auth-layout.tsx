@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router';
-import { apiClient } from '@/lib/sdk';
-import { SettingPage } from '@/modules/setting/page';
+import { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router";
+import { apiClient } from "@/lib/sdk";
 
-export default function Settings() {
-    const navigate = useNavigate(); // GLOBALIZA EN UNA SOLA LLAMADA
+export default function AuthLayout() {
+    const navigate = useNavigate();
     const [status, setStatus] = useState<"checking" | "authenticated" | "error">("checking");
     const [error, setError] = useState("");
     const [attempt, setAttempt] = useState(0);
@@ -15,17 +14,12 @@ export default function Settings() {
         apiClient.restoreSession()
             .then((session) => {
                 if (!active) return;
-                if (session) {
-                    setStatus("authenticated");
-                } else {
-                    navigate("/", { replace: true });
-                }
+                if (session) setStatus("authenticated");
+                else navigate("/", { replace: true });
             })
             .catch((cause: unknown) => {
                 if (!active) return;
-                setError(cause instanceof Error
-                    ? cause.message
-                    : "No se pudo verificar la sesión.");
+                setError(cause instanceof Error ? cause.message : "No se pudo verificar la sesión.");
                 setStatus("error");
             });
 
@@ -36,7 +30,7 @@ export default function Settings() {
 
     if (status === "checking") {
         return (
-            <main className="min-h-screen flex items-center justify-center">
+            <main className="flex min-h-screen items-center justify-center">
                 <span className="loading loading-spinner loading-lg text-primary" />
                 <span className="sr-only">Verificando tu sesión...</span>
             </main>
@@ -45,7 +39,7 @@ export default function Settings() {
 
     if (status === "error") {
         return (
-            <main className="min-h-screen flex flex-col items-center justify-center gap-4 p-4">
+            <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-4">
                 <p role="alert">{error}</p>
                 <button
                     className="btn btn-primary"
@@ -62,9 +56,5 @@ export default function Settings() {
         );
     }
 
-
-
-    return (
-        <SettingPage />
-    )
+    return <Outlet />;
 }

@@ -62,7 +62,7 @@ function ManagerContent() {
 
   return (
     <div className="min-h-screen bg-base-200 text-base-content">
-      <header className="flex bg-base-100 h-16 items-center gap-3 border-b border-base-300 px-6 py-4 lg:px-10">
+      <header className="flex bg-base-100 h-19 items-center gap-3 border-b border-base-300 px-6 py-4 lg:px-10">
         <UsersRound size={21} className="text-base-content/60" />
 
         <span className="text-sm font-medium text-base-content/70">

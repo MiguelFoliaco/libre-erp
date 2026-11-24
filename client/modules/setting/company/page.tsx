@@ -146,7 +146,7 @@ function CompanySettingsContent() {
 
     return (
         <div className="min-h-full bg-base-200">
-            <header className="flex h-16 items-center gap-3 border-b border-base-300 bg-base-100 px-6 py-4">
+            <header className="flex h-19 items-center gap-3 border-b border-base-300 bg-base-100 px-6 py-4">
                 <Building size={20} className="text-neutral" />
                 <div>
                     <h1 className="font-bold">{text("modules.settings.company.title")}</h1>
