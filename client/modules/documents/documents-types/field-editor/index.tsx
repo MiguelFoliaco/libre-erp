@@ -2,6 +2,7 @@ import { useMemo, useState, type DragEvent, type FormEvent } from "react";
 import {
     CalendarDays,
     Check,
+    Eye,
     FileText,
     GripVertical,
     Hash,
@@ -77,10 +78,146 @@ const VARIABLE_GROUP_LABELS: Record<string, string> = {
     client: "Clientes",
     supplier: "Proveedores",
     product: "Productos",
+    employer: "Empleadores",
     global: "Generales",
 };
 
 const TYPE_LABELS = new Map(DATA_TYPES.map((type) => [type.value, type.label]));
+
+const PREVIEW_VARIABLE_VALUES: Record<string, string> = {
+    "client.person.name": "Comercializadora Andina S.A.S.",
+    "client.person.email": "contacto@andina.example",
+    "client.person.phone": "+57 300 123 4567",
+    "client.person.address_str": "Calle 100 # 15-20, Bogotá",
+    "client.person.document_number": "NIT 900.123.456-7",
+    "client.person.document_types_people.name": "NIT",
+    "client.person.address.locality": "Bogotá",
+    "client.person.address.country": "Colombia",
+    "client.person.address.postalCode": "110111",
+    "supplier.person.name": "Proveedor de Muestra S.A.S.",
+    "supplier.person.email": "ventas@proveedor.example",
+    "supplier.person.phone": "+57 310 987 6543",
+    "supplier.person.address_str": "Carrera 7 # 20-30, Medellín",
+    "supplier.person.document_number": "NIT 800.765.432-1",
+    "supplier.person.document_types_people.name": "NIT",
+    "supplier.person.address.locality": "Medellín",
+    "supplier.person.address.country": "Colombia",
+    "supplier.person.address.postalCode": "050001",
+    "products.sku": "SKU-001",
+    "products.name": "Producto de muestra",
+    "products.description": "Descripción del producto de muestra",
+    "products.unit": "Unidad",
+    "user.person.name": "María Fernanda Pérez",
+    "user.person.email": "maria.perez@example",
+    "user.person.phone": "+57 320 555 0101",
+};
+
+function getPreviewValue(field: DocumentTypeField, documentType: DocumentTypes): string {
+    const today = new Date();
+    const dueDate = new Date(today);
+    dueDate.setDate(dueDate.getDate() + 30);
+    const dateFormat: Intl.DateTimeFormatOptions = { dateStyle: "long" };
+    const predefinedValues: Record<string, string> = {
+        ...PREVIEW_VARIABLE_VALUES,
+        document_number: `${documentType.numbering_prefix || documentType.code}-0001`,
+        "document_type.name": documentType.name,
+        date: new Intl.DateTimeFormat("es-CO", dateFormat).format(today),
+        document_due_date: new Intl.DateTimeFormat("es-CO", dateFormat).format(dueDate),
+        "products.price": new Intl.NumberFormat("es-CO", {
+            style: "currency",
+            currency: "COP",
+            maximumFractionDigits: 0,
+        }).format(125000),
+        "products.quantity": "2",
+        "products.total": new Intl.NumberFormat("es-CO", {
+            style: "currency",
+            currency: "COP",
+            maximumFractionDigits: 0,
+        }).format(250000),
+    };
+    const predefinedValue = predefinedValues[field.name];
+    if (predefinedValue) return predefinedValue;
+
+    switch (field.data_type) {
+        case "number":
+            return field.is_currency
+                ? new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(125000)
+                : "1.250";
+        case "decimal":
+            return field.is_currency
+                ? new Intl.NumberFormat("es-CO", {
+                    style: "currency",
+                    currency: "COP",
+                    minimumFractionDigits: 2,
+                }).format(1250.5)
+                : new Intl.NumberFormat("es-CO", { minimumFractionDigits: 2 }).format(1250.5);
+        case "currency":
+            return new Intl.NumberFormat("es-CO", {
+                style: "currency",
+                currency: "COP",
+                minimumFractionDigits: 2,
+            }).format(1250.5);
+        case "date":
+            return new Intl.DateTimeFormat("es-CO", dateFormat).format(today);
+        case "datetime":
+            return `${new Intl.DateTimeFormat("es-CO", dateFormat).format(today)} · 10:30 a. m.`;
+        case "boolean":
+            return "Sí";
+        case "select": {
+            const values = field.options.values;
+            return Array.isArray(values) && typeof values[0] === "string"
+                ? values[0]
+                : "Opción de ejemplo";
+        }
+        case "json":
+            return '{"ejemplo":"Dato diligenciado"}';
+        case "textarea":
+            return `Texto de ejemplo para ${field.label.toLowerCase()}.`;
+        default:
+            return "Dato de ejemplo";
+    }
+}
+
+function PreviewFieldSection({
+    title,
+    fields,
+    documentType,
+}: {
+    title: string;
+    fields: DocumentTypeField[];
+    documentType: DocumentTypes;
+}) {
+    return (
+        <section className="mt-8">
+            <h2 className="mb-4 border-b border-slate-200 pb-2 text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
+                {title}
+            </h2>
+            {fields.length > 0 ? (
+                <div className="grid grid-cols-2 gap-x-8 gap-y-5">
+                    {fields.map((field) => (
+                        <div
+                            key={field.id}
+                            className={`min-w-0 border-b border-dashed border-slate-200 pb-2 ${
+                                field.data_type === "textarea" || field.data_type === "json" ? "col-span-2" : ""
+                            }`}
+                        >
+                            <p className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                                {field.label}
+                            </p>
+                            <p className="break-words whitespace-pre-wrap text-sm font-medium text-slate-800">
+                                {getPreviewValue(field, documentType)}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <p className="rounded border border-dashed border-slate-200 px-3 py-4 text-xs text-slate-400">
+                    No hay campos configurados en esta sección.
+                </p>
+            )}
+        </section>
+    );
+}
 
 export const FieldEditor = ({ documentSelected, onClose }: Props) => {
     const {
@@ -103,6 +240,7 @@ export const FieldEditor = ({ documentSelected, onClose }: Props) => {
     } = useDocumentFieldEditor(documentSelected);
     const [nameSuggestionsOpen, setNameSuggestionsOpen] = useState(false);
     const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
+    const [previewOpen, setPreviewOpen] = useState(false);
 
     const zones = useMemo(() => {
         const byName = new Map(fields.map((field) => [field.name, field]));
@@ -482,7 +620,16 @@ export const FieldEditor = ({ documentSelected, onClose }: Props) => {
                             </div>
                             <button
                                 type="button"
-                                className="btn btn-ghost btn-sm ml-auto"
+                                className="btn btn-outline btn-sm ml-auto"
+                                onClick={() => setPreviewOpen(true)}
+                                disabled={loading || saving}
+                            >
+                                <Eye size={15} />
+                                Vista previa
+                            </button>
+                            <button
+                                type="button"
+                                className="btn btn-ghost btn-sm"
                                 onClick={() => void load()}
                                 disabled={loading || saving}
                             >
@@ -529,6 +676,99 @@ export const FieldEditor = ({ documentSelected, onClose }: Props) => {
                     </main>
                 </div>
             </div>
+
+            {previewOpen && (
+                <div
+                    className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-950/60 p-3 sm:p-6"
+                    onClick={() => setPreviewOpen(false)}
+                >
+                    <section
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="document-preview-title"
+                        className="flex max-h-[94vh] w-full max-w-5xl flex-col overflow-hidden rounded-xl border border-base-300 bg-base-100 shadow-2xl"
+                        onClick={(event) => event.stopPropagation()}
+                    >
+                        <header className="flex shrink-0 items-center gap-3 border-b border-base-300 px-5 py-3">
+                            <span className="flex size-9 items-center justify-center rounded-lg bg-neutral text-neutral-content">
+                                <Eye size={17} />
+                            </span>
+                            <div>
+                                <h2 id="document-preview-title" className="text-sm font-semibold">
+                                    Vista previa del documento
+                                </h2>
+                                <p className="text-xs text-base-content/55">
+                                    Valores de muestra para {documentSelected.name}
+                                </p>
+                            </div>
+                            <button
+                                type="button"
+                                className="btn btn-circle btn-ghost btn-sm ml-auto"
+                                onClick={() => setPreviewOpen(false)}
+                                aria-label="Cerrar vista previa"
+                            >
+                                <X size={17} />
+                            </button>
+                        </header>
+
+                        <div className="min-h-0 flex-1 overflow-y-auto bg-slate-200 p-3 sm:p-8">
+                            <article className="mx-auto min-h-[1056px] w-full max-w-[816px] bg-white p-7 text-slate-900 shadow-xl sm:p-12">
+                                <div className="flex items-start gap-4 border-b-2 border-slate-800 pb-6">
+                                    <div className="flex size-12 shrink-0 items-center justify-center rounded bg-slate-900 text-white">
+                                        <FileText size={22} />
+                                    </div>
+                                    <div className="min-w-0">
+                                        <p className="text-sm font-bold uppercase tracking-wide">Libre ERP</p>
+                                        <p className="mt-1 text-xs text-slate-500">
+                                            {documentSelected.category || "Documento"}
+                                        </p>
+                                    </div>
+                                    <div className="ml-auto text-right">
+                                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                                            {documentSelected.code}
+                                        </p>
+                                        <h1 className="mt-1 text-xl font-bold sm:text-2xl">
+                                            {documentSelected.name}
+                                        </h1>
+                                        <p className="mt-1 text-sm text-slate-600">
+                                            N.º {documentSelected.numbering_prefix || documentSelected.code}-0001
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="mt-5 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
+                                    <span className="rounded-full bg-amber-100 px-3 py-1 font-semibold text-amber-800">
+                                        BORRADOR
+                                    </span>
+                                    <span>
+                                        Fecha: {new Intl.DateTimeFormat("es-CO", { dateStyle: "long" }).format(new Date())}
+                                    </span>
+                                </div>
+
+                                <PreviewFieldSection
+                                    title="Encabezado"
+                                    fields={zones.header}
+                                    documentType={documentSelected}
+                                />
+                                <PreviewFieldSection
+                                    title="Contenido"
+                                    fields={zones.content}
+                                    documentType={documentSelected}
+                                />
+                                <PreviewFieldSection
+                                    title="Pie de página"
+                                    fields={zones.footer}
+                                    documentType={documentSelected}
+                                />
+
+                                <div className="mt-16 border-t border-slate-200 pt-4 text-center text-[10px] text-slate-400">
+                                    Vista previa con datos de ejemplo. Estos valores no se guardarán.
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+                </div>
+            )}
         </div>
     );
 };

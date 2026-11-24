@@ -186,6 +186,24 @@ export const config = {
 
             },
 
+            employer: {
+                var_employer_name: {
+                    type: 'text',
+                    description: 'Nombre o razon social del Empleador',
+                    value: 'user.person.name'
+                },
+                var_employer_email: {
+                    type: 'text',
+                    description: 'Correo electrónico del Empleador',
+                    value: 'user.person.email'
+                },
+                var_employer_phone: {
+                    type: 'text',
+                    description: 'Número de teléfono del Empleador',
+                    value: 'user.person.phone'
+                },
+            },
+
             // TODOS LOS DOCUMENTOS
             global: {
                 var_current_date: {
